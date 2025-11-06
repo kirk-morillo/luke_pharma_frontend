@@ -268,294 +268,720 @@ const callLocation = (phone) => {
 </script>
 
 <style scoped>
+/* Variables */
 :root {
-    --primary-red: #E74C3C;
+    --primary-red: #FF6347;
+    --secondary-blue: #34495e;
+    --success-green: #2ecc71;
     --footer-bg-dark: #1f2a38;
+    --footer-bg-light: #2c3e50;
     --footer-text-light: #f5f7f9;
     --footer-text-subtle: #9cb3c9;
+    --newsletter-bg: linear-gradient(135deg, var(--primary-red), var(--secondary-blue));
     --hover-bg-subtle: rgba(255, 255, 255, 0.05);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.main-footer {
-    background-color: var(--footer-bg-dark);
+.enhanced-footer {
+    margin-top: 80px;
+    position: relative;
+}
+
+/* Newsletter Section */
+.newsletter-section {
+    background: var(--newsletter-bg);
+    color: var(--white);
+    padding: 40px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.newsletter-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="80" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="20" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="20" cy="80" r="1" fill="rgba(255,255,255,0.05)"/></svg>');
+    background-size: 100px 100px;
+    animation: float 20s infinite linear;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-50px, -50px); }
+}
+
+.newsletter-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    position: relative;
+    z-index: 1;
+}
+
+.newsletter-info h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.newsletter-info h3 i {
+    font-size: 1.8rem;
+}
+
+.newsletter-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    line-height: 1.5;
+    max-width: 400px;
+}
+
+.newsletter-form {
+    flex-shrink: 0;
+    max-width: 500px;
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.newsletter-input {
+    flex: 1;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--text-dark);
+    box-shadow: var(--shadow-md);
+}
+
+.newsletter-input:focus {
+    outline: none;
+    box-shadow: var(--shadow-lg);
+}
+
+.newsletter-input::placeholder {
+    color: var(--text-light);
+}
+
+.newsletter-btn {
+    padding: 16px 28px;
+    background: var(--white);
+    color: var(--primary-red);
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.newsletter-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.newsletter-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.subscribe-message {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.subscribe-message.success {
+    background: rgba(46, 204, 113, 0.2);
+    color: var(--white);
+    border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+.subscribe-message.error {
+    background: rgba(231, 76, 60, 0.2);
+    color: var(--white);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+/* Main Footer */
+.footer-main {
+    background: var(--footer-bg-dark);
     color: var(--footer-text-light);
-    padding: 60px 40px 0;
-    margin-top: 60px;
-    box-shadow: inset 0 8px 10px -8px rgba(0, 0, 0, 0.5);
+    padding: 60px 0 0;
 }
 
 .footer-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1.5fr 1.5fr;
+    gap: 40px;
     max-width: 1400px;
     margin: 0 auto;
-    padding-bottom: 30px;
-    border-bottom: 1px solid #34495e;
+    padding: 0 40px 60px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* ---------------------------------------------------------------------- */
-/* --- GENERAL SECTION STYLING (4-Column Layout) --- */
-/* ---------------------------------------------------------------------- */
-
-.footer-section {
-    /* Width for 4 columns */
-    width: 23%;
-}
-
-.section-title-icon-wrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.footer-section h3 {
-    position: relative;
-    padding-bottom: 12px;
-    color: var(--footer-text-light);
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    font-size: 1.3em;
-    text-transform: uppercase;
-    margin: 0;
-}
-
-/* Class for the requested red headings */
-.red-text {
-    color: var(--primary-red) !important;
-}
-
-.footer-section h3::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 40px;
-    height: 3px;
-    background-color: var(--primary-red);
-    border-radius: 2px;
-}
-
-.detail-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    font-size: 0.95em;
-    color: var(--footer-text-light);
-    margin-bottom: 8px;
-    padding: 3px 0;
-    transition: background-color 0.2s;
-    border-radius: 4px;
-}
-
-.detail-item:hover {
-    background-color: var(--hover-bg-subtle);
-}
-
-.detail-item i {
-    font-size: 1.4em;
-    margin-top: 2px;
-}
-
-.icon-red {
-    color: var(--primary-red);
-}
-
-.detail-item p {
-    margin: 0;
-    line-height: 1.5;
-}
-
-/* ---------------------------------------------------------------------- */
-/* --- 1. LEFT SECTION (Logo and Social Links ONLY) --- */
-/* ---------------------------------------------------------------------- */
-.footer-left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding-right: 20px;
+/* Company Section */
+.footer-company {
+    max-width: 400px;
 }
 
 .footer-logo-link {
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: inherit;
-    margin-bottom: 0px;
+    color: var(--white);
+    margin-bottom: 20px;
 }
 
 .footer-logo {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     margin-right: 15px;
+    object-fit: contain;
 }
 
 .footer-site-name {
     font-weight: 800;
-    font-size: 1.8em;
-    color: rgb(248, 84, 84);
+    font-size: 1.8rem;
+    color: var(--primary-red);
 }
 
 .tagline {
-    font-size: 1.0em;
-    font-weight: 300;
-    margin-top: 5px;
-    margin-left: 0;
+    font-size: 1rem;
+    line-height: 1.6;
     color: var(--footer-text-subtle);
-    padding-left: 115px;
-    /* Offset to align under site name */
+    margin-bottom: 30px;
 }
 
 .social-links {
-    margin-top: 15px;
-    margin-left: 0;
-    padding-left: 115px;
-    margin-bottom: 0;
-    /* Adjusted: No button, so no extra bottom margin needed */
+    margin-bottom: 30px;
 }
 
-/* REMOVED .admin-login-link-btn STYLES */
-
-/* ---------------------------------------------------------------------- */
-/* --- 2. LOCATION SECTION --- */
-/* ---------------------------------------------------------------------- */
-
-.footer-center {
-    padding-right: 20px;
-}
-
-.location-text-emphasis {
-    color: var(--primary-red);
+.social-title {
+    font-size: 1.1rem;
     font-weight: 600;
-    margin: 0;
-    line-height: 1.5;
+    margin-bottom: 15px;
+    color: var(--white);
 }
 
-.nearby-text {
-    display: block;
-    font-size: 0.8em;
-    font-style: italic;
+.social-icons {
+    display: flex;
+    gap: 12px;
+}
+
+.social-link {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.social-link:hover {
+    background: var(--primary-red);
+    transform: translateY(-3px);
+}
+
+.app-download {
+    margin-top: 30px;
+}
+
+.app-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--white);
+}
+
+.app-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.app-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.app-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.app-btn i {
+    font-size: 1.2rem;
+}
+
+.app-btn-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.app-small {
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+.app-large {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Links Section */
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--primary-red);
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: var(--primary-red);
+    border-radius: 2px;
+}
+
+.links-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.link-column-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 15px;
+}
+
+.link-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.link-list li {
+    margin-bottom: 10px;
+}
+
+.footer-link {
     color: var(--footer-text-subtle);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.footer-link:hover {
+    color: var(--primary-red);
+    transform: translateX(4px);
+}
+
+/* Locations Section */
+.locations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.location-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.location-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.location-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex: 1;
+}
+
+.location-icon {
+    color: var(--primary-red);
+    font-size: 1.1rem;
     margin-top: 2px;
 }
 
-/* ---------------------------------------------------------------------- */
-/* --- 3. OPERATING HOURS SECTION --- */
-/* ---------------------------------------------------------------------- */
-.footer-hours {
-    padding-right: 20px;
-}
-
-.hours-list {
-    font-size: 0.9em;
-}
-
-.hour-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 2px 0;
-    color: var(--footer-text-light);
-}
-
-.hour-item .day {
-    font-weight: 400;
-}
-
-.hour-item .time {
+.location-name {
+    font-size: 0.95rem;
     font-weight: 600;
+    color: var(--white);
+    margin-bottom: 4px;
+}
+
+.location-address {
+    font-size: 0.85rem;
+    color: var(--footer-text-subtle);
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+.location-hours {
+    font-size: 0.8rem;
     color: var(--footer-text-subtle);
 }
 
-.hour-item.closed .time {
-    color: var(--primary-red);
-    font-weight: 700;
+.location-call {
+    width: 36px;
+    height: 36px;
+    background: var(--primary-red);
+    border: none;
+    border-radius: 50%;
+    color: var(--white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    margin-left: 10px;
 }
 
-/* ---------------------------------------------------------------------- */
-/* --- COPYRIGHT BAR (Simplified Bottom) --- */
-/* ---------------------------------------------------------------------- */
-.copyright-bar {
+.location-call:hover {
+    background: #e8533b;
+    transform: scale(1.1);
+}
+
+/* Staff Portal Section */
+.staff-portal {
+    background: rgba(255, 99, 71, 0.1);
+    border: 1px solid rgba(255, 99, 71, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.staff-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.staff-icon {
+    color: var(--primary-red);
+    font-size: 1.2rem;
+    margin-top: 2px;
+}
+
+.staff-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--footer-text-subtle);
+}
+
+.staff-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.staff-login-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--primary-red);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    justify-content: center;
+}
+
+.staff-login-btn:hover {
+    background: #e8533b;
+    transform: translateY(-2px);
+}
+
+.staff-login-btn.cashier {
+    background: var(--success-green);
+}
+
+.staff-login-btn.cashier:hover {
+    background: #27ae60;
+}
+
+.staff-help {
     text-align: center;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.staff-help p {
+    font-size: 0.85rem;
+    color: var(--footer-text-subtle);
+    margin-bottom: 8px;
+}
+
+.support-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary-red);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.support-link:hover {
+    color: #e8533b;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+    background: var(--footer-bg-light);
+    padding: 25px 0;
+}
+
+.bottom-content {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 15px 0 15px;
-    font-size: 0.8em;
-    color: var(--footer-text-subtle);
-    border-top: 1px solid #34495e;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* ---------------------------------------------------------------------- */
-/* --- RESPONSIVE ADJUSTMENTS (Mobile Layout) --- */
-/* ---------------------------------------------------------------------- */
-@media (max-width: 900px) {
+.copyright {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
 
-    .main-footer {
-        padding: 40px 20px 0;
-    }
+.copyright p {
+    font-size: 0.9rem;
+    color: var(--footer-text-subtle);
+    margin: 0;
+}
 
+.legal-links {
+    display: flex;
+    gap: 20px;
+}
+
+.legal-link {
+    color: var(--footer-text-subtle);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.3s ease;
+}
+
+.legal-link:hover {
+    color: var(--primary-red);
+}
+
+.certifications {
+    display: flex;
+    gap: 20px;
+}
+
+.certification {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--footer-text-subtle);
+}
+
+.certification i {
+    color: var(--success-green);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
     .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+
+    .newsletter-content {
         flex-direction: column;
-        gap: 30px;
-        align-items: flex-start;
-        padding-bottom: 40px;
-    }
-
-    .footer-section {
-        width: 100%;
-        padding-right: 0;
-    }
-
-    /* Left Section Centering */
-    .footer-left {
-        align-items: center;
-    }
-
-    .tagline,
-    .social-links {
-        margin-left: 0;
         text-align: center;
-        padding-left: 0;
-        /* Remove offsets on mobile */
     }
 
-    /* REMOVED .admin-login-link-btn mobile styles */
-
-    .footer-logo-link {
-        margin-bottom: 15px;
+    .newsletter-info h3 {
         justify-content: center;
     }
 
-    /* Title Centering for all Sections */
-    .section-title-icon-wrapper {
-        align-items: center;
-        width: 100%;
+    .newsletter-form {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .newsletter-section {
+        padding: 30px 0;
     }
 
-    .footer-section h3 {
+    .newsletter-content,
+    .footer-content,
+    .bottom-content {
+        padding: 0 20px;
+    }
+
+    .newsletter-info h3 {
+        font-size: 1.5rem;
+    }
+
+    .form-group {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 0 20px 40px;
+    }
+
+    .footer-company {
+        max-width: 100%;
         text-align: center;
     }
 
-    .footer-section h3::after {
-        left: 50%;
-        transform: translateX(-50%);
+    .footer-logo-link {
+        justify-content: center;
+        margin-bottom: 15px;
     }
 
-    /* Detail Item Centering (Address/Hours/Contacts) */
-    .detail-item,
-    .hours-list {
-        max-width: 300px;
-        margin-left: auto;
-        margin-right: auto;
+    .tagline {
+        text-align: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    .links-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .bottom-content {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .copyright {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .legal-links {
+        justify-content: center;
+    }
+
+    .certifications {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .newsletter-info h3 {
+        font-size: 1.3rem;
+    }
+
+    .newsletter-subtitle {
+        font-size: 1rem;
+    }
+
+    .app-buttons {
+        align-items: center;
+    }
+
+    .app-btn {
         width: 100%;
+        max-width: 200px;
     }
 
-    .detail-item {
-        justify-content: flex-start;
+    .location-item {
+        flex-direction: column;
+        gap: 15px;
     }
 
-    .copyright-bar {
-        border-top: none;
+    .location-call {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+
+    .staff-buttons {
+        gap: 8px;
+    }
+
+    .legal-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .certifications {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
     }
 }
 </style>
