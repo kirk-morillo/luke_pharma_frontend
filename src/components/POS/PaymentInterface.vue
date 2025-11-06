@@ -201,7 +201,7 @@ const {
   cartIsEmpty,
   getCartItems,
   getGrandTotal,
-  processPayment,
+  processPayment: processStorePayment,
   clearCart,
   getCurrentTransaction
 } = usePosStore();
