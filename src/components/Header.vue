@@ -1,19 +1,85 @@
 <template>
-    <header class="main-header">
-        <div class="header-content">
+    <header class="enhanced-header">
+        <div class="header-top">
+            <div class="header-content">
+                <div class="header-left">
+                    <router-link to="/" class="logo-link">
+                        <img src="/logo.png" alt="Company Logo" class="logo" />
+                        <span class="site-name">Luked Pharma Co.</span>
+                    </router-link>
+                    <div class="tagline">Your Trusted Health Partner Since 2020</div>
+                </div>
 
-            <div class="header-left">
-                <router-link to="/" class="logo-link">
-                    <img src="/logo.png" alt="Company Logo" class="logo" />
-                    <span class="site-name">Luked Pharma Co.</span>
+                <div class="header-right">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="pi pi-phone"></i>
+                            <span>0919 002 4637</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="pi pi-envelope"></i>
+                            <span>lukedpharma@gmail.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="header-nav">
+            <div class="nav-content">
+                <nav class="main-nav">
+                    <router-link to="/" class="nav-link">
+                        <i class="pi pi-home"></i>
+                        <span>Home</span>
+                    </router-link>
+                    <router-link to="#items" class="nav-link" @click="scrollToSection('items')">
+                        <i class="pi pi-list"></i>
+                        <span>Items</span>
+                    </router-link>
+                    <router-link to="#stores" class="nav-link" @click="scrollToSection('stores')">
+                        <i class="pi pi-map-marker"></i>
+                        <span>Stores</span>
+                    </router-link>
+                    <router-link to="#about" class="nav-link" @click="scrollToSection('about')">
+                        <i class="pi pi-info-circle"></i>
+                        <span>About</span>
+                    </router-link>
+                    <router-link to="/login" class="nav-link login-link">
+                        <i class="pi pi-user"></i>
+                        <span>Staff Portal</span>
+                    </router-link>
+                </nav>
+
+                <div class="mobile-menu-toggle" @click="toggleMobileMenu">
+                    <i class="pi" :class="mobileMenuOpen ? 'pi-times' : 'pi-bars'"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div v-if="mobileMenuOpen" class="mobile-menu" @click="toggleMobileMenu">
+            <div class="mobile-menu-content" @click.stop>
+                <router-link to="/" class="mobile-nav-link" @click="toggleMobileMenu">
+                    <i class="pi pi-home"></i>
+                    <span>Home</span>
+                </router-link>
+                <router-link to="#items" class="mobile-nav-link" @click="scrollToSection('items'); toggleMobileMenu()">
+                    <i class="pi pi-list"></i>
+                    <span>Items</span>
+                </router-link>
+                <router-link to="#stores" class="mobile-nav-link" @click="scrollToSection('stores'); toggleMobileMenu()">
+                    <i class="pi pi-map-marker"></i>
+                    <span>Stores</span>
+                </router-link>
+                <router-link to="#about" class="mobile-nav-link" @click="scrollToSection('about'); toggleMobileMenu()">
+                    <i class="pi pi-info-circle"></i>
+                    <span>About</span>
+                </router-link>
+                <router-link to="/login" class="mobile-nav-link" @click="toggleMobileMenu">
+                    <i class="pi pi-user"></i>
+                    <span>Staff Portal</span>
                 </router-link>
             </div>
-            <nav class="main-nav">
-                <router-link to="/items" class="nav-link">Items</router-link>
-                <router-link to="/stores" class="nav-link">Stores</router-link>
-                <router-link to="/about" class="nav-link">About</router-link>
-            </nav>
-
         </div>
     </header>
 </template>
