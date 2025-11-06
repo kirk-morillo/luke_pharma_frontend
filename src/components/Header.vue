@@ -85,6 +85,20 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
+const mobileMenuOpen = ref(false);
+
+const toggleMobileMenu = () => {
+    mobileMenuOpen.value = !mobileMenuOpen.value;
+};
+
+const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
+};
 </script>
 
 <style scoped>
