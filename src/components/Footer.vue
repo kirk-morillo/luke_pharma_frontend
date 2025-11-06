@@ -1,70 +1,194 @@
 <template>
-    <footer class="main-footer">
-        <div class="footer-content">
-
-            <div class="footer-section footer-left">
-                <router-link to="/" class="footer-logo-link">
-                    <img src="/logo.png" alt="Company Logo" class="footer-logo" />
-                    <span class="footer-site-name">Luked Pharma Co.</span>
-                </router-link>
-                <p class="tagline">Your trusted health partner.</p>
-                <div class="social-links">
-                    <a href="https://www.facebook.com/profile.php?id=100083107822016" target="_blank"
-                        rel="noopener noreferrer">
-                        <i class="pi pi-facebook social-icon"></i>
-                    </a>
+    <footer class="enhanced-footer">
+        <!-- Newsletter Section -->
+        <div class="newsletter-section">
+            <div class="newsletter-content">
+                <div class="newsletter-info">
+                    <h3 class="newsletter-title">
+                        <i class="pi pi-envelope"></i>
+                        Stay Updated with Health Tips
+                    </h3>
+                    <p class="newsletter-subtitle">Get the latest health news and exclusive offers delivered to your inbox</p>
+                </div>
+                <div class="newsletter-form">
+                    <div class="form-group">
+                        <input
+                            v-model="email"
+                            type="email"
+                            placeholder="Enter your email address"
+                            class="newsletter-input"
+                            @keyup.enter="subscribeNewsletter"
+                        />
+                        <button @click="subscribeNewsletter" class="newsletter-btn" :disabled="!email || isSubscribing">
+                            <i class="pi" :class="isSubscribing ? 'pi-spin pi-spinner' : 'pi-send'"></i>
+                            {{ isSubscribing ? 'Subscribing...' : 'Subscribe' }}
+                        </button>
+                    </div>
+                    <p v-if="subscribeMessage" class="subscribe-message" :class="subscribeMessage.type">
+                        {{ subscribeMessage.text }}
+                    </p>
                 </div>
             </div>
-
-            <div class="footer-section footer-center">
-                <div class="section-title-icon-wrapper">
-                    <h3 class="red-text">Location</h3>
-                </div>
-                <div class="detail-item detail-location">
-                    <i class="pi pi-map-marker icon-red"></i>
-                    <div class="detail-text">
-                        <p class="location-text-emphasis">1626 Rizal Avenue Sta.Cruz Manila</p>
-                        <span class="nearby-text">Near Jose Reyes Hospital</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-section footer-hours">
-                <div class="section-title-icon-wrapper">
-                    <h3 class="red-text">Hours</h3>
-                </div>
-                <div class="hours-list">
-                    <div class="hour-item">
-                        <span class="day">Sunday - Friday</span>
-                        <span class="time">8:00 AM - 5:00 PM</span>
-                    </div>
-                    <div class="hour-item closed">
-                        <span class="day">Saturday</span>
-                        <span class="time">CLOSED</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-section footer-right">
-                <div class="section-title-icon-wrapper">
-                    <h3 class="red-text">Contacts</h3>
-                </div>
-                <div class="contact-details">
-                    <div class="detail-item">
-                        <i class="pi pi-phone icon-red"></i>
-                        <p>0919 002 4637</p>
-                    </div>
-                    <div class="detail-item">
-                        <i class="pi pi-envelope icon-red"></i>
-                        <p>lukedpharma@gmail.com</p>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
-        <div class="copyright-bar">
-            <p>&copy; 2025 Luked Pharma Co. All rights reserved.</p>
+        <!-- Main Footer Content -->
+        <div class="footer-main">
+            <div class="footer-content">
+
+                <!-- Company Info Section -->
+                <div class="footer-section footer-company">
+                    <router-link to="/" class="footer-logo-link">
+                        <img src="/logo.png" alt="Company Logo" class="footer-logo" />
+                        <span class="footer-site-name">Luked Pharma Co.</span>
+                    </router-link>
+                    <p class="tagline">Your trusted health partner since 2020. We are committed to providing quality medicines and healthcare products to serve our community.</p>
+
+                    <div class="social-links">
+                        <h4 class="social-title">Follow Us</h4>
+                        <div class="social-icons">
+                            <a href="https://www.facebook.com/profile.php?id=100083107822016" target="_blank"
+                                rel="noopener noreferrer" class="social-link">
+                                <i class="pi pi-facebook"></i>
+                            </a>
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="social-link">
+                                <i class="pi pi-instagram"></i>
+                            </a>
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="social-link">
+                                <i class="pi pi-twitter"></i>
+                            </a>
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="social-link">
+                                <i class="pi pi-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="app-download">
+                        <h4 class="app-title">Download Our App</h4>
+                        <div class="app-buttons">
+                            <button class="app-btn">
+                                <i class="pi pi-mobile"></i>
+                                <div class="app-btn-text">
+                                    <span class="app-small">Download on the</span>
+                                    <span class="app-large">App Store</span>
+                                </div>
+                            </button>
+                            <button class="app-btn">
+                                <i class="pi pi-android"></i>
+                                <div class="app-btn-text">
+                                    <span class="app-small">Get it on</span>
+                                    <span class="app-large">Google Play</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links Section -->
+                <div class="footer-section footer-links">
+                    <div class="section-title-icon-wrapper">
+                        <h3 class="section-title">Quick Links</h3>
+                    </div>
+                    <div class="links-grid">
+                        <div class="link-column">
+                            <h4 class="link-column-title">Products</h4>
+                            <ul class="link-list">
+                                <li><a href="#items" class="footer-link">All Medicines</a></li>
+                                <li><a href="#" class="footer-link">Medical Supplies</a></li>
+                                <li><a href="#" class="footer-link">Personal Care</a></li>
+                                <li><a href="#" class="footer-link">Vitamins</a></li>
+                                <li><a href="#" class="footer-link">Prescriptions</a></li>
+                            </ul>
+                        </div>
+                        <div class="link-column">
+                            <h4 class="link-column-title">Services</h4>
+                            <ul class="link-list">
+                                <li><a href="#" class="footer-link">Free Delivery</a></li>
+                                <li><a href="#" class="footer-link">Online Consultation</a></li>
+                                <li><a href="#" class="footer-link">Health Checkup</a></li>
+                                <li><a href="#" class="footer-link">Prescription Transfer</a></li>
+                                <li><a href="#" class="footer-link">Senior Citizen Program</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Locations Section -->
+                <div class="footer-section footer-locations">
+                    <div class="section-title-icon-wrapper">
+                        <h3 class="section-title">Our Locations</h3>
+                    </div>
+                    <div class="locations-list">
+                        <div class="location-item" v-for="location in mainLocations" :key="location.id">
+                            <div class="location-info">
+                                <i class="pi pi-map-marker location-icon"></i>
+                                <div class="location-details">
+                                    <h4 class="location-name">{{ location.name }}</h4>
+                                    <p class="location-address">{{ location.address }}</p>
+                                    <span class="location-hours">{{ location.hours }}</span>
+                                </div>
+                            </div>
+                            <button @click="callLocation(location.phone)" class="location-call">
+                                <i class="pi pi-phone"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Staff Portal Section -->
+                <div class="footer-section footer-staff">
+                    <div class="section-title-icon-wrapper">
+                        <h3 class="section-title">Staff Portal</h3>
+                    </div>
+                    <div class="staff-portal">
+                        <div class="staff-info">
+                            <i class="pi pi-lock staff-icon"></i>
+                            <p class="staff-description">Access staff dashboard, inventory management, and POS system</p>
+                        </div>
+                        <div class="staff-buttons">
+                            <router-link to="/login" class="staff-login-btn">
+                                <i class="pi pi-user"></i>
+                                <span>Admin Login</span>
+                            </router-link>
+                            <router-link to="/login" class="staff-login-btn cashier">
+                                <i class="pi pi-shopping-cart"></i>
+                                <span>Cashier Login</span>
+                            </router-link>
+                        </div>
+                        <div class="staff-help">
+                            <p>Need help? Contact IT Support:</p>
+                            <a href="tel:0919-002-4637" class="support-link">
+                                <i class="pi pi-phone"></i>
+                                0919 002 4637
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="footer-bottom">
+            <div class="bottom-content">
+                <div class="copyright">
+                    <p>&copy; 2025 Luked Pharma Co. All rights reserved.</p>
+                    <div class="legal-links">
+                        <a href="#" class="legal-link">Privacy Policy</a>
+                        <a href="#" class="legal-link">Terms of Service</a>
+                        <a href="#" class="legal-link">Cookie Policy</a>
+                    </div>
+                </div>
+                <div class="certifications">
+                    <div class="certification">
+                        <i class="pi pi-shield"></i>
+                        <span>FDA Approved</span>
+                    </div>
+                    <div class="certification">
+                        <i class="pi pi-check-circle"></i>
+                        <span>ISO Certified</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
 </template>
