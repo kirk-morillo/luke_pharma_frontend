@@ -284,7 +284,7 @@ const processPayment = async () => {
   isProcessing.value = true;
 
   try {
-    const transaction = processPayment(cashAmount.value);
+    const transaction = processStorePayment(cashAmount.value);
 
     // Show success message
     emit('show-toast', {
