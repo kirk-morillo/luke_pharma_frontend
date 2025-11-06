@@ -194,7 +194,77 @@
 </template>
 
 <script setup>
-// No script logic needed for this footer
+import { ref } from 'vue';
+
+// State
+const email = ref('');
+const isSubscribing = ref(false);
+const subscribeMessage = ref(null);
+
+// Main locations data
+const mainLocations = ref([
+  {
+    id: 1,
+    name: "Main Branch - Sta. Cruz",
+    address: "1626 Rizal Avenue, Sta. Cruz Manila",
+    phone: "0919 002 4637",
+    hours: "8:00 AM - 10:00 PM"
+  },
+  {
+    id: 2,
+    name: "Makati Branch",
+    address: "Ayala Avenue, Makati City",
+    phone: "0918 123 4567",
+    hours: "8:00 AM - 9:00 PM"
+  },
+  {
+    id: 3,
+    name: "Quezon City Branch",
+    address: "Quezon Avenue, Quezon City",
+    phone: "0917 987 6543",
+    hours: "8:00 AM - 8:00 PM"
+  }
+]);
+
+// Methods
+const subscribeNewsletter = async () => {
+  if (!email.value || !isValidEmail(email.value)) {
+    subscribeMessage.value = {
+      type: 'error',
+      text: 'Please enter a valid email address.'
+    };
+    setTimeout(() => {
+      subscribeMessage.value = null;
+    }, 3000);
+    return;
+  }
+
+  isSubscribing.value = true;
+
+  // Simulate API call
+  await new Promise(resolve => setTimeout(resolve, 1500));
+
+  subscribeMessage.value = {
+    type: 'success',
+    text: 'Thank you for subscribing! Check your email for confirmation.'
+  };
+
+  isSubscribing.value = false;
+  email.value = '';
+
+  setTimeout(() => {
+    subscribeMessage.value = null;
+  }, 5000);
+};
+
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const callLocation = (phone) => {
+  window.open(`tel:${phone}`);
+};
 </script>
 
 <style scoped>
