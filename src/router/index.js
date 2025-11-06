@@ -77,14 +77,28 @@ const routes = [
         path: 'sales',
         name: 'SalesManagement',
         // Using a consistent dynamic import style
-        component: () => import('@/pages/admin side/SalesManagement.vue'), 
-        meta: { 
-            requiresAuth: true, 
+        component: () => import('@/pages/admin side/SalesManagement.vue'),
+        meta: {
+            requiresAuth: true,
             roles: ['admin', 'cashier'], // Correctly allows both roles
             isSidebarLink: true,
             sidebarTitle: 'Sales',
             sidebarIcon: 'pi pi-chart-bar'
-        } 
+        }
+      },
+      // POS TERMINAL ROUTE (NEW)
+      {
+        path: 'pos',
+        name: 'POS',
+        // Using dynamic import to follow existing pattern
+        component: () => import('@/pages/admin side/POS.vue'),
+        meta: {
+            requiresAuth: true,
+            roles: ['admin', 'cashier'], // Allow both admin and cashier roles
+            isSidebarLink: true,
+            sidebarTitle: 'POS Terminal',
+            sidebarIcon: 'pi pi-calculator'
+        }
       }
     ]
   }
