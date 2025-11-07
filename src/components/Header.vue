@@ -136,17 +136,19 @@ const scrollToFooter = () => {
     --text-dark: #000000;
     --border-light: #ecf0f1;
     --search-bg: #ffffff;
+    --dropdown-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
 .main-header {
     position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     background-color: var(--bg-light-red);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     padding: 15px 40px;
     margin-bottom: 20px;
+    z-index: 1000;
 }
 
 .header-content {
