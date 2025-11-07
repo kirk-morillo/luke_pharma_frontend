@@ -1,172 +1,197 @@
 <template>
     <div class="landing-page-container">
-
         <Header />
 
         <main class="main-content">
-
+            <!-- Hero Section -->
             <section id="hero" class="hero-section">
                 <div class="hero-text-content">
-                    <h1>Your Health, Our Priority.</h1>
-                    <p class="subtitle-text">Find the right medicine and health supplies from our trusted locations.</p>
-                    <a href="#items-section" @click.prevent="scrollToSection('items-section')" class="hero-cta-button">
-                        Explore Our Items <i class="pi pi-arrow-right"></i>
-                    </a>
+                    <h1>"Your Health, Our Commitment"</h1>
+                    <p class="subtitle-text">Trusted pharmaceutical care with quality medicines and health supplies for your family's wellness journey.</p>
+                    <router-link to="/products" class="hero-cta-button">
+                        Explore Products <i class="pi pi-arrow-right"></i>
+                    </router-link>
                 </div>
             </section>
 
-            <section id="items-section" class="items-section-container">
+            <!-- Frequently Sold Products Section -->
+            <section id="frequently-sold" class="frequently-sold-section">
                 <div class="section-header">
-                    <h2>Our Health Items</h2>
-                    <p>Search, filter by category, and check availability across our locations.</p>
+                    <h2>Frequently Sold Products</h2>
+                    <p>Discover our most popular health essentials trusted by our community.</p>
                 </div>
 
-                <div class="search-filter-controls">
-                    <div class="search-input-wrapper">
-                        <i class="pi pi-search search-icon"></i>
-                        <input type="text" v-model="searchTerm" placeholder="Search for a medicine or product name..."
-                            class="search-input" @input="clearSelection" />
-                        <i v-if="searchTerm" class="pi pi-times clear-search"
-                            @click="searchTerm = ''; clearSelection()"></i>
-                    </div>
-
-                    <div class="category-filters">
-                        <button v-for="cat in categories" :key="cat" @click="selectedCategory = cat; clearSelection()"
-                            :class="{ 'active': selectedCategory === cat }" class="category-button">
-                            {{ cat }}
-                        </button>
-                    </div>
-                </div>
-
-                <div v-if="selectedItem" class="item-availability-card">
-                    <div class="availability-header">
-                        <h3>Availability for: {{ selectedItem.name }} ({{ selectedItem.category }})</h3>
-                        <i class="pi pi-times-circle close-btn" @click="clearSelection"></i>
-                    </div>
-                    <div class="availability-list">
-                        <p v-if="selectedItem.locations.length === 0" class="not-available">
-                            Currently out of stock at all locations.
-                        </p>
-                        <div v-else class="locations-list">
-                            <span v-for="loc in selectedItem.locations" :key="loc" class="location-tag">
-                                <i class="pi pi-check-circle"></i> {{ loc }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-grid">
-                    <div v-if="filteredItems.length === 0" class="no-results">
-                        <i class="pi pi-exclamation-triangle"></i>
-                        <p>No items found matching your search and filter criteria.</p>
-                    </div>
-
-                    <div v-else v-for="item in filteredItems" :key="item.id" class="product-card"
-                        @click="selectItem(item)">
+                <div class="products-grid">
+                    <div v-for="product in frequentlySoldProducts" :key="product.id" class="product-card"
+                         @mouseenter="hoveredProduct = product.id"
+                         @mouseleave="hoveredProduct = null">
                         <div class="card-content">
-                            <i class="pi pi-pills product-icon"></i>
-                            <h4 class="product-name">{{ item.name }}</h4>
-                            <p class="product-category">{{ item.category }}</p>
+                            <i :class="getProductIcon(product.category)" class="product-icon"></i>
+                            <h4 class="product-name">{{ product.name }}</h4>
+                            <p class="product-description">{{ product.description }}</p>
                         </div>
                         <div class="card-footer">
-                            <span class="product-price">₱{{ item.price.toFixed(2) }}</span>
-                            <button class="availability-btn">
-                                Check Stock <i class="pi pi-arrow-right"></i>
+                            <div>
+                                <span class="product-price">₱{{ product.price.toFixed(2) }}</span>
+                                <p class="stock-locations">
+                                    <i class="pi pi-map-marker"></i>
+                                    {{ product.stockLocations.join(', ') }}
+                                </p>
+                            </div>
+                            <button @click.stop="addToBag(product)"
+                                    class="add-to-bag-btn"
+                                    :disabled="!product.inStock">
+                                <i class="pi pi-shopping-bag"></i>
+                                Add to Bag
                             </button>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section id="stores-section" class="stores-section-container">
+            <!-- Branch Carousel Section -->
+            <section id="branches" class="branches-section">
                 <div class="section-header">
-                    <h2>Our Store Locations</h2>
-                    <p>Visit any of our five convenient locations across the city.</p>
+                    <h2>Our Store Branches</h2>
+                    <p>Visit any of our convenient locations serving your community.</p>
                 </div>
-                <div class="stores-grid">
-                    <div v-for="location in storeLocations" :key="location" class="store-card">
-                        <i class="pi pi-building store-icon"></i>
-                        <h3 class="store-name">{{ location }}</h3>
-                        <p class="store-address">1626 Rizal Avenue Sta.Cruz Manila Area (Near Jose Reyes Hospital)</p>
-                        <button class="view-map-btn">
-                            View Details <i class="pi pi-external-link"></i>
-                        </button>
+
+                <div class="carousel-container">
+                    <button @click="previousBranches" class="carousel-arrow prev-arrow">
+                        <i class="pi pi-chevron-left"></i>
+                    </button>
+
+                    <div class="carousel-wrapper">
+                        <div class="carousel-track" :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
+                            <div v-for="(branch, index) in displayedBranches" :key="`${branch.id}-${index}`"
+                                 class="branch-card">
+                                <div class="branch-icon">
+                                    <i class="pi pi-building"></i>
+                                </div>
+                                <h3 class="branch-name">{{ branch.name }}</h3>
+                                <p class="branch-hours">{{ branch.serviceHours }}</p>
+                                <div class="branch-contact">
+                                    <p><i class="pi pi-phone"></i> {{ branch.contact }}</p>
+                                    <p><i class="pi pi-envelope"></i> {{ branch.email }}</p>
+                                </div>
+                                <button class="branch-details-btn">
+                                    View Details <i class="pi pi-external-link"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
+
+                    <button @click="nextBranches" class="carousel-arrow next-arrow">
+                        <i class="pi pi-chevron-right"></i>
+                    </button>
+                </div>
+
+                <!-- Carousel Indicators -->
+                <div class="carousel-indicators">
+                    <button v-for="(_, index) in totalCarouselSlides"
+                            :key="index"
+                            @click="goToSlide(index)"
+                            :class="{ active: index === currentSlideIndex }"
+                            class="indicator">
+                    </button>
                 </div>
             </section>
         </main>
 
         <Footer />
-
     </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import Header from '../../components/Header.vue';
 import Footer from '../../components/Footer.vue';
+import { useBag } from '@/composables/useBag.js';
+import { frequentlySoldProducts, mockBranches } from '@/data/mockData.js';
 
-// --- MOCK DATA ---
-const items = ref([
-    { id: 1, name: 'Paracetamol 500mg', category: 'Pain Relief', locations: ['Location 1', 'Location 3', 'Location 5'], price: 5.00 },
-    { id: 2, name: 'Amoxicillin 250mg', category: 'Antibiotics', locations: ['Location 2', 'Location 4'], price: 12.50 },
-    { id: 3, name: 'Vitamin C 1000mg', category: 'Vitamins', locations: ['Location 1', 'Location 2', 'Location 3', 'Location 4', 'Location 5'], price: 8.99 },
-    { id: 4, name: 'Loperamide 2mg', category: 'Digestive', locations: ['Location 3', 'Location 5'], price: 6.25 },
-    { id: 5, name: 'Cetirizine 10mg', category: 'Allergy', locations: ['Location 1', 'Location 4'], price: 4.75 },
-    { id: 6, name: 'Ibuprofen 200mg', category: 'Pain Relief', locations: ['Location 2', 'Location 5'], price: 7.00 },
-    { id: 7, name: 'Ginseng Complex', category: 'Vitamins', locations: ['Location 1', 'Location 2'], price: 15.00 },
-    { id: 8, name: 'Omeprazole 20mg', category: 'Digestive', locations: ['Location 3', 'Location 4'], price: 10.50 },
-]);
+// Bag functionality
+const { addToBag: bagAddToBag } = useBag();
 
-const categories = ['All', 'Pain Relief', 'Antibiotics', 'Vitamins', 'Digestive', 'Allergy'];
-const storeLocations = ['Location 1', 'Location 2', 'Location 3', 'Location 4', 'Location 5'];
+// State management
+const hoveredProduct = ref(null);
+const currentIndex = ref(0);
+const autoPlayInterval = ref(null);
 
-// --- STATE MANAGEMENT ---
-const selectedCategory = ref('All');
-const searchTerm = ref('');
-const selectedItem = ref(null);
+// Carousel logic
+const BRANCHES_PER_SLIDE = 3;
+const displayedBranches = computed(() => {
+    const branches = [];
+    const totalBranches = mockBranches.length;
 
-// --- LOGIC ---
-const filteredItems = computed(() => {
-    let list = items.value;
-
-    if (selectedCategory.value !== 'All') {
-        list = list.filter(item => item.category === selectedCategory.value);
+    // Create infinite carousel by duplicating branches
+    for (let i = 0; i < totalBranches * 3; i++) {
+        branches.push(mockBranches[i % totalBranches]);
     }
 
-    if (searchTerm.value.trim()) {
-        const query = searchTerm.value.toLowerCase().trim();
-        list = list.filter(item => item.name.toLowerCase().includes(query));
-    }
-
-    return list;
+    return branches;
 });
 
-const selectItem = (item) => {
-    selectedItem.value = item;
+const totalCarouselSlides = computed(() => {
+    return Math.ceil(displayedBranches.value.length / BRANCHES_PER_SLIDE);
+});
+
+const currentSlideIndex = computed(() => {
+    return Math.floor(currentIndex.value / BRANCHES_PER_SLIDE);
+});
+
+// Methods
+const getProductIcon = (category) => {
+    const icons = {
+        'Medicine': 'pi pi-pill',
+        'Medical Equipment': 'pi pi-cog'
+    };
+    return icons[category] || 'pi pi-box';
 };
 
-const clearSelection = () => {
-    selectedItem.value = null;
-};
-
-/**
- * Handles smooth internal scrolling for navigation.
- */
-const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-        const headerElement = document.querySelector('.main-header');
-        const headerHeight = headerElement ? headerElement.offsetHeight : 0;
-
-        const offsetPosition = element.getBoundingClientRect().top + window.scrollY - headerHeight;
-
-        window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-        });
+const addToBag = (product) => {
+    if (product.inStock) {
+        bagAddToBag(product, 1);
+        // Show success feedback (you can integrate SweetAlert2 here later)
+        console.log(`Added ${product.name} to bag`);
     }
 };
+
+const nextBranches = () => {
+    const maxIndex = displayedBranches.value.length - BRANCHES_PER_SLIDE;
+    currentIndex.value = (currentIndex.value + BRANCHES_PER_SLIDE) % (maxIndex + 1);
+};
+
+const previousBranches = () => {
+    const maxIndex = displayedBranches.value.length - BRANCHES_PER_SLIDE;
+    currentIndex.value = currentIndex.value - BRANCHES_PER_SLIDE < 0
+        ? maxIndex
+        : currentIndex.value - BRANCHES_PER_SLIDE;
+};
+
+const goToSlide = (slideIndex) => {
+    currentIndex.value = slideIndex * BRANCHES_PER_SLIDE;
+};
+
+const startAutoPlay = () => {
+    autoPlayInterval.value = setInterval(() => {
+        nextBranches();
+    }, 5000);
+};
+
+const stopAutoPlay = () => {
+    if (autoPlayInterval.value) {
+        clearInterval(autoPlayInterval.value);
+        autoPlayInterval.value = null;
+    }
+};
+
+onMounted(() => {
+    startAutoPlay();
+});
+
+onUnmounted(() => {
+    stopAutoPlay();
+});
 </script>
 
 <style scoped>
