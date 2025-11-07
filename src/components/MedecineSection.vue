@@ -1,5 +1,5 @@
 <template>
-    <div class="catalog-container">
+    <div class="catalog-container page-container">
         <header-component />
 
         <div class="search-and-filter">
@@ -24,31 +24,13 @@
                 <h1>Browse Our Medicines</h1>
                 <p v-if="loading" class="loading-message">Loading products...</p>
                 <div v-if="!loading" class="product-grid">
-                    <div v-for="product in filteredProducts" :key="product.id" class="product-card">
-                        <div class="product-image-placeholder">
-                            <i :class="[
-                                'pi',
-                                product.category === 'vitamins' ? 'pi-sun' :
-                                    product.category === 'pain_relief' ? 'pi-briefcase' :
-                                        'pi-tablet'
-                            ]" class="product-icon"></i>
-                        </div>
-                        <div class="product-details">
-                            <h3 class="product-name">{{ product.name }}</h3>
-                            <p class="product-category">{{ product.category.replace('_', ' ') }}</p>
-                            <div class="price-and-stock">
-                                <span class="product-price">₱{{ product.price.toFixed(2) }}</span>
-                                <span
-                                    :class="['product-stock', { low: product.stock < 10 && product.stock > 0, zero: product.stock === 0 }]">
-                                    Stock: {{ product.stock > 0 ? product.stock : 'Out of Stock' }}
-                                </span>
-                            </div>
-                        </div>
-                        <button @click="addToCart(product)" :disabled="product.stock <= 0"
-                            :class="['add-to-cart-btn', { 'staff-mode': isStaff }]">
-                            {{ isStaff ? 'ADD TO SALE' : 'ADD TO CART' }}
-                        </button>
-                    </div>
+                    <ProductCard
+                        v-for="product in mappedProducts"
+                        :key="product.id"
+                        :product="product"
+                        :compact="true"
+                        @add-to-bag="handleAddToCart"
+                    />
                 </div>
             </div>
 
