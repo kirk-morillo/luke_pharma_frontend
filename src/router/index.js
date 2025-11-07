@@ -6,7 +6,12 @@ import Login from '@/pages/Login.vue';
 // 1. IMPORT THE LANDING PAGE COMPONENT
 import LandingPage from '@/pages/user side/LandingPage.vue'; // Assuming location: src/pages/user side/LandingPage.vue
 // NOTE: ProductCatalog (MedecineSection) is now likely a component within LandingPage.vue
-import ProductCatalogComponent from '@/components/MedecineSection.vue'; 
+import ProductCatalogComponent from '@/components/MedecineSection.vue';
+
+// NEW USER-FACING PAGES
+import ProductsPage from '@/pages/user side/ProductsPage.vue';
+import BranchPage from '@/pages/user side/BranchPage.vue';
+import BagPage from '@/pages/user side/BagPage.vue';
 
 // --- END CHANGES ---
 
