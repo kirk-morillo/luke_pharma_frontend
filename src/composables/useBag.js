@@ -156,6 +156,7 @@ export const useBag = () => {
     removeFromBag,
     updateQuantity,
     clearBag,
+    completeOrder,
     getBagItems,
     getTotalPrice,
     getItemCount,
