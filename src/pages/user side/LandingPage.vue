@@ -1,5 +1,5 @@
 <template>
-    <div class="landing-page-container">
+    <div class="landing-page-container page-container">
         <Header />
 
         <main class="main-content">
@@ -21,27 +21,12 @@
                 </div>
 
                 <div class="products-grid">
-                    <div v-for="product in frequentlySoldProducts" :key="product.id" class="product-card"
-                        @mouseenter="hoveredProduct = product.id" @mouseleave="hoveredProduct = null">
-                        <div class="card-content">
-                            <i :class="getProductIcon(product.category)" class="product-icon"></i>
-                            <h4 class="product-name">{{ product.name }}</h4>
-                            <p class="product-description">{{ product.description }}</p>
-                        </div>
-                        <div class="card-footer">
-                            <div>
-                                <span class="product-price">₱{{ product.price.toFixed(2) }}</span>
-                                <p class="stock-locations">
-                                    <i class="pi pi-map-marker"></i>
-                                    {{ product.stockLocations.join(', ') }}
-                                </p>
-                            </div>
-                            <button @click.stop="addToBag(product)" class="add-to-bag-btn" :disabled="!product.inStock">
-                                <i class="pi pi-shopping-bag"></i>
-                                Add to Bag
-                            </button>
-                        </div>
-                    </div>
+                    <ProductCard
+                        v-for="product in frequentlySoldProducts"
+                        :key="product.id"
+                        :product="product"
+                        @add-to-bag="handleAddToBag"
+                    />
                 </div>
             </section>
 
