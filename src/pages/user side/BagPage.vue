@@ -80,14 +80,14 @@
                   <!-- Quantity Controls -->
                   <div class="flex items-center gap-2">
                     <button
-                      @click="updateQuantity(item.product.id, item.quantity - 1)"
+                      @click="handleUpdateQuantity(item.product.id, item.quantity - 1)"
                       class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors duration-200"
                     >
                       <i class="pi pi-minus text-xs"></i>
                     </button>
                     <span class="w-12 text-center font-semibold">{{ item.quantity }}</span>
                     <button
-                      @click="updateQuantity(item.product.id, item.quantity + 1)"
+                      @click="handleUpdateQuantity(item.product.id, item.quantity + 1)"
                       class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors duration-200"
                     >
                       <i class="pi pi-plus text-xs"></i>
