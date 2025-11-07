@@ -201,15 +201,15 @@ onUnmounted(() => {
     --bg-light-red: #FADBD8;
     --text-dark: #000000;
     --border-light: #ecf0f1;
-    --search-bg: #ffffff;
-    --footer-bg-dark: #1f2a38;
+    --text-secondary: #666666;
+    --shadow-light: 0 2px 8px rgba(0,0,0,0.1);
+    --shadow-medium: 0 4px 16px rgba(0,0,0,0.15);
 }
 
 .landing-page-container {
     display: flex;
-    padding: '20px';
     flex-direction: column;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: #f7f7f7;
 }
 
@@ -228,19 +228,22 @@ section {
 
 .section-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 50px;
 }
 
 .section-header h2 {
     font-size: 2.5em;
-    font-weight: 800;
+    font-weight: 700;
     color: var(--primary-red);
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    font-family: 'Poppins', sans-serif;
 }
 
 .section-header p {
-    color: #555;
+    color: var(--text-secondary);
     font-size: 1.1em;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* ========================================
