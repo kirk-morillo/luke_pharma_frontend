@@ -262,8 +262,7 @@ const filteredProducts = computed(() => {
 // Methods
 const handleAddToBag = (product) => {
   if (product.inStock && !isInBag(product.id)) {
-    addToBag(product)
-    showProductAddedAlert(product.name, true)
+    addToBag(product, 1, false) // Feedback handled by composable
   } else if (!product.inStock) {
     showErrorAlert('Out of Stock', 'This product is currently out of stock.')
   }
