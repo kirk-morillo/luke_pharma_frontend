@@ -115,19 +115,10 @@ const currentSlideIndex = computed(() => {
 
 
 // Methods
-const getProductIcon = (category) => {
-    const icons = {
-        'Medicine': 'pi pi-pill',
-        'Medical Equipment': 'pi pi-cog'
-    };
-    return icons[category] || 'pi pi-box';
-};
-
-const addToBag = (product) => {
+const handleAddToBag = (product) => {
     if (product.inStock) {
         bagAddToBag(product, 1);
-        // Show success feedback (you can integrate SweetAlert2 here later)
-        console.log(`Added ${product.name} to bag`);
+        showProductAddedAlert(product.name, true);
     }
 };
 
