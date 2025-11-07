@@ -657,3 +657,120 @@ input[type="checkbox"]:checked {
 .animate__shakeX {
     animation-name: shakeX;
 }
+
+/* Enhanced SweetAlert2 Mobile Responsiveness */
+@media (max-width: 768px) {
+    .swal2-popup {
+        width: 90% !important;
+        max-width: 400px;
+        margin: 20px auto !important;
+        padding: 1rem !important;
+        font-size: 0.9rem;
+    }
+
+    .swal2-title {
+        font-size: 1.2rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .swal2-content {
+        font-size: 0.85rem !important;
+        line-height: 1.4 !important;
+    }
+
+    .swal2-actions {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+    }
+
+    .swal2-confirm,
+    .swal2-cancel {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.9rem !important;
+    }
+
+    .swal2-icon {
+        margin-bottom: 0.75rem !important;
+    }
+
+    .swal2-icon::before {
+        font-size: 2.5rem !important;
+    }
+
+    .swal2-html-container {
+        font-size: 0.85rem !important;
+        line-height: 1.4 !important;
+    }
+}
+
+/* Enhanced SweetAlert2 Touch Targets for Mobile */
+@media (max-width: 480px) {
+    .swal2-confirm,
+    .swal2-cancel {
+        min-height: 44px !important;
+        padding: 0.875rem 1rem !important;
+        font-size: 0.95rem !important;
+    }
+}
+
+/* SweetAlert2 Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .swal2-popup {
+        background-color: #1f2937 !important;
+        color: #f9fafb !important;
+        border: 1px solid #374151 !important;
+    }
+
+    .swal2-title {
+        color: #f9fafb !important;
+    }
+
+    .swal2-content {
+        color: #d1d5db !important;
+    }
+
+    .swal2-html-container {
+        color: #d1d5db !important;
+    }
+}
+
+/* Enhanced Icon Animations */
+.swal2-icon {
+    transition: all 0.3s ease !important;
+}
+
+.swal2-icon.custom-success-icon::before,
+.swal2-icon.custom-error-icon::before,
+.swal2-icon.custom-warning-icon::before,
+.swal2-icon.custom-info-icon::before,
+.swal2-icon.custom-question-icon::before {
+    animation: iconPulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes iconPulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
+
+/* Enhanced Button Hover Effects */
+.swal2-confirm:hover,
+.swal2-cancel:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+    transition: all 0.3s ease !important;
+}
+
+.swal2-confirm:active,
+.swal2-cancel:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
