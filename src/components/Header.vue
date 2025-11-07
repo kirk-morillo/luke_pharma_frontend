@@ -9,30 +9,88 @@
                 </router-link>
             </div>
 
-            <div class="header-center">
-                <input type="text" placeholder="Search items, stores..." class="search-input" />
-            </div>
-
             <nav class="main-nav">
-                <router-link to="/items" class="nav-link">
-                    <i class="pi pi-box nav-icon"></i>
-                    <span class="nav-text">Items</span>
-                </router-link>
+                <!-- Products Dropdown -->
+                <div class="nav-dropdown" @mouseenter="showProductsDropdown = true" @mouseleave="showProductsDropdown = false">
+                    <router-link to="/products" class="nav-link dropdown-toggle">
+                        <i class="pi pi-box nav-icon"></i>
+                        <span class="nav-text">Products</span>
+                        <i class="pi pi-chevron-down dropdown-icon"></i>
+                    </router-link>
+                    <div class="dropdown-menu" :class="{ active: showProductsDropdown }">
+                        <router-link to="/products" class="dropdown-item">
+                            <i class="pi pi-pill dropdown-item-icon"></i>
+                            Medicine
+                        </router-link>
+                        <router-link to="/products" class="dropdown-item">
+                            <i class="pi pi-cog dropdown-item-icon"></i>
+                            Medical Equipment
+                        </router-link>
+                    </div>
+                </div>
 
-                <router-link to="/stores" class="nav-link">
-                    <i class="pi pi-building nav-icon"></i>
-                    <span class="nav-text">Stores</span>
-                </router-link>
+                <!-- Branch Dropdown -->
+                <div class="nav-dropdown" @mouseenter="showBranchDropdown = true" @mouseleave="showBranchDropdown = false">
+                    <button class="nav-link dropdown-toggle" @click="scrollToFooter">
+                        <i class="pi pi-building nav-icon"></i>
+                        <span class="nav-text">Branch</span>
+                        <i class="pi pi-chevron-down dropdown-icon"></i>
+                    </button>
+                    <div class="dropdown-menu" :class="{ active: showBranchDropdown }">
+                        <a href="#" class="dropdown-item" @click.prevent="scrollToFooter">
+                            <i class="pi pi-map-marker dropdown-item-icon"></i>
+                            Location 1
+                        </a>
+                        <a href="#" class="dropdown-item" @click.prevent="scrollToFooter">
+                            <i class="pi pi-map-marker dropdown-item-icon"></i>
+                            Location 2
+                        </a>
+                        <a href="#" class="dropdown-item" @click.prevent="scrollToFooter">
+                            <i class="pi pi-map-marker dropdown-item-icon"></i>
+                            Location 3
+                        </a>
+                    </div>
+                </div>
 
-                <router-link to="/about" class="nav-link">
-                    <i class="pi pi-info-circle nav-icon"></i>
-                    <span class="nav-text">About</span>
-                </router-link>
+                <!-- Contacts Button -->
+                <button class="nav-link" @click="scrollToFooter">
+                    <i class="pi pi-phone nav-icon"></i>
+                    <span class="nav-text">Contacts</span>
+                </button>
 
-                <router-link to="/account" class="nav-link account-icon-link">
-                    <i class="pi pi-user-circle nav-icon"></i>
-                    <span class="nav-text">Account</span>
-                </router-link>
+                <!-- Bag Dropdown -->
+                <div class="nav-dropdown" @mouseenter="showBagDropdown = true" @mouseleave="showBagDropdown = false">
+                    <router-link to="/bag" class="nav-link dropdown-toggle">
+                        <i class="pi pi-shopping-bag nav-icon"></i>
+                        <span class="nav-text">Bag</span>
+                        <span v-if="itemCount > 0" class="bag-badge">{{ itemCount }}</span>
+                        <i class="pi pi-chevron-down dropdown-icon"></i>
+                    </router-link>
+                    <div class="dropdown-menu bag-dropdown" :class="{ active: showBagDropdown }">
+                        <div v-if="itemCount > 0" class="bag-preview">
+                            <div class="bag-preview-header">
+                                <span class="bag-preview-title">Recently Added</span>
+                                <router-link to="/bag" class="view-bag-btn">View All</router-link>
+                            </div>
+                            <div class="bag-preview-items">
+                                <div v-for="item in recentBagItems" :key="item.product.id" class="bag-preview-item">
+                                    <span class="item-name">{{ item.product.name }}</span>
+                                    <span class="item-quantity">×{{ item.quantity }}</span>
+                                </div>
+                            </div>
+                            <div class="bag-preview-footer">
+                                <span class="bag-total">Total: ₱{{ totalPrice.toFixed(2) }}</span>
+                            </div>
+                        </div>
+                        <div v-else class="empty-bag">
+                            <i class="pi pi-shopping-bag empty-bag-icon"></i>
+                            <p class="empty-bag-text">Your bag is empty</p>
+                            <router-link to="/products" class="explore-products-btn">
+                                Explore Products
+                            </router-link>
+                        </div>
+                    </div>
+                </div>
             </nav>
 
         </div>
@@ -40,7 +98,33 @@
 </template>
 
 <script setup>
-// No script changes needed for this component structure
+import { ref, computed } from 'vue'
+import { useBag } from '@/composables/useBag.js'
+
+const { bagState, getBagItems, getTotalPrice, getItemCount } = useBag()
+
+// Dropdown visibility states
+const showProductsDropdown = ref(false)
+const showBranchDropdown = ref(false)
+const showBagDropdown = ref(false)
+
+// Computed properties
+const itemCount = computed(() => getItemCount())
+const totalPrice = computed(() => getTotalPrice())
+
+// Get recent bag items (max 3 for preview)
+const recentBagItems = computed(() => {
+    const items = getBagItems()
+    return items.slice(0, 3)
+})
+
+// Method to scroll to footer
+const scrollToFooter = () => {
+    const footer = document.querySelector('footer')
+    if (footer) {
+        footer.scrollIntoView({ behavior: 'smooth' })
+    }
+}
 </script>
 
 <style scoped>
