@@ -1093,3 +1093,344 @@ input[type="checkbox"]:checked {
     outline: 2px solid rgba(231, 76, 60, 0.3);
     outline-offset: 2px;
 }
+
+/* Landing Page Utility Classes */
+.landing-page {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f7f7f7;
+}
+
+.landing-section {
+    padding: 3.75rem 2.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.section-header-center {
+    text-align: center;
+    margin-bottom: 3.125rem;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-red, #E74C3C);
+    margin-bottom: 0.9375rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.section-subtitle {
+    color: var(--text-secondary, #666666);
+    font-size: 1.1rem;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Hero Section Styles */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(135deg, #fefefe, #FADBD8);
+    padding: 7.5rem 2.5rem;
+    min-height: 500px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    color: var(--text-dark, #000000);
+    margin-bottom: 1.25rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    color: var(--text-secondary, #666666);
+    margin-bottom: 2.1875rem;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+}
+
+.hero-cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--primary-red, #E74C3C);
+    color: white;
+    padding: 0.9375rem 2.1875rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.hero-cta-button:hover {
+    background-color: #C0392B;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+    text-decoration: none;
+    color: white;
+}
+
+/* Products Section */
+.frequently-sold-section {
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin: 1.875rem auto;
+}
+
+/* Branches Section */
+.branches-section {
+    background-color: #f8f9fa;
+    margin: 1.875rem auto 2.5rem;
+    border-radius: 20px;
+}
+
+/* Branch Card Styles */
+.branch-icon {
+    font-size: 3.5rem;
+    color: var(--primary-red, #E74C3C);
+    margin-bottom: 1.25rem;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.branch-name {
+    font-size: 1.4rem;
+    color: var(--text-dark, #000000);
+    margin-bottom: 0.625rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif';
+}
+
+.branch-hours {
+    color: var(--text-secondary, #666666);
+    margin-bottom: 0.9375rem;
+    font-size: 0.95rem;
+    font-family: 'Poppins', sans-serif';
+}
+
+.branch-contact {
+    color: var(--text-secondary, #666666);
+    margin: 5px 0;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.branch-contact i {
+    margin-right: 8px;
+    color: var(--primary-red, #E74C3C);
+}
+
+.branch-details-btn {
+    background-color: var(--primary-red, #E74C3C);
+    color: white;
+    border: none;
+    padding: 0.625rem 1.25rem;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0.9375rem;
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Poppins', sans-serif';
+    font-size: 1rem;
+}
+
+.branch-details-btn:hover {
+    background-color: #C0392B;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.branch-details-btn i {
+    margin-left: 8px;
+}
+
+/* Products Page Utility Classes */
+.products-page-container {
+    min-height: 100vh;
+    background-color: #f9fafb;
+    font-family: 'Poppins', sans-serif;
+}
+
+.products-main-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.page-title-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+    font-family: 'Poppins', sans-serif';
+}
+
+.page-subtitle {
+    font-size: 1.125rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
+    font-family: 'Poppins', sans-serif';
+}
+
+.page-title-underline {
+    width: 6rem;
+    height: 4px;
+    background-color: #E74C3C;
+    margin: 1rem auto;
+    border-radius: 2px;
+}
+
+.search-section {
+    max-width: 42rem;
+    margin: 0 auto 2rem auto;
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    font-size: 1.25rem;
+    z-index: 1;
+}
+
+.search-input {
+    width: 100%;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    padding: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 1.125rem;
+    font-family: 'Poppins', sans-serif';
+    outline: none;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
+}
+
+.search-input:focus {
+    border-color: #E74C3C;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.search-clear-btn {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    border-radius: 50%;
+    transition: color 0.2s ease;
+}
+
+.search-clear-btn:hover {
+    color: #6b7280;
+}
+
+.filter-section {
+    max-width: 56rem;
+    margin: 0 auto 2rem auto;
+}
+
+.filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.category-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.category-btn.active {
+    background-color: #E74C3C;
+    color: #ffffff;
+}
+
+.category-btn:not(.active) {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.category-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.products-section {
+    max-width: 80rem;
+    margin: 0 auto;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    color: #d1d5db;
+    margin-bottom: 1rem;
+}
+
+.empty-state-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+    font-family: 'Poppins', sans-serif';
+}
+
+.empty-state-text {
+    color: #6b7280;
+    font-family: 'Poppins', sans-serif';
+}
