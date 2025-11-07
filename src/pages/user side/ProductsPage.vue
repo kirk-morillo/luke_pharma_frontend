@@ -1,31 +1,31 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="products-page-container page-container" :style="containerStyle">
     <!-- Header Component -->
     <Header />
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
+    <main class="main-content" :style="mainContentStyle">
       <!-- Page Title -->
-      <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-800 mb-2">Our Products</h1>
-        <p class="text-lg text-gray-600">Find quality medicines and medical equipment</p>
-        <div class="w-24 h-1 bg-red-500 mx-auto mt-4"></div>
+      <div class="page-title-section" :style="titleSectionStyle">
+        <h1 :style="titleStyle">Our Products</h1>
+        <p :style="subtitleStyle">Find quality medicines and medical equipment</p>
+        <div :style="titleUnderlineStyle"></div>
       </div>
 
       <!-- Search Bar Section -->
-      <div class="max-w-2xl mx-auto mb-8">
-        <div class="relative">
-          <i class="pi pi-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl"></i>
+      <div class="search-section" :style="searchSectionStyle">
+        <div class="search-container" :style="searchContainerStyle">
+          <i class="pi pi-search" :style="searchIconStyle"></i>
           <input
             v-model="searchQuery"
             type="text"
             placeholder="Search for medicines or medical equipment..."
-            class="w-full pl-12 pr-12 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-lg"
+            :style="searchInputStyle"
           />
           <button
             v-if="searchQuery"
             @click="searchQuery = ''"
-            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 text-2xl leading-none"
+            :style="clearButtonStyle"
           >
             ×
           </button>
@@ -33,16 +33,11 @@
       </div>
 
       <!-- Category Filter Section -->
-      <div class="max-w-4xl mx-auto mb-8">
-        <div class="flex flex-wrap justify-center gap-4">
+      <div class="filter-section" :style="filterSectionStyle">
+        <div class="filter-container" :style="filterContainerStyle">
           <button
             @click="selectedCategory = null"
-            :class="[
-              'px-6 py-3 rounded-lg font-semibold transition-all duration-200',
-              selectedCategory === null
-                ? 'bg-red-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            ]"
+            :style="getCategoryButtonStyle(null)"
           >
             All Categories ({{ productCategories.reduce((sum, cat) => sum + cat.count, 0) }})
           </button>
@@ -50,12 +45,7 @@
             v-for="category in productCategories"
             :key="category.id"
             @click="selectedCategory = category.id"
-            :class="[
-              'px-6 py-3 rounded-lg font-semibold transition-all duration-200',
-              selectedCategory === category.id
-                ? 'bg-red-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            ]"
+            :style="getCategoryButtonStyle(category.id)"
           >
             {{ category.name }} ({{ category.count }})
           </button>
@@ -63,71 +53,20 @@
       </div>
 
       <!-- Products Grid Section -->
-      <div class="max-w-7xl mx-auto">
-        <div v-if="filteredProducts.length === 0" class="text-center py-16">
-          <i class="pi pi-search text-6xl text-gray-300 mb-4"></i>
-          <h3 class="text-xl font-semibold text-gray-600 mb-2">No products found</h3>
-          <p class="text-gray-500">Try adjusting your search or filters</p>
+      <div class="products-section" :style="productsSectionStyle">
+        <div v-if="filteredProducts.length === 0" class="empty-state" :style="emptyStateStyle">
+          <i class="pi pi-search" :style="emptyIconStyle"></i>
+          <h3 :style="emptyTitleStyle">No products found</h3>
+          <p :style="emptyTextStyle">Try adjusting your search or filters</p>
         </div>
 
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div
+        <div v-else class="products-grid">
+          <ProductCard
             v-for="product in filteredProducts"
             :key="product.id"
-            class="bg-white p-6 rounded-lg border border-gray-200 hover:border-red-500 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1"
-          >
-            <!-- Product Name -->
-            <h3 class="text-xl font-bold mb-2" style="color: #E74C3C;">
-              {{ product.name }}
-            </h3>
-
-            <!-- Product Description -->
-            <p class="text-gray-600 text-sm mb-4">
-              {{ product.description }}
-            </p>
-
-            <!-- Price -->
-            <div class="text-2xl font-bold text-gray-800 mb-3">
-              ₱{{ product.price.toFixed(2) }}
-            </div>
-
-            <!-- Stock Locations -->
-            <div class="text-sm text-gray-600 mb-4">
-              <span v-if="product.stockLocations.length === 3" class="text-green-600 font-medium">
-                Available at all branches
-              </span>
-              <span v-else-if="product.stockLocations.length > 0" class="text-blue-600">
-                Available at: {{ product.stockLocations.join(', ') }}
-              </span>
-              <span v-else class="text-red-600 font-medium">
-                Currently out of stock
-              </span>
-            </div>
-
-            <!-- Add to Bag Button -->
-            <button
-              @click="handleAddToBag(product)"
-              :disabled="!product.inStock || isInBag(product.id)"
-              :class="[
-                'w-full py-3 px-4 rounded-lg font-semibold transition-all duration-200',
-                !product.inStock || isInBag(product.id)
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-red-500 text-white hover:bg-red-600 active:scale-95'
-              ]"
-            >
-              <span v-if="isInBag(product.id)" class="flex items-center justify-center">
-                <i class="pi pi-check mr-2"></i>
-                In Bag ({{ getItemQuantity(product.id) }})
-              </span>
-              <span v-else-if="!product.inStock">
-                Out of Stock
-              </span>
-              <span v-else>
-                <i class="pi pi-shopping-cart mr-2"></i>
-                Add to Bag
-              </span>
-            </button>
-          </div>
+            :product="product"
+            @add-to-bag="handleAddToBag"
+          />
         </div>
       </div>
     </main>
