@@ -233,7 +233,7 @@ const handleSelectAll = () => {
   selectAll.value = !selectAll.value
 }
 
-const updateQuantity = (productId, newQuantity) => {
+const handleUpdateQuantity = (productId, newQuantity) => {
   if (newQuantity <= 0) {
     removeFromBag(productId)
     // Remove from selected items if it was selected
