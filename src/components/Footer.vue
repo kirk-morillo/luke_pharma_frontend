@@ -9,7 +9,7 @@
                 </router-link>
                 <p class="tagline">Your trusted health partner.</p>
 
-                <router-link to="/admin/login" class="admin-login-link-btn">
+                <router-link to="/login" class="admin-login-link-btn">
                     <i class="pi pi-lock"></i> Admin Login
                 </router-link>
 

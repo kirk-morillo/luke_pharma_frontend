@@ -3,18 +3,17 @@
         <Header />
 
         <main class="main-content">
-            <!-- Hero Section -->
             <section id="hero" class="hero-section">
                 <div class="hero-text-content">
                     <h1>"Your Health, Our Commitment"</h1>
-                    <p class="subtitle-text">Trusted pharmaceutical care with quality medicines and health supplies for your family's wellness journey.</p>
+                    <p class="subtitle-text">Trusted pharmaceutical care with quality medicines and health supplies for
+                        your family's wellness journey.</p>
                     <router-link to="/products" class="hero-cta-button">
                         Explore Products <i class="pi pi-arrow-right"></i>
                     </router-link>
                 </div>
             </section>
 
-            <!-- Frequently Sold Products Section -->
             <section id="frequently-sold" class="frequently-sold-section">
                 <div class="section-header">
                     <h2>Frequently Sold Products</h2>
@@ -23,8 +22,7 @@
 
                 <div class="products-grid">
                     <div v-for="product in frequentlySoldProducts" :key="product.id" class="product-card"
-                         @mouseenter="hoveredProduct = product.id"
-                         @mouseleave="hoveredProduct = null">
+                        @mouseenter="hoveredProduct = product.id" @mouseleave="hoveredProduct = null">
                         <div class="card-content">
                             <i :class="getProductIcon(product.category)" class="product-icon"></i>
                             <h4 class="product-name">{{ product.name }}</h4>
@@ -38,9 +36,7 @@
                                     {{ product.stockLocations.join(', ') }}
                                 </p>
                             </div>
-                            <button @click.stop="addToBag(product)"
-                                    class="add-to-bag-btn"
-                                    :disabled="!product.inStock">
+                            <button @click.stop="addToBag(product)" class="add-to-bag-btn" :disabled="!product.inStock">
                                 <i class="pi pi-shopping-bag"></i>
                                 Add to Bag
                             </button>
@@ -49,22 +45,21 @@
                 </div>
             </section>
 
-            <!-- Branch Carousel Section -->
             <section id="branches" class="branches-section">
                 <div class="section-header">
                     <h2>Our Store Branches</h2>
                     <p>Visit any of our convenient locations serving your community.</p>
                 </div>
 
-                <div class="carousel-container">
+                <div class="carousel-container" @mouseenter="stopAutoPlay" @mouseleave="startAutoPlay">
                     <button @click="previousBranches" class="carousel-arrow prev-arrow">
                         <i class="pi pi-chevron-left"></i>
                     </button>
 
                     <div class="carousel-wrapper">
-                        <div class="carousel-track" :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
-                            <div v-for="(branch, index) in displayedBranches" :key="`${branch.id}-${index}`"
-                                 class="branch-card">
+                        <div class="carousel-track"
+                            :style="{ transform: `translateX(-${currentIndex * (100 / BRANCHES_PER_SLIDE)}%)` }">
+                            <div v-for="branch in mockBranches" :key="branch.id" class="branch-card">
                                 <div class="branch-icon">
                                     <i class="pi pi-building"></i>
                                 </div>
@@ -86,13 +81,9 @@
                     </button>
                 </div>
 
-                <!-- Carousel Indicators -->
                 <div class="carousel-indicators">
-                    <button v-for="(_, index) in totalCarouselSlides"
-                            :key="index"
-                            @click="goToSlide(index)"
-                            :class="{ active: index === currentSlideIndex }"
-                            class="indicator">
+                    <button v-for="(_, index) in totalCarouselSlides" :key="index" @click="goToSlide(index)"
+                        :class="{ active: index === currentSlideIndex }" class="indicator">
                     </button>
                 </div>
             </section>
@@ -114,30 +105,28 @@ const { addToBag: bagAddToBag } = useBag();
 
 // State management
 const hoveredProduct = ref(null);
-const currentIndex = ref(0);
+const currentIndex = ref(0); // Tracks the index of the first visible branch
 const autoPlayInterval = ref(null);
 
 // Carousel logic
 const BRANCHES_PER_SLIDE = 3;
-const displayedBranches = computed(() => {
-    const branches = [];
-    const totalBranches = mockBranches.length;
+const totalBranches = computed(() => mockBranches.length);
 
-    // Create infinite carousel by duplicating branches
-    for (let i = 0; i < totalBranches * 3; i++) {
-        branches.push(mockBranches[i % totalBranches]);
-    }
-
-    return branches;
-});
-
+// Calculated property for the number of slides
 const totalCarouselSlides = computed(() => {
-    return Math.ceil(displayedBranches.value.length / BRANCHES_PER_SLIDE);
+    // If we show 3 per slide, and have 5 branches, we need 5 total steps to show the branches individually
+    // A better approach is usually to just let the currentIndex cycle through all *branches* and let CSS handle the display.
+    // However, since the indicator logic uses "slides", let's keep that logic, but ensure it's calculated correctly.
+    // If the goal is to show the full cycle, we calculate how many full 'BRANCHES_PER_SLIDE' groups can be made.
+    return Math.ceil(totalBranches.value / BRANCHES_PER_SLIDE);
 });
 
+// The current slide index for the indicators
 const currentSlideIndex = computed(() => {
+    // This now calculates which group of 3 the current branch index belongs to.
     return Math.floor(currentIndex.value / BRANCHES_PER_SLIDE);
 });
+
 
 // Methods
 const getProductIcon = (category) => {
@@ -157,25 +146,60 @@ const addToBag = (product) => {
 };
 
 const nextBranches = () => {
-    const maxIndex = displayedBranches.value.length - BRANCHES_PER_SLIDE;
-    currentIndex.value = (currentIndex.value + BRANCHES_PER_SLIDE) % (maxIndex + 1);
+    // Determine the furthest possible starting index (the index of the first branch in the last 'slide')
+    const lastBranchIndex = totalBranches.value - BRANCHES_PER_SLIDE;
+
+    // Calculate the new index. Max of 0 is needed in case totalBranches < BRANCHES_PER_SLIDE
+    const maxIndex = Math.max(0, lastBranchIndex);
+
+    // Cycle through all branches individually, or move by the slide size.
+    // Sticking to moving by one slide for cleaner navigation (BRANCHES_PER_SLIDE)
+    let newIndex = currentIndex.value + BRANCHES_PER_SLIDE;
+
+    // Wrap around to the start (index 0) if we exceed the max index.
+    if (newIndex > maxIndex) {
+        newIndex = 0;
+    }
+
+    currentIndex.value = newIndex;
 };
 
 const previousBranches = () => {
-    const maxIndex = displayedBranches.value.length - BRANCHES_PER_SLIDE;
-    currentIndex.value = currentIndex.value - BRANCHES_PER_SLIDE < 0
-        ? maxIndex
-        : currentIndex.value - BRANCHES_PER_SLIDE;
+    const lastBranchIndex = totalBranches.value - BRANCHES_PER_SLIDE;
+    const maxIndex = Math.max(0, lastBranchIndex);
+
+    let newIndex = currentIndex.value - BRANCHES_PER_SLIDE;
+
+    // Wrap around to the last slide if we go below 0
+    if (newIndex < 0) {
+        // Calculate the starting index of the *last* complete/partial slide
+        const lastSlideStart = Math.floor(maxIndex / BRANCHES_PER_SLIDE) * BRANCHES_PER_SLIDE;
+        newIndex = lastSlideStart;
+    }
+
+    currentIndex.value = newIndex;
 };
 
 const goToSlide = (slideIndex) => {
+    // Move to the starting branch index of the requested slide
     currentIndex.value = slideIndex * BRANCHES_PER_SLIDE;
+
+    // Ensure we don't exceed the boundary
+    const lastBranchIndex = totalBranches.value - BRANCHES_PER_SLIDE;
+    const maxIndex = Math.max(0, lastBranchIndex);
+
+    if (currentIndex.value > maxIndex) {
+        currentIndex.value = maxIndex;
+    }
 };
 
 const startAutoPlay = () => {
-    autoPlayInterval.value = setInterval(() => {
-        nextBranches();
-    }, 5000);
+    // Only start if it's not already running
+    if (!autoPlayInterval.value) {
+        autoPlayInterval.value = setInterval(() => {
+            nextBranches();
+        }, 5000);
+    }
 };
 
 const stopAutoPlay = () => {
@@ -196,17 +220,16 @@ onUnmounted(() => {
 
 <style scoped>
 /* --- CSS Variables --- */
-:root {
+/* Placed inside the component root selector for scoped use */
+.landing-page-container {
     --primary-red: #E74C3C;
     --bg-light-red: #FADBD8;
     --text-dark: #000000;
     --border-light: #ecf0f1;
     --text-secondary: #666666;
-    --shadow-light: 0 2px 8px rgba(0,0,0,0.1);
-    --shadow-medium: 0 4px 16px rgba(0,0,0,0.15);
-}
+    --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.15);
 
-.landing-page-container {
     display: flex;
     flex-direction: column;
     font-family: 'Poppins', sans-serif;
@@ -469,9 +492,12 @@ section {
 .carousel-track {
     display: flex;
     transition: transform 0.5s ease-in-out;
+    /* Set width to accommodate all branches */
+    width: 100%;
 }
 
 .branch-card {
+    /* Uses the same variable as the script (BRANCHES_PER_SLIDE=3) to set width */
     min-width: calc(100% / 3);
     padding: 40px 30px;
     text-align: center;
@@ -612,6 +638,7 @@ RESPONSIVE ADJUSTMENTS
     }
 
     .branch-card {
+        /* Adjusted width for showing 2 branches */
         min-width: calc(100% / 2);
         padding: 30px 20px;
     }
@@ -679,17 +706,30 @@ RESPONSIVE ADJUSTMENTS
     }
 
     .branch-card {
+        /* Adjusted width for showing 1 branch */
         min-width: 100%;
         padding: 30px 20px;
         margin: 0 5px;
     }
 
     .carousel-arrow {
-        display: none;
+        /* Re-enabling arrows but pushing them to the edges */
+        display: flex;
+        top: 30%;
+        /* Move up a bit to not interfere with indicators */
+    }
+
+    .prev-arrow {
+        left: 0;
+    }
+
+    .next-arrow {
+        right: 0;
     }
 
     .carousel-container {
-        margin: 0 20px;
+        margin: 0 40px;
+        /* Added margin to make space for the arrows */
     }
 
     .stock-locations {
