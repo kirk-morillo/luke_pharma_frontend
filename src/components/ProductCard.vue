@@ -226,14 +226,164 @@ export default {
 </script>
 
 <style scoped>
+/* Base ProductCard Styles */
+.product-card {
+  background-color: var(--card-bg, #ffffff);
+  border: 1px solid var(--card-border, #e0e0e0);
+  border-radius: var(--card-radius, 8px);
+  padding: 1rem;
+  margin: 0.5rem;
+  box-shadow: var(--card-shadow, 0 2px 4px rgba(0,0,0,0.1));
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
 .product-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   border-color: var(--primary-red, #E74C3C);
 }
 
+.product-card.compact {
+  min-height: 180px;
+  padding: 0.75rem;
+  margin: 0.25rem;
+}
+
 .product-card.out-of-stock {
   opacity: 0.7;
+}
+
+/* Icon Container */
+.card-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 0.75rem auto;
+  padding: 0.75rem;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  transition: all 0.3s ease;
+}
+
+.product-card.compact .card-icon {
+  width: 48px;
+  height: 48px;
+  padding: 0.75rem;
+}
+
+.product-card:hover .card-icon {
+  transform: scale(1.1);
+}
+
+/* Product Information */
+.product-name {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary, #2c3e50);
+  text-align: center;
+  line-height: 1.3;
+  font-family: 'Poppins', sans-serif;
+}
+
+.product-card.compact .product-name {
+  font-size: 0.875rem;
+}
+
+.product-category {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8125rem;
+  color: var(--text-secondary, #7f8c8d);
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.product-card.compact .product-category {
+  font-size: 0.75rem;
+}
+
+.product-price {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--primary-red, #E74C3C);
+  text-align: center;
+  margin: 0 0 0.5rem 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.product-card.compact .product-price {
+  font-size: 1rem;
+}
+
+/* Stock Locations */
+.stock-locations {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: var(--text-muted, #95a5a6);
+  margin-bottom: 0.75rem;
+  gap: 0.25rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.product-card.compact .stock-locations {
+  font-size: 0.6875rem;
+  margin-bottom: 0.5rem;
+}
+
+.stock-locations i {
+  font-size: 0.625rem;
+  color: var(--primary-red, #E74C3C);
+}
+
+/* Add to Bag Button */
+.add-to-bag-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  margin-top: auto;
+  background-color: var(--primary-red, #E74C3C);
+  color: #ffffff;
+  min-height: 40px;
+}
+
+.product-card.compact .add-to-bag-btn {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  min-height: 36px;
+}
+
+.add-to-bag-btn:hover:not(:disabled) {
+  background-color: #c0392b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
+.add-to-bag-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.add-to-bag-btn:disabled {
+  background-color: #ecf0f1;
+  color: #bdc3c7;
+  cursor: not-allowed;
 }
 
 .product-card.out-of-stock .add-to-bag-btn {
@@ -242,30 +392,173 @@ export default {
   cursor: not-allowed !important;
 }
 
-.add-to-bag-btn:active:not(:disabled) {
-  transform: translateY(0);
+.add-to-bag-btn i {
+  font-size: 0.875rem;
 }
 
-/* Responsive adjustments */
+.product-card.compact .add-to-bag-btn i {
+  font-size: 0.75rem;
+}
+
+/* Category-specific Icon Styles */
+.card-icon.medicine-icon {
+  background-color: rgba(46, 204, 113, 0.1);
+}
+
+.card-icon.medicine-icon i {
+  color: #2ecc71;
+}
+
+.card-icon.equipment-icon {
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+.card-icon.equipment-icon i {
+  color: #3498db;
+}
+
+/* Responsive Design Improvements */
+@media (max-width: 1024px) {
+  .product-card {
+    margin: 0.375rem;
+    min-height: 200px;
+  }
+
+  .product-card.compact {
+    min-height: 160px;
+  }
+}
+
 @media (max-width: 768px) {
   .product-card {
-    margin: 4px;
-    padding: 12px;
-    min-height: 160px;
+    margin: 0.25rem;
+    padding: 0.75rem;
+    min-height: 180px;
+  }
+
+  .product-card.compact {
+    min-height: 140px;
+    padding: 0.5rem;
   }
 
   .card-icon {
+    width: 48px !important;
+    height: 48px !important;
+    padding: 0.5rem !important;
+  }
+
+  .product-card.compact .card-icon {
     width: 40px !important;
     height: 40px !important;
-    padding: 8px !important;
+    padding: 0.5rem !important;
+  }
+
+  .product-name {
+    font-size: 0.875rem;
+  }
+
+  .product-category {
+    font-size: 0.75rem;
+  }
+
+  .product-price {
+    font-size: 1rem;
+  }
+
+  .stock-locations {
+    font-size: 0.6875rem;
+  }
+
+  .add-to-bag-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    min-height: 36px;
   }
 }
 
 @media (max-width: 480px) {
   .product-card {
-    margin: 2px;
-    padding: 8px;
-    min-height: 140px;
+    margin: 0.125rem;
+    padding: 0.5rem;
+    min-height: 160px;
   }
+
+  .product-card.compact {
+    min-height: 130px;
+    padding: 0.375rem;
+  }
+
+  .card-icon {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0.375rem !important;
+  }
+
+  .product-card.compact .card-icon {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0.25rem !important;
+  }
+
+  .product-name {
+    font-size: 0.8125rem;
+  }
+
+  .product-category {
+    font-size: 0.6875rem;
+  }
+
+  .product-price {
+    font-size: 0.875rem;
+  }
+
+  .stock-locations {
+    font-size: 0.625rem;
+  }
+
+  .add-to-bag-btn {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.6875rem;
+    min-height: 32px;
+  }
+}
+
+/* Touch-friendly improvements for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .add-to-bag-btn {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+  }
+
+  .product-card.compact .add-to-bag-btn {
+    min-height: 40px;
+  }
+}
+
+/* Animation improvements */
+.product-card {
+  animation: cardFadeIn 0.3s ease-out;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Focus styles for accessibility */
+.product-card:focus-within {
+  outline: 2px solid var(--primary-red, #E74C3C);
+  outline-offset: 2px;
+}
+
+.add-to-bag-btn:focus-visible {
+  outline: 2px solid var(--primary-red, #E74C3C);
+  outline-offset: 2px;
 }
 </style>
