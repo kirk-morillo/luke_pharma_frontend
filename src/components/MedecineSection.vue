@@ -261,12 +261,20 @@ onMounted(fetchProducts);
 }
 
 /* ---------------------------------------------------------------------- */
-/* --- 3. PRODUCT GRID --- */
+/* --- 3. PRODUCT GRID & LOADING --- */
 /* ---------------------------------------------------------------------- */
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 25px;
+}
+
+.loading-message {
+    text-align: center;
+    font-size: 1.2em;
+    color: var(--text-secondary, #666666);
+    padding: 40px;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* ---------------------------------------------------------------------- */
