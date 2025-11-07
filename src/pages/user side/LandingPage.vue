@@ -82,14 +82,15 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import Header from '../../components/Header.vue';
 import Footer from '../../components/Footer.vue';
+import ProductCard from '../../components/ProductCard.vue';
 import { useBag } from '@/composables/useBag.js';
 import { frequentlySoldProducts, mockBranches } from '@/data/mockData.js';
+import { showProductAddedAlert } from '@/utils/sweetAlertConfig.js';
 
 // Bag functionality
 const { addToBag: bagAddToBag } = useBag();
 
 // State management
-const hoveredProduct = ref(null);
 const currentIndex = ref(0); // Tracks the index of the first visible branch
 const autoPlayInterval = ref(null);
 
