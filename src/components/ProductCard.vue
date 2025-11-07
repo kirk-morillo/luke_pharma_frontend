@@ -5,29 +5,31 @@
       'compact': compact,
       'out-of-stock': !product.inStock
     }"
-    :style="cardStyle"
   >
-    <div class="card-icon" :style="iconStyle">
-      <i :class="getProductIcon(product.category)" :style="iconElementStyle"></i>
+    <div
+      class="card-icon"
+      :class="{
+        'medicine-icon': product.category === 'Medicine',
+        'equipment-icon': product.category === 'Equipment'
+      }"
+    >
+      <i :class="getProductIcon(product.category)"></i>
     </div>
     <div class="card-content">
-      <h4 class="product-name" :style="nameStyle">{{ product.name }}</h4>
-      <p class="product-category" :style="categoryStyle">{{ product.category }}</p>
-      <div class="product-price" :style="priceStyle">₱{{ product.price.toFixed(2) }}</div>
-      <div class="stock-locations" :style="locationsStyle">
-        <i class="pi pi-map-marker" :style="markerStyle"></i>
+      <h4 class="product-name">{{ product.name }}</h4>
+      <p class="product-category">{{ product.category }}</p>
+      <div class="product-price">₱{{ product.price.toFixed(2) }}</div>
+      <div class="stock-locations">
+        <i class="pi pi-map-marker"></i>
         {{ formatStockLocations(product.stockLocations) }}
       </div>
       <button
         v-if="showAddButton"
         @click="$emit('add-to-bag', product)"
         class="add-to-bag-btn"
-        :style="buttonStyle"
         :disabled="!product.inStock"
-        @mouseover="handleButtonHover(true)"
-        @mouseleave="handleButtonHover(false)"
       >
-        <i class="pi pi-shopping-bag" :style="buttonIconStyle"></i>
+        <i class="pi pi-shopping-bag"></i>
         {{ compact ? '' : 'Add to Bag' }}
       </button>
     </div>
