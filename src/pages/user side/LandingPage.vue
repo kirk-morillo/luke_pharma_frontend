@@ -107,24 +107,88 @@ const { addToBag: bagAddToBag } = useBag();
 const currentIndex = ref(0); // Tracks the index of the first visible branch
 const autoPlayInterval = ref(null);
 
-// Carousel logic
-const BRANCHES_PER_SLIDE = 3;
+// Responsive carousel logic
+const getBranchesPerSlide = () => {
+    if (typeof window !== 'undefined') {
+        if (window.innerWidth < 768) return 1; // Mobile
+        if (window.innerWidth <= 1024) return 2; // Tablet
+        return 3; // Desktop
+    }
+    return 3; // Default for SSR
+};
+
 const totalBranches = computed(() => mockBranches.length);
+const branchesPerSlide = ref(getBranchesPerSlide());
 
 // Calculated property for the number of slides
 const totalCarouselSlides = computed(() => {
-    // If we show 3 per slide, and have 5 branches, we need 5 total steps to show the branches individually
-    // A better approach is usually to just let the currentIndex cycle through all *branches* and let CSS handle the display.
-    // However, since the indicator logic uses "slides", let's keep that logic, but ensure it's calculated correctly.
-    // If the goal is to show the full cycle, we calculate how many full 'BRANCHES_PER_SLIDE' groups can be made.
-    return Math.ceil(totalBranches.value / BRANCHES_PER_SLIDE);
+    return Math.ceil(totalBranches.value / branchesPerSlide.value);
 });
 
 // The current slide index for the indicators
 const currentSlideIndex = computed(() => {
-    // This now calculates which group of 3 the current branch index belongs to.
-    return Math.floor(currentIndex.value / BRANCHES_PER_SLIDE);
+    return Math.floor(currentIndex.value / branchesPerSlide.value);
 });
+
+// Responsive branch styling
+const branchIconStyle = computed(() => ({
+    fontSize: window.innerWidth < 768 ? '2.5em' : '3.5em',
+    color: 'var(--primary-red, #E74C3C)',
+    marginBottom: window.innerWidth < 768 ? '15px' : '20px',
+    opacity: 0.8,
+    transition: 'all 0.3s ease'
+}));
+
+const branchNameStyle = computed(() => ({
+    fontSize: window.innerWidth < 768 ? '1.2em' : '1.4em',
+    color: 'var(--text-dark, #000000)',
+    marginBottom: window.innerWidth < 768 ? '8px' : '10px',
+    fontWeight: '600',
+    fontFamily: 'Poppins, sans-serif'
+}));
+
+const branchHoursStyle = computed(() => ({
+    color: 'var(--text-secondary, #666666)',
+    marginBottom: window.innerWidth < 768 ? '12px' : '15px',
+    fontSize: window.innerWidth < 768 ? '0.9em' : '0.95em',
+    fontFamily: 'Poppins, sans-serif'
+}));
+
+const branchContactStyle = computed(() => ({
+    color: 'var(--text-secondary, #666666)',
+    margin: '5px 0',
+    fontSize: window.innerWidth < 768 ? '0.85em' : '0.9em',
+    fontFamily: 'Poppins, sans-serif',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+}));
+
+const branchButtonStyle = computed(() => ({
+    backgroundColor: 'var(--primary-red, #E74C3C)',
+    color: 'white',
+    border: 'none',
+    padding: window.innerWidth < 768 ? '8px 16px' : '10px 20px',
+    borderRadius: '20px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    marginTop: window.innerWidth < 768 ? '12px' : '15px',
+    display: 'inline-flex',
+    alignItems: 'center',
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: window.innerWidth < 768 ? '0.9em' : '1em'
+}));
+
+const getResponsivePadding = () => {
+    return window.innerWidth < 768 ? '30px 20px' : '40px 30px';
+};
+
+// Handle window resize
+const handleResize = () => {
+    branchesPerSlide.value = getBranchesPerSlide();
+    currentIndex.value = 0; // Reset to first slide on resize
+};
 
 
 // Methods
