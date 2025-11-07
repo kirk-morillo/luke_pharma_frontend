@@ -434,22 +434,6 @@ const scrollToFooter = () => {
     text-align: center;
 }
 
-/* Account Icon Styling (Icon-only on Desktop) */
-.account-icon-link {
-    padding: 8px 10px;
-    margin-left: 5px;
-}
-
-.account-icon-link .nav-text {
-    display: none;
-}
-
-.account-icon-link .nav-icon {
-    margin-right: 0;
-    font-size: 1.4em;
-}
-
-
 /* --- Responsive Adjustments --- */
 /* Medium Screens (950px and below) */
 @media (max-width: 950px) {
@@ -468,22 +452,21 @@ const scrollToFooter = () => {
         flex-basis: 100%;
         justify-content: center;
         margin-left: 0;
+        gap: 10px;
     }
 
-    .header-center {
-        order: 2;
-        flex-basis: 100%;
-        max-width: 100%;
+    /* Hide dropdown icons on medium screens */
+    .dropdown-icon {
+        display: none;
     }
 
-    /* Re-show 'Account' text on wider mobile views */
-    .account-icon-link .nav-text {
-        display: initial;
+    /* Adjust dropdown menu position */
+    .dropdown-menu {
+        min-width: 180px;
     }
 
-    .account-icon-link .nav-icon {
-        margin-right: 6px;
-        font-size: 1.1em;
+    .bag-dropdown {
+        right: -50px;
     }
 }
 
@@ -500,8 +483,7 @@ const scrollToFooter = () => {
     }
 
     .header-left,
-    .main-nav,
-    .header-center {
+    .main-nav {
         order: unset;
         margin: 0;
         width: 100%;
@@ -519,8 +501,10 @@ const scrollToFooter = () => {
         padding: 6px 10px;
     }
 
-    /* Hide text on all small-screen links */
-    .nav-text {
+    /* Hide text and dropdown icons on small screens */
+    .nav-text,
+    .dropdown-icon,
+    .bag-badge {
         display: none;
     }
 
@@ -529,9 +513,9 @@ const scrollToFooter = () => {
         font-size: 1.2em;
     }
 
-    .account-icon-link {
-        margin-left: 0;
-        padding: 6px 10px;
+    /* Disable dropdowns on small screens - use direct navigation */
+    .dropdown-menu {
+        display: none;
     }
 }
 </style>
