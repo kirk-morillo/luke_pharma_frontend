@@ -1,124 +1,209 @@
 <template>
-    <header class="main-header">
-        <div class="header-content">
+    <header class="main-header sticky top-0 bg-white shadow-lg z-50 transition duration-300 ease-in-out py-3 sm:py-4">
+        <div class="header-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
 
-            <div class="header-left">
-                <router-link to="/" class="logo-link">
-                    <img src="/logo.png" alt="Company Logo" class="logo" />
-                    <span class="site-name">Luked Pharma Co.</span>
+            <!-- Header Left (Logo and Site Name) -->
+            <div class="header-left flex items-center">
+                <router-link to="/"
+                    class="logo-link flex items-center text-red-600 font-bold hover:text-red-700 transition">
+                    <!-- Using your actual logo.png --><img src="/logo.png" alt="Luked Pharma Logo"
+                        class="w-8 h-8 sm:w-10 sm:h-10 mr-2 object-contain rounded-full border-2 border-red-500" />
+                    <span class="site-name text-lg sm:text-xl font-extrabold tracking-tight hidden sm:inline">
+                        Luked Pharma Co.
+                    </span>
+                    <span class="site-name text-lg sm:text-xl font-extrabold tracking-tight sm:hidden">
+                        Luked Pharma
+                    </span>
                 </router-link>
             </div>
 
-            <nav class="main-nav">
+            <!-- Main Navigation (Desktop) -->
+            <nav class="main-nav hidden md:flex items-center space-x-2 lg:space-x-4">
+
                 <!-- Products Dropdown -->
-                <div class="nav-dropdown" @mouseenter="showProductsDropdown = true" @mouseleave="showProductsDropdown = false">
-                    <router-link to="/products" class="nav-link dropdown-toggle">
-                        <i class="pi pi-box nav-icon"></i>
+                <div class="relative group" @mouseenter="showProductsDropdown = true"
+                    @mouseleave="showProductsDropdown = false">
+                    <router-link to="/products" :class="['nav-link flex items-center p-3 text-red-600 font-medium rounded-lg hover:bg-red-50 hover:text-red-700 transition relative',
+                        isProductsActive ? 'bg-red-50 text-red-700' : '' // Apply active state
+                    ]">
+                        <i class="pi pi-box mr-2 text-lg"></i>
                         <span class="nav-text">Products</span>
-                        <i class="pi pi-chevron-down dropdown-icon"></i>
+                        <i
+                            :class="['pi pi-chevron-down ml-1 text-xs transition-transform duration-200', { 'rotate-180': showProductsDropdown }]"></i>
+                        <!-- Vertical red line for active state --><span v-if="isProductsActive"
+                            class="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-0.5 bg-red-600 rounded-full"></span>
                     </router-link>
-                    <div class="dropdown-menu" :class="{ active: showProductsDropdown }">
-                        <router-link to="/products" class="dropdown-item">
-                            <i class="pi pi-pill dropdown-item-icon"></i>
-                            Medicine
+
+                    <div :class="['absolute top-full mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 transition-all duration-300 origin-top',
+                        showProductsDropdown ? 'opacity-100 scale-y-100 visible' : 'opacity-0 scale-y-0 invisible']">
+                        <router-link to="/products?category=medicine"
+                            class="dropdown-item flex items-center p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition border-b border-gray-100">
+                            <i class="pi pi-plus-circle mr-3"></i>
+                            <span>Medicine</span>
                         </router-link>
-                        <router-link to="/products" class="dropdown-item">
-                            <i class="pi pi-cog dropdown-item-icon"></i>
-                            Medical Equipment
+                        <router-link to="/products?category=equipment"
+                            class="dropdown-item flex items-center p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition">
+                            <i class="pi pi-cog mr-3"></i>
+                            <span>Medical Equipment</span>
                         </router-link>
                     </div>
                 </div>
 
                 <!-- Branch Dropdown -->
-                <div class="nav-dropdown" @mouseenter="showBranchDropdown = true" @mouseleave="showBranchDropdown = false">
-                    <button class="nav-link dropdown-toggle" @click="scrollToFooter">
-                        <i class="pi pi-building nav-icon"></i>
-                        <span class="nav-text">Branch</span>
-                        <i class="pi pi-chevron-down dropdown-icon"></i>
+                <div class="relative group" @mouseenter="showBranchDropdown = true"
+                    @mouseleave="showBranchDropdown = false">
+                    <button @click="scrollToFooter" :class="['nav-link flex items-center p-3 text-red-600 font-medium rounded-lg hover:bg-red-50 hover:text-red-700 transition relative',
+                        isLocationActive ? 'bg-red-50 text-red-700' : ''
+                    ]">
+                        <i class="pi pi-building mr-2 text-lg"></i>
+                        <span class="nav-text">Location</span>
+                        <i
+                            :class="['pi pi-chevron-down ml-1 text-xs transition-transform duration-200', { 'rotate-180': showBranchDropdown }]"></i>
+                        <span v-if="isLocationActive"
+                            class="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-0.5 bg-red-600 rounded-full"></span>
                     </button>
-                    <div class="dropdown-menu" :class="{ active: showBranchDropdown }">
-                        <a href="#" class="dropdown-item" @click.prevent="scrollToFooter">
-                            <i class="pi pi-map-marker dropdown-item-icon"></i>
-                            Location 1
+                    <div :class="['absolute top-full mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 transition-all duration-300 origin-top',
+                        showBranchDropdown ? 'opacity-100 scale-y-100 visible' : 'opacity-0 scale-y-0 invisible']">
+                        <a href="#" @click.prevent="scrollToFooter"
+                            class="dropdown-item flex items-center p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition border-b border-gray-100">
+                            <i class="pi pi-map-marker mr-3 text-red-500"></i> Location 1
                         </a>
-                        <a href="#" class="dropdown-item" @click.prevent="scrollToFooter">
-                            <i class="pi pi-map-marker dropdown-item-icon"></i>
-                            Location 2
+                        <a href="#" @click.prevent="scrollToFooter"
+                            class="dropdown-item flex items-center p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition border-b border-gray-100">
+                            <i class="pi pi-map-marker mr-3 text-red-500"></i> Location 2
                         </a>
-                        <a href="#" class="dropdown-item" @click.prevent="scrollToFooter">
-                            <i class="pi pi-map-marker dropdown-item-icon"></i>
-                            Location 3
+                        <a href="#" @click.prevent="scrollToFooter"
+                            class="dropdown-item flex items-center p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition">
+                            <i class="pi pi-map-marker mr-3 text-red-500"></i> Location 3
                         </a>
                     </div>
                 </div>
 
-                <!-- Contacts Button -->
-                <button class="nav-link" @click="scrollToFooter">
-                    <i class="pi pi-phone nav-icon"></i>
+                <!-- Contacts Button (Direct Link) --><button @click="scrollToFooter" :class="['nav-link flex items-center p-3 text-red-600 font-medium rounded-lg hover:bg-red-50 hover:text-red-700 transition relative',
+                    isContactsActive ? 'bg-red-50 text-red-700' : ''
+                ]">
+                    <i class="pi pi-phone mr-2 text-lg"></i>
                     <span class="nav-text">Contacts</span>
+                    <span v-if="isContactsActive"
+                        class="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-0.5 bg-red-600 rounded-full"></span>
                 </button>
 
-                <!-- Bag Dropdown -->
-                <div class="nav-dropdown" @mouseenter="showBagDropdown = true" @mouseleave="showBagDropdown = false">
-                    <router-link to="/bag" class="nav-link dropdown-toggle">
-                        <i class="pi pi-shopping-bag nav-icon"></i>
-                        <span class="nav-text">Bag</span>
-                        <span v-if="itemCount > 0" class="bag-badge">{{ itemCount }}</span>
-                        <i class="pi pi-chevron-down dropdown-icon"></i>
+            </nav>
+
+            <!-- Bag Dropdown / Mobile Menu (Right) -->
+            <div class="flex items-center space-x-4">
+                <div class="relative group" @mouseenter="showBagDropdown = true" @mouseleave="showBagDropdown = false">
+                    <router-link to="/bag" :class="['nav-link flex items-center p-3 text-red-600 font-medium rounded-lg hover:bg-red-50 hover:text-red-700 transition relative',
+                        isBagPage ? 'bg-red-50 text-red-700' : ''
+                    ]">
+                        <div class="relative">
+                            <i class="pi pi-shopping-bag text-lg sm:text-xl"></i>
+                            <span v-if="itemCount > 0 && !isBagPage"
+                                class="absolute -top-1 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center ring-2 ring-white">
+                                {{ itemCount }}
+                            </span>
+                        </div>
+                        <span class="nav-text ml-2 hidden sm:inline">Bag</span>
+                        <span v-if="isBagPage"
+                            class="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-0.5 bg-red-600 rounded-full"></span>
                     </router-link>
-                    <div class="dropdown-menu bag-dropdown" :class="{ active: showBagDropdown }">
-                        <div v-if="itemCount > 0" class="bag-preview">
-                            <div class="bag-preview-header">
-                                <span class="bag-preview-title">Recently Added</span>
-                                <router-link to="/bag" class="view-bag-btn">View All</router-link>
+
+                    <div :class="['absolute top-full mt-2 w-72 md:w-80 bg-white rounded-xl shadow-2xl border border-gray-100 transition-all duration-300 origin-top right-0',
+                        showBagDropdown ? 'opacity-100 scale-y-100 visible' : 'opacity-0 scale-y-0 invisible']">
+                        <div v-if="itemCount > 0" class="p-4">
+                            <div class="flex justify-between items-center mb-3 pb-2 border-b border-gray-100">
+                                <span class="text-base font-semibold text-gray-800">Recently Added ({{ itemCount
+                                }})</span>
+                                <router-link to="/bag" class="text-sm font-medium text-red-600 hover:text-red-700">View
+                                    Bag</router-link>
                             </div>
-                            <div class="bag-preview-items">
-                                <div v-for="item in recentBagItems" :key="item.product.id" class="bag-preview-item">
-                                    <span class="item-name">{{ item.product.name }}</span>
-                                    <span class="item-quantity">×{{ item.quantity }}</span>
+                            <div class="space-y-2 max-h-40 overflow-y-auto mb-3">
+                                <div v-for="item in recentBagItems" :key="item.product.id"
+                                    class="flex justify-between items-center text-sm">
+                                    <span class="item-name text-gray-700 truncate mr-2">{{ item.product.name }}</span>
+                                    <span class="item-quantity font-semibold text-red-600 flex-shrink-0">×{{
+                                        item.quantity }}</span>
                                 </div>
                             </div>
-                            <div class="bag-preview-footer">
-                                <span class="bag-total">Total: ₱{{ totalPrice.toFixed(2) }}</span>
+                            <div class="pt-3 border-t border-gray-100 flex justify-between items-center">
+                                <span class="text-base font-bold text-gray-800">Total:</span>
+                                <span class="bag-total text-xl font-extrabold text-red-600">₱{{ totalPrice.toFixed(2)
+                                }}</span>
                             </div>
                         </div>
-                        <div v-else class="empty-bag">
-                            <i class="pi pi-shopping-bag empty-bag-icon"></i>
-                            <p class="empty-bag-text">Your bag is empty</p>
-                            <router-link to="/products" class="explore-products-btn">
+                        <div v-else class="p-6 text-center">
+                            <i class="pi pi-shopping-bag text-4xl text-gray-300 mb-3"></i>
+                            <p class="text-gray-500 mb-4">Your bag is empty. Start shopping now!</p>
+                            <router-link to="/products"
+                                class="inline-block px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">
                                 Explore Products
                             </router-link>
                         </div>
                     </div>
                 </div>
-            </nav>
+            </div>
 
         </div>
+
+        <!-- Mobile Navigation (Footer-style bar on small screens) -->
+        <nav
+            class="main-nav-mobile md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-xl p-2 flex justify-around">
+            <router-link to="/bag"
+                class="flex flex-col items-center p-1 text-gray-500 hover:text-red-600 transition relative">
+                <i class="pi pi-shopping-bag text-xl"></i>
+                <span class="text-xs">Bag</span>
+                <span v-if="itemCount > 0 && !isBagPage"
+                    class="absolute top-0 right-1 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center -mt-1 -mr-1 ring-2 ring-white z-10">
+                    {{ itemCount }}
+                </span>
+            </router-link>
+
+            <router-link to="/products"
+                class="flex flex-col items-center p-1 text-gray-500 hover:text-red-600 transition">
+                <i class="pi pi-box text-xl"></i>
+                <span class="text-xs">Products</span>
+            </router-link>
+            <button @click="scrollToFooter"
+                class="flex flex-col items-center p-1 text-gray-500 hover:text-red-600 transition">
+                <i class="pi pi-building text-xl"></i>
+                <span class="text-xs">Location</span>
+            </button>
+            <button @click="scrollToFooter"
+                class="flex flex-col items-center p-1 text-gray-500 hover:text-red-600 transition">
+                <i class="pi pi-phone text-xl"></i>
+                <span class="text-xs">Contacts</span>
+            </button>
+        </nav>
     </header>
+    <div class="h-5 md:h-5"></div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import { useBag } from '@/composables/useBag.js'
+import { useRoute } from 'vue-router'
 
-const { bagState, getBagItems, getTotalPrice, getItemCount } = useBag()
+const route = useRoute()
 
-// Dropdown visibility states
+const { getBagItems, getTotalPrice, getItemCount } = useBag()
+
 const showProductsDropdown = ref(false)
 const showBranchDropdown = ref(false)
 const showBagDropdown = ref(false)
 
-// Computed properties
 const itemCount = computed(() => getItemCount())
 const totalPrice = computed(() => getTotalPrice())
 
-// Get recent bag items (max 3 for preview)
+const isBagPage = computed(() => route.path === '/bag')
+const isProductsActive = computed(() => route.path.startsWith('/products')) // For Products & sub-categories
+const isLocationActive = computed(() => route.hash === '#footer') // Assuming location scrolls to footer
+const isContactsActive = computed(() => route.hash === '#footer') // Assuming contacts scrolls to footer
+
 const recentBagItems = computed(() => {
     const items = getBagItems()
     return items.slice(0, 3)
 })
 
-// Method to scroll to footer
 const scrollToFooter = () => {
     const footer = document.querySelector('footer')
     if (footer) {
@@ -126,396 +211,3 @@ const scrollToFooter = () => {
     }
 }
 </script>
-
-<style scoped>
-/* NOTE: Icons will only appear if primeicons/primeicons.css is imported globally. */
-
-:root {
-    --primary-red: #E74C3C;
-    --bg-light-red: #FADBD8;
-    --text-dark: #000000;
-    --border-light: #ecf0f1;
-    --search-bg: #ffffff;
-    --dropdown-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-}
-
-.main-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background-color: var(--bg-light-red);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    padding: 15px 40px;
-    margin-bottom: 20px;
-    z-index: 1000;
-}
-
-.header-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1400px;
-    margin: 0 auto;
-    gap: 30px;
-}
-
-/* --- Left Section (Logo) --- */
-.header-left {
-    display: flex;
-    align-items: center;
-}
-
-.logo-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: var(--primary-red);
-    font-weight: 700;
-}
-
-.logo {
-    width: 50px;
-    height: 50px;
-    margin-right: 10px;
-    object-fit: contain;
-}
-
-.site-name {
-    font-weight: 600;
-    color: var(--primary-red);
-    font-size: 1.6em;
-}
-
-/* --- Center Section (Search) --- */
-.header-center {
-    flex-grow: 1;
-    max-width: 450px;
-}
-
-.search-input {
-    width: 100%;
-    padding: 10px 15px;
-    border: 1px solid var(--border-light);
-    border-radius: 25px;
-    font-size: 1em;
-    outline: none;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    background-color: var(--search-bg);
-}
-
-.search-input:focus {
-    border-color: var(--primary-red);
-    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
-}
-
-/* --- Right Section (Navigation) --- */
-.main-nav {
-    display: flex;
-    gap: 15px;
-}
-
-.nav-dropdown {
-    position: relative;
-}
-
-.nav-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: var(--primary-red);
-    font-size: 1em;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: color 0.3s, background-color 0.3s;
-    font-weight: 500;
-    white-space: nowrap;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.nav-icon {
-    margin-right: 6px;
-    font-size: 1.1em;
-}
-
-.nav-link:hover,
-.nav-link.router-link-active {
-    color: var(--bg-light-red);
-    background-color: var(--primary-red);
-}
-
-.dropdown-toggle {
-    position: relative;
-}
-
-.dropdown-icon {
-    margin-left: 4px;
-    font-size: 0.8em;
-    transition: transform 0.3s;
-}
-
-.nav-dropdown:hover .dropdown-icon {
-    transform: rotate(180deg);
-}
-
-/* Dropdown Menu Styles */
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: white;
-    min-width: 200px;
-    box-shadow: var(--dropdown-shadow);
-    border-radius: 8px;
-    border: 1px solid var(--border-light);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
-    z-index: 1001;
-    margin-top: 5px;
-}
-
-.dropdown-menu.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.dropdown-item {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    color: var(--text-dark);
-    text-decoration: none;
-    transition: background-color 0.2s;
-    border-bottom: 1px solid var(--border-light);
-    font-size: 0.95em;
-}
-
-.dropdown-item:last-child {
-    border-bottom: none;
-    border-radius: 0 0 8px 8px;
-}
-
-.dropdown-item:first-child {
-    border-radius: 8px 8px 0 0;
-}
-
-.dropdown-item:hover {
-    background-color: var(--bg-light-red);
-    color: var(--primary-red);
-}
-
-.dropdown-item-icon {
-    margin-right: 8px;
-    font-size: 1em;
-}
-
-/* Bag Dropdown Styles */
-.bag-dropdown {
-    min-width: 280px;
-    right: 0;
-    left: auto;
-}
-
-.bag-preview {
-    padding: 12px;
-}
-
-.bag-preview-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border-light);
-}
-
-.bag-preview-title {
-    font-weight: 600;
-    color: var(--text-dark);
-}
-
-.view-bag-btn {
-    color: var(--primary-red);
-    text-decoration: none;
-    font-size: 0.9em;
-    font-weight: 500;
-}
-
-.view-bag-btn:hover {
-    text-decoration: underline;
-}
-
-.bag-preview-items {
-    margin-bottom: 12px;
-}
-
-.bag-preview-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    font-size: 0.9em;
-}
-
-.item-name {
-    color: var(--text-dark);
-    font-weight: 500;
-}
-
-.item-quantity {
-    color: var(--primary-red);
-    font-weight: 600;
-}
-
-.bag-preview-footer {
-    padding-top: 8px;
-    border-top: 1px solid var(--border-light);
-    text-align: right;
-}
-
-.bag-total {
-    font-weight: 600;
-    color: var(--primary-red);
-    font-size: 1.1em;
-}
-
-.empty-bag {
-    padding: 20px;
-    text-align: center;
-}
-
-.empty-bag-icon {
-    font-size: 2.5em;
-    color: var(--border-light);
-    margin-bottom: 12px;
-}
-
-.empty-bag-text {
-    color: var(--text-dark);
-    margin-bottom: 16px;
-    font-size: 0.95em;
-}
-
-.explore-products-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: var(--primary-red);
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: 500;
-    font-size: 0.9em;
-    transition: background-color 0.3s;
-}
-
-.explore-products-btn:hover {
-    background-color: #C0392B;
-    text-decoration: none;
-    color: white;
-}
-
-/* Bag Badge */
-.bag-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: var(--primary-red);
-    color: white;
-    font-size: 0.75em;
-    font-weight: 600;
-    padding: 2px 6px;
-    border-radius: 10px;
-    min-width: 18px;
-    text-align: center;
-}
-
-/* --- Responsive Adjustments --- */
-/* Medium Screens (950px and below) */
-@media (max-width: 950px) {
-    .header-content {
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 15px;
-    }
-
-    .header-left {
-        order: 1;
-    }
-
-    .main-nav {
-        order: 3;
-        flex-basis: 100%;
-        justify-content: center;
-        margin-left: 0;
-        gap: 10px;
-    }
-
-    /* Hide dropdown icons on medium screens */
-    .dropdown-icon {
-        display: none;
-    }
-
-    /* Adjust dropdown menu position */
-    .dropdown-menu {
-        min-width: 180px;
-    }
-
-    .bag-dropdown {
-        right: -50px;
-    }
-}
-
-/* Small Screens (600px and below) - Icon-only navigation */
-@media (max-width: 600px) {
-    .main-header {
-        padding: 15px 10px;
-    }
-
-    .header-content {
-        flex-direction: column;
-        gap: 15px;
-        align-items: center;
-    }
-
-    .header-left,
-    .main-nav {
-        order: unset;
-        margin: 0;
-        width: 100%;
-        max-width: 100%;
-        justify-content: center;
-    }
-
-    .main-nav {
-        flex-wrap: nowrap;
-        justify-content: space-around;
-        gap: 0;
-    }
-
-    .nav-link {
-        padding: 6px 10px;
-    }
-
-    /* Hide text and dropdown icons on small screens */
-    .nav-text,
-    .dropdown-icon,
-    .bag-badge {
-        display: none;
-    }
-
-    .nav-icon {
-        margin-right: 0;
-        font-size: 1.2em;
-    }
-
-    /* Disable dropdowns on small screens - use direct navigation */
-    .dropdown-menu {
-        display: none;
-    }
-}
-</style>

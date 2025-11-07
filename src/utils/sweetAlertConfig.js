@@ -32,7 +32,9 @@ export const showErrorAlert = (title, text) => {
   return Swal.fire({
     title: title,
     text: text,
-    iconHtml: '<i class="pi pi-times-circle"></i>',
+    // The centering fix is primarily in the CSS, but adding a zeroed padding style here
+    // can help override potential inline padding issues, ensuring perfect center.
+    iconHtml: '<i class="pi pi-times-circle" style="padding-left: 0 !important;"></i>', 
     customClass: {
       icon: 'custom-error-icon',
       title: 'custom-title',
@@ -287,22 +289,22 @@ export const showToast = (title, message, type = 'info') => {
 // Configure global SweetAlert2 defaults
 if (Swal && Swal.defaults) {
     Object.assign(Swal.defaults, {
-        customClass: {
-            popup: 'custom-popup',
-            header: 'custom-header',
-            title: 'custom-title',
-            content: 'custom-content',
-            actions: 'custom-actions',
-            confirmButton: 'custom-confirm-button',
-            cancelButton: 'custom-cancel-button',
-            footer: 'custom-footer'
-        },
-        buttonsStyling: true,
-        // ... all other defaults
-        showConfirmButton: true,
-        allowOutsideClick: false,
-        allowEscapeKey: true,
-        focusConfirm: false
+      customClass: {
+          popup: 'custom-popup',
+          header: 'custom-header',
+          title: 'custom-title',
+          content: 'custom-content',
+          actions: 'custom-actions',
+          confirmButton: 'custom-confirm-button',
+          cancelButton: 'custom-cancel-button',
+          footer: 'custom-footer'
+      },
+      buttonsStyling: true,
+      // ... all other defaults
+      showConfirmButton: true,
+      allowOutsideClick: false,
+      allowEscapeKey: true,
+      focusConfirm: false
     });
 } else {
     console.error("SweetAlert2 is not fully initialized. Cannot set global defaults.");

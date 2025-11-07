@@ -22,7 +22,6 @@ body {
 #app-wrapper {
   margin: 0;
   padding: 0;
-  /* Ensure the app container itself fills the viewport if content is short */
   min-height: 100vh;
 }
 

@@ -1,38 +1,83 @@
 <template>
   <div
-    class="product-card"
+    class="bg-white border border-gray-200 rounded-xl shadow-lg p-5 flex flex-col relative overflow-hidden transition-all duration-300 cursor-pointer min-h-56 group"
     :class="{
-      'compact': compact,
-      'out-of-stock': !product.inStock
-    }"
-  >
-    <div
-      class="card-icon"
-      :class="{
-        'medicine-icon': product.category === 'Medicine',
-        'equipment-icon': product.category === 'Equipment'
-      }"
-    >
-      <i :class="getProductIcon(product.category)"></i>
+      // Hover Effect & Base Sizing
+      'hover:shadow-xl hover:border-red-500 hover:-translate-y-1': product.inStock,
+      'p-4 min-h-44': compact,
+
+      // Out-of-Stock Styles
+      'opacity-60 cursor-not-allowed': !product.inStock,
+    }">
+    <!-- SOLD OUT Overlay -->
+    <div v-if="!product.inStock"
+      class="absolute inset-0 bg-gray-100/80 flex items-center justify-center z-10 rounded-xl">
+      <span class="text-xl font-black text-red-600/90 tracking-widest rotate-[-10deg] opacity-100">
+        SOLD OUT
+      </span>
     </div>
-    <div class="card-content">
-      <h4 class="product-name">{{ product.name }}</h4>
-      <p class="product-category">{{ product.category }}</p>
-      <div class="product-price">₱{{ product.price.toFixed(2) }}</div>
-      <div class="stock-locations">
-        <i class="pi pi-map-marker"></i>
-        {{ formatStockLocations(product.stockLocations) }}
+
+    <!-- Top Section (Icon & Details) -->
+    <div class="flex flex-col items-center flex-grow text-center">
+
+      <!-- Product Icon (Category visual identifier) -->
+      <div class="flex justify-center items-center mb-3 rounded-full transition-all duration-300 shadow-md" :class="[
+        // Sizing
+        compact ? 'w-12 h-12 p-2' : 'w-16 h-16 p-3',
+
+        // Category Specific Colors
+        product.category === 'Medicine'
+          ? 'bg-emerald-100 text-emerald-600' // Medicine (Green)
+          : 'bg-blue-100 text-blue-600', // Equipment (Blue)
+
+        // Hover Effect on Icon
+        product.inStock ? 'group-hover:scale-110' : ''
+      ]">
+        <i :class="[getProductIcon(product.category), compact ? 'text-xl' : 'text-3xl']"></i>
       </div>
-      <button
-        v-if="showAddButton"
-        @click="$emit('add-to-bag', product)"
-        class="add-to-bag-btn"
-        :disabled="!product.inStock"
-      >
-        <i class="pi pi-shopping-bag"></i>
-        {{ compact ? '' : 'Add to Bag' }}
-      </button>
+
+      <!-- Name (H4 - Primary Identifier) -->
+      <h4 class="font-semibold text-gray-900 mb-1 leading-snug line-clamp-2"
+        :class="{ 'text-lg': !compact, 'text-base': compact }">
+        {{ product.name }}
+      </h4>
+
+      <!-- Price (Emphasis on value) -->
+      <div class="font-black text-red-600 my-1" :class="{ 'text-2xl': !compact, 'text-xl': compact }">
+        ₱{{ product.price.toFixed(2) }}
+      </div>
+
+      <!-- Category (Sub-identifier) -->
+      <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3" :class="{ 'text-xxs': compact }">
+        {{ product.category }}
+      </p>
+
+      <!-- Stock Location Badge (Secondary information, clarity on availability) -->
+      <div
+        class="flex items-center justify-center text-xs text-gray-600 bg-gray-100 py-1 px-2.5 rounded-full mb-4 font-medium"
+        :class="{ 'text-xxs': compact, 'py-0.5 px-2': compact }">
+        <i class="pi pi-map-marker text-red-500 text-xs mr-1"></i>
+        <span class="truncate">{{ formatStockLocations(product.stockLocations) }}</span>
+      </div>
     </div>
+
+    <!-- Action Button (Pinned to the bottom) -->
+    <button v-if="showAddButton" @click.stop="$emit('add-to-bag', product)"
+      class="mt-auto flex items-center justify-center gap-2 w-full font-bold transition-all duration-300 rounded-lg transform active:scale-95"
+      :class="{
+        // Sizing
+        'py-3 px-4 text-sm min-h-11': !compact,
+        'py-2 px-3 text-xs min-h-9': compact,
+
+        // Active State
+        'bg-red-600 text-white hover:bg-red-700 hover:shadow-lg': product.inStock,
+
+        // Disabled State
+        'bg-gray-300 text-gray-500 cursor-not-allowed': !product.inStock
+      }" :disabled="!product.inStock">
+      <i :class="['pi pi-shopping-bag', compact ? 'text-sm' : 'text-base']"></i>
+      <span>{{ product.inStock ? 'Add to Bag' : 'Out of Stock' }}</span>
+    </button>
   </div>
 </template>
 
@@ -54,19 +99,20 @@ export default {
     }
   },
   emits: ['add-to-bag'],
-    methods: {
+  methods: {
     getProductIcon(category) {
-      return category === 'Medicine' ? 'pi pi-pill' : 'pi pi-cog'
+      // Logic for icon based on category
+      return category === 'Medicine' ? 'pi pi-plus-circle' : 'pi pi-cog'
     },
     formatStockLocations(locations) {
       if (!locations || locations.length === 0) return 'No locations'
 
       // Check if product is available at all branches
-      const allLocations = ['Location 1', 'Location 2', 'Location 3', 'Location 4', 'Location 5']
+      const allLocations = ['Location 1', 'Location 2', 'Location 3']
       const availableLocations = locations.filter(loc => allLocations.includes(loc))
 
       if (availableLocations.length >= 3) {
-        return 'All Branches'
+        return 'Available at 3+ Branches' // Changed text for clearer availability status
       }
 
       return availableLocations.join(', ')
@@ -76,339 +122,17 @@ export default {
 </script>
 
 <style scoped>
-/* Base ProductCard Styles */
-.product-card {
-  background-color: var(--card-bg, #ffffff);
-  border: 1px solid var(--card-border, #e0e0e0);
-  border-radius: var(--card-radius, 8px);
-  padding: 1rem;
-  margin: 0.5rem;
-  box-shadow: var(--card-shadow, 0 2px 4px rgba(0,0,0,0.1));
-  transition: all 0.3s ease;
-  cursor: pointer;
-  min-height: 220px;
-  display: flex;
-  flex-direction: column;
-  position: relative;
+/* Define a custom utility class for extra small text */
+.text-xxs {
+  font-size: 0.65rem;
+  /* ~10px */
+}
+
+/* Ensure the line-clamp utility works correctly for the name */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-.product-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  border-color: var(--primary-red, #E74C3C);
-}
-
-.product-card.compact {
-  min-height: 180px;
-  padding: 0.75rem;
-  margin: 0.25rem;
-}
-
-.product-card.out-of-stock {
-  opacity: 0.7;
-}
-
-/* Icon Container */
-.card-icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto 0.75rem auto;
-  padding: 0.75rem;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  transition: all 0.3s ease;
-}
-
-.product-card.compact .card-icon {
-  width: 48px;
-  height: 48px;
-  padding: 0.75rem;
-}
-
-.product-card:hover .card-icon {
-  transform: scale(1.1);
-}
-
-/* Product Information */
-.product-name {
-  margin: 0 0 0.25rem 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-primary, #2c3e50);
-  text-align: center;
-  line-height: 1.3;
-  font-family: 'Poppins', sans-serif;
-}
-
-.product-card.compact .product-name {
-  font-size: 0.875rem;
-}
-
-.product-category {
-  margin: 0 0 0.5rem 0;
-  font-size: 0.8125rem;
-  color: var(--text-secondary, #7f8c8d);
-  text-align: center;
-  font-family: 'Poppins', sans-serif;
-}
-
-.product-card.compact .product-category {
-  font-size: 0.75rem;
-}
-
-.product-price {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--primary-red, #E74C3C);
-  text-align: center;
-  margin: 0 0 0.5rem 0;
-  font-family: 'Poppins', sans-serif;
-}
-
-.product-card.compact .product-price {
-  font-size: 1rem;
-}
-
-/* Stock Locations */
-.stock-locations {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  color: var(--text-muted, #95a5a6);
-  margin-bottom: 0.75rem;
-  gap: 0.25rem;
-  font-family: 'Poppins', sans-serif;
-}
-
-.product-card.compact .stock-locations {
-  font-size: 0.6875rem;
-  margin-bottom: 0.5rem;
-}
-
-.stock-locations i {
-  font-size: 0.625rem;
-  color: var(--primary-red, #E74C3C);
-}
-
-/* Add to Bag Button */
-.add-to-bag-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.375rem;
-  padding: 0.625rem 1rem;
-  border: none;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'Poppins', sans-serif;
-  margin-top: auto;
-  background-color: var(--primary-red, #E74C3C);
-  color: #ffffff;
-  min-height: 40px;
-}
-
-.product-card.compact .add-to-bag-btn {
-  padding: 0.5rem 0.75rem;
-  font-size: 0.75rem;
-  min-height: 36px;
-}
-
-.add-to-bag-btn:hover:not(:disabled) {
-  background-color: #c0392b;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
-}
-
-.add-to-bag-btn:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.add-to-bag-btn:disabled {
-  background-color: #ecf0f1;
-  color: #bdc3c7;
-  cursor: not-allowed;
-}
-
-.product-card.out-of-stock .add-to-bag-btn {
-  background-color: #ecf0f1 !important;
-  color: #bdc3c7 !important;
-  cursor: not-allowed !important;
-}
-
-.add-to-bag-btn i {
-  font-size: 0.875rem;
-}
-
-.product-card.compact .add-to-bag-btn i {
-  font-size: 0.75rem;
-}
-
-/* Category-specific Icon Styles */
-.card-icon.medicine-icon {
-  background-color: rgba(46, 204, 113, 0.1);
-}
-
-.card-icon.medicine-icon i {
-  color: #2ecc71;
-}
-
-.card-icon.equipment-icon {
-  background-color: rgba(52, 152, 219, 0.1);
-}
-
-.card-icon.equipment-icon i {
-  color: #3498db;
-}
-
-/* Responsive Design Improvements */
-@media (max-width: 1024px) {
-  .product-card {
-    margin: 0.375rem;
-    min-height: 200px;
-  }
-
-  .product-card.compact {
-    min-height: 160px;
-  }
-}
-
-@media (max-width: 768px) {
-  .product-card {
-    margin: 0.25rem;
-    padding: 0.75rem;
-    min-height: 180px;
-  }
-
-  .product-card.compact {
-    min-height: 140px;
-    padding: 0.5rem;
-  }
-
-  .card-icon {
-    width: 48px !important;
-    height: 48px !important;
-    padding: 0.5rem !important;
-  }
-
-  .product-card.compact .card-icon {
-    width: 40px !important;
-    height: 40px !important;
-    padding: 0.5rem !important;
-  }
-
-  .product-name {
-    font-size: 0.875rem;
-  }
-
-  .product-category {
-    font-size: 0.75rem;
-  }
-
-  .product-price {
-    font-size: 1rem;
-  }
-
-  .stock-locations {
-    font-size: 0.6875rem;
-  }
-
-  .add-to-bag-btn {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.75rem;
-    min-height: 36px;
-  }
-}
-
-@media (max-width: 480px) {
-  .product-card {
-    margin: 0.125rem;
-    padding: 0.5rem;
-    min-height: 160px;
-  }
-
-  .product-card.compact {
-    min-height: 130px;
-    padding: 0.375rem;
-  }
-
-  .card-icon {
-    width: 40px !important;
-    height: 40px !important;
-    padding: 0.375rem !important;
-  }
-
-  .product-card.compact .card-icon {
-    width: 32px !important;
-    height: 32px !important;
-    padding: 0.25rem !important;
-  }
-
-  .product-name {
-    font-size: 0.8125rem;
-  }
-
-  .product-category {
-    font-size: 0.6875rem;
-  }
-
-  .product-price {
-    font-size: 0.875rem;
-  }
-
-  .stock-locations {
-    font-size: 0.625rem;
-  }
-
-  .add-to-bag-btn {
-    padding: 0.375rem 0.625rem;
-    font-size: 0.6875rem;
-    min-height: 32px;
-  }
-}
-
-/* Touch-friendly improvements for mobile */
-@media (hover: none) and (pointer: coarse) {
-  .add-to-bag-btn {
-    min-height: 44px;
-    padding: 0.75rem 1rem;
-  }
-
-  .product-card.compact .add-to-bag-btn {
-    min-height: 40px;
-  }
-}
-
-/* Animation improvements */
-.product-card {
-  animation: cardFadeIn 0.3s ease-out;
-}
-
-@keyframes cardFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Focus styles for accessibility */
-.product-card:focus-within {
-  outline: 2px solid var(--primary-red, #E74C3C);
-  outline-offset: 2px;
-}
-
-.add-to-bag-btn:focus-visible {
-  outline: 2px solid var(--primary-red, #E74C3C);
-  outline-offset: 2px;
+  -webkit-line-clamp: 2;
 }
 </style>

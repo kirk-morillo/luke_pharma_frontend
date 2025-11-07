@@ -1,190 +1,198 @@
 <template>
-  <div class="min-h-screen bg-gray-50 page-container">
-    <!-- Header Component -->
+  <div class="min-h-screen bg-gray-50">
     <Header />
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
-      <!-- Page Title -->
-      <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-800 mb-2">Shopping Bag</h1>
-        <p class="text-lg text-gray-600">Review and checkout your selected items</p>
-        <div class="w-24 h-1 bg-red-500 mx-auto mt-4"></div>
-      </div>
+    <main class="py-8">
+      <div class="container mx-auto px-4 lg:px-6 xl:px-8">
 
-      <!-- Empty Bag State -->
-      <div v-if="bagItems.length === 0" class="max-w-md mx-auto text-center py-16">
-        <i class="pi pi-shopping-cart text-6xl text-gray-300 mb-4"></i>
-        <h3 class="text-xl font-semibold text-gray-600 mb-2">Your bag is empty</h3>
-        <p class="text-gray-500 mb-6">Start adding some products to your bag</p>
-        <router-link
-          to="/products"
-          class="inline-flex items-center px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors duration-200"
-        >
-          <i class="pi pi-arrow-left mr-2"></i>
-          Explore Products
-        </router-link>
-      </div>
+        <div class="mb-8">
+          <h1 class="text-4xl font-extrabold text-gray-900 mb-1">Shopping Bag 🛍️</h1>
+          <p class="text-xl text-gray-600">
+            <span class="font-extrabold text-red-600">{{ bagItems.length }}</span>
+            {{ bagItems.length === 1 ? 'item' : 'items' }} in your bag
+          </p>
+        </div>
 
-      <!-- Bag Content (Two-section layout) -->
-      <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        <!-- Left Section: All Products List -->
-        <div class="lg:col-span-2">
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex justify-between items-center mb-6">
-              <h2 class="text-2xl font-bold text-gray-800">All Items in Bag</h2>
-              <div class="flex items-center gap-4">
-                <label class="flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    v-model="selectAll"
-                    @change="handleSelectAll"
-                    class="mr-2 w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500"
-                  />
-                  <span class="text-gray-700 font-medium">Select All</span>
+        <div v-if="bagItems.length === 0" class="max-w-md mx-auto text-center py-20">
+          <div class="bg-white p-12 rounded-2xl shadow-xl">
+            <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 flex items-center justify-center rounded-full">
+              <i class="pi pi-shopping-cart text-5xl text-gray-400"></i>
+            </div>
+            <h3 class="text-3xl font-bold text-gray-800 mb-3">Your bag is empty</h3>
+            <p class="text-gray-500 mb-10">Start adding some products to your bag and fill it up!</p>
+            <router-link to="/products"
+              class="inline-flex items-center px-10 py-4 bg-red-600 text-white font-bold text-lg hover:bg-red-700 transition duration-200 uppercase tracking-wider rounded-xl shadow-lg">
+              <i class="pi pi-arrow-left mr-3 text-lg"></i>
+              Explore Products
+            </router-link>
+          </div>
+        </div>
+
+
+        <div v-else
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-6 md:gap-8 max-w-7xl mx-auto min-h-[400px]">
+
+
+          <div class="md:col-span-8 col-span-1 sm:col-span-1">
+            <div class="bg-white rounded-xl shadow-xl overflow-hidden">
+
+              <div
+                class="flex flex-col sm:flex-row justify-between items-center p-4 sm:p-6 bg-red-50 border-b-2 border-red-200 gap-4">
+                <label class="flex items-center cursor-pointer group">
+                  <input type="checkbox" v-model="selectAll" @change="handleSelectAll"
+                    class="mr-3 cursor-pointer w-6 h-6 rounded accent-red-600" />
+                  <span class="text-lg text-gray-800 font-bold">
+                    Select All Items
+                  </span>
                 </label>
-                <button
-                  @click="handleClearBag"
-                  class="text-red-500 hover:text-red-700 font-medium text-sm"
-                >
+                <button @click="handleClearBag"
+                  class="px-4 py-2 text-red-600 hover:bg-red-100 font-bold transition duration-200 flex items-center gap-2 rounded-lg w-full sm:w-auto justify-center">
+                  <i class="pi pi-trash text-base"></i>
                   Clear Bag
                 </button>
               </div>
-            </div>
 
-            <!-- Product List -->
-            <div class="space-y-4">
-              <div
-                v-for="item in bagItems"
-                :key="item.product.id"
-                class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-200"
-              >
-                <div class="flex items-center gap-4">
-                  <!-- Checkbox -->
-                  <input
-                    type="checkbox"
-                    v-model="selectedItems"
-                    :value="item.product.id"
-                    class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500"
-                  />
+              <div class="divide-y divide-gray-100">
+                <div v-for="item in bagItems" :key="item.product.id"
+                  class="p-4 sm:p-6 hover:bg-gray-50 transition-colors duration-200">
 
-                  <!-- Product Info -->
-                  <div class="flex-1">
-                    <h3 class="text-lg font-semibold" style="color: #E74C3C;">
-                      {{ item.product.name }}
-                    </h3>
-                    <p class="text-gray-600 text-sm mb-1">{{ item.product.description }}</p>
-                    <p class="text-gray-800 font-semibold">₱{{ item.product.price.toFixed(2) }}</p>
+                  <div class="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+                    <input type="checkbox" v-model="selectedItems" :value="item.product.id"
+                      class="mt-1 cursor-pointer flex-shrink-0 w-5 h-5 rounded accent-red-600" />
+
+                    <div
+                      class="flex items-center justify-center flex-shrink-0 w-24 h-24 bg-gray-100 rounded-lg shadow-sm">
+                      <i class="pi pi-box text-5xl text-gray-400"></i>
+                    </div>
+
+                    <div class="flex-1 min-w-0">
+                      <h3 class="text-xl font-bold mb-2 text-gray-900">
+                        {{ item.product.name }}
+                      </h3>
+                      <div class="flex items-center gap-2 mb-4">
+                        <span class="text-sm text-gray-600">Unit Price:</span>
+                        <span class="text-lg font-extrabold text-red-600">₱{{ item.product.price.toFixed(2)
+                        }}</span>
+                      </div>
+
+                      <div class="flex items-center gap-3">
+                        <span class="text-base font-semibold text-gray-700">Qty:</span>
+                        <div class="flex items-center gap-2 bg-gray-100 p-1 rounded-lg">
+                          <button @click="handleUpdateQuantity(item.product.id, item.quantity - 1)"
+                            class="bg-white hover:bg-red-600 hover:text-white flex items-center justify-center transition duration-200 w-8 h-8 rounded-lg shadow-sm">
+                            <i class="pi pi-minus text-sm"></i>
+                          </button>
+                          <span class="text-center font-bold text-lg w-10 text-gray-900">{{
+                            item.quantity
+                          }}</span>
+                          <button @click="handleUpdateQuantity(item.product.id, item.quantity + 1)"
+                            class="bg-white hover:bg-red-600 hover:text-white flex items-center justify-center transition duration-200 w-8 h-8 rounded-lg shadow-sm">
+                            <i class="pi pi-plus text-sm"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="text-right flex-shrink-0 w-full sm:w-32 mt-4 sm:mt-0">
+                      <p class="text-2xl font-extrabold mb-3 text-gray-900">
+                        ₱{{ (item.product.price * item.quantity).toFixed(2) }}
+                      </p>
+                      <button @click="handleRemoveFromBag(item.product.id)"
+                        class="text-sm font-semibold hover:underline transition-colors duration-200 flex items-center gap-1 text-red-600 ml-auto">
+                        <i class="pi pi-times text-xs"></i>
+                        Remove
+                      </button>
+                    </div>
                   </div>
-
-                  <!-- Quantity Controls -->
-                  <div class="flex items-center gap-2">
-                    <button
-                      @click="handleUpdateQuantity(item.product.id, item.quantity - 1)"
-                      class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors duration-200"
-                    >
-                      <i class="pi pi-minus text-xs"></i>
-                    </button>
-                    <span class="w-12 text-center font-semibold">{{ item.quantity }}</span>
-                    <button
-                      @click="handleUpdateQuantity(item.product.id, item.quantity + 1)"
-                      class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors duration-200"
-                    >
-                      <i class="pi pi-plus text-xs"></i>
-                    </button>
-                  </div>
-
-                  <!-- Item Total -->
-                  <div class="text-right">
-                    <p class="text-lg font-bold text-gray-800">
-                      ₱{{ (item.product.price * item.quantity).toFixed(2) }}
-                    </p>
-                  </div>
-
-                  <!-- Remove Button -->
-                  <button
-                    @click="removeFromBag(item.product.id)"
-                    class="text-red-500 hover:text-red-700 transition-colors duration-200"
-                  >
-                    <i class="pi pi-trash text-lg"></i>
-                  </button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Right Section: Selected Products & Checkout -->
-        <div class="lg:col-span-1">
-          <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Selected for Checkout</h2>
 
-            <!-- Selected Items List -->
-            <div v-if="selectedBagItems.length === 0" class="text-center py-8">
-              <i class="pi pi-shopping-cart text-4xl text-gray-300 mb-3"></i>
-              <p class="text-gray-500">No items selected</p>
-              <p class="text-sm text-gray-400 mt-1">Select items from your bag to checkout</p>
-            </div>
+          <div class="md:col-span-4 col-span-1 sm:col-span-1">
+            <div class="bg-white rounded-xl shadow-xl overflow-hidden sticky top-24">
 
-            <div v-else class="space-y-4 mb-6">
-              <div
-                v-for="item in selectedBagItems"
-                :key="item.product.id"
-                class="flex justify-between items-center pb-3 border-b border-gray-100"
-              >
-                <div class="flex-1">
-                  <h4 class="font-medium text-gray-800">{{ item.product.name }}</h4>
-                  <p class="text-sm text-gray-600">₱{{ item.product.price.toFixed(2) }} × {{ item.quantity }}</p>
+              <div class="p-6 bg-gradient-to-r from-red-600 to-orange-600">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                  <i class="pi pi-shopping-bag"></i>
+                  Order Summary
+                </h2>
+              </div>
+
+              <div class="p-6 flex flex-col gap-6">
+
+                <div class="bg-gray-50 p-4 rounded-xl">
+                  <div class="flex justify-between items-center text-base mb-2 text-gray-700">
+                    <span>Selected Items</span>
+                    <span class="font-bold">{{ selectedBagItems.length }} {{ selectedBagItems.length === 1 ? 'item'
+                      : 'items' }}</span>
+                  </div>
+                  <div class="flex justify-between items-center text-sm text-gray-500">
+                    <span>Total Items in Bag</span>
+                    <span class="font-semibold">{{ bagItems.length }} {{ bagItems.length === 1 ? 'item' : 'items'
+                    }}</span>
+                  </div>
                 </div>
-                <div class="text-right">
-                  <p class="font-semibold text-gray-800">
-                    ₱{{ (item.product.price * item.quantity).toFixed(2) }}
-                  </p>
+
+                <div class="flex justify-between items-center pb-6 border-b border-gray-200">
+                  <span class="font-medium text-lg text-gray-700">Subtotal (Selected)</span>
+                  <span class="font-bold text-xl text-gray-900">
+                    ₱{{ selectedSubtotal.toFixed(2) }}
+                  </span>
+                </div>
+
+                <div class="p-6 bg-red-50 rounded-xl border-2 border-red-300">
+                  <div class="flex justify-between items-center">
+                    <span class="text-xl font-bold text-gray-800">ORDER TOTAL</span>
+                    <span class="text-4xl font-extrabold text-red-600">
+                      ₱{{ selectedSubtotal.toFixed(2) }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-3">
+                  <button @click="handleCheckout" :disabled="selectedBagItems.length === 0"
+                    class="w-full py-5 px-6 font-extrabold text-xl text-white transition duration-200 flex items-center justify-center gap-2 rounded-xl shadow-lg"
+                    :class="{
+                      'bg-gray-400 cursor-not-allowed': selectedBagItems.length === 0,
+                      'bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700': selectedBagItems.length > 0
+                    }">
+                    <i class="pi pi-credit-card text-lg"></i>
+                    <span v-if="selectedBagItems.length === 0">Select Items to Checkout</span>
+                    <span v-else>Checkout ({{ selectedBagItems.length }} Items)</span>
+                  </button>
+
+                  <router-link to="/products"
+                    class="w-full block text-center py-4 px-6 font-bold hover:bg-red-50 transition duration-200 text-lg text-red-600 border-2 border-red-600 rounded-xl">
+                    <i class="pi pi-arrow-left mr-2"></i>
+                    Continue Shopping
+                  </router-link>
+                </div>
+
+                <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div class="flex gap-3">
+                    <i class="pi pi-info-circle flex-shrink-0 text-blue-600 mt-0.5"></i>
+                    <p class="text-sm text-blue-900">
+                      <span class="font-bold">Important Note:</span> Present your bag code at any Luke Pharma branch to
+                      complete your purchase.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <!-- Order Summary -->
-            <div class="border-t border-gray-200 pt-4">
-              <div class="flex justify-between items-center mb-4">
-                <span class="text-gray-600">Subtotal</span>
-                <span class="font-semibold text-gray-800">
-                  ₱{{ selectedSubtotal.toFixed(2) }}
-                </span>
-              </div>
-              <div class="flex justify-between items-center mb-6">
-                <span class="text-xl font-bold text-gray-800">Total</span>
-                <span class="text-2xl font-bold" style="color: #E74C3C;">
-                  ₱{{ selectedSubtotal.toFixed(2) }}
-                </span>
-              </div>
-
-              <!-- Checkout Button -->
-              <button
-                @click="handleCheckout"
-                :disabled="selectedBagItems.length === 0"
-                :class="[
-                  'w-full py-4 px-6 rounded-lg font-bold text-white transition-all duration-200',
-                  selectedBagItems.length === 0
-                    ? 'bg-gray-300 cursor-not-allowed'
-                    : 'bg-red-500 hover:bg-red-600 active:scale-95'
-                ]"
-              >
-                <i class="pi pi-credit-card mr-2"></i>
-                Checkout ({{ selectedBagItems.length }} {{ selectedBagItems.length === 1 ? 'item' : 'items' }})
-              </button>
             </div>
           </div>
         </div>
       </div>
     </main>
 
-    <!-- Footer Component -->
     <Footer />
   </div>
 </template>
 
 <script setup>
+// ... (Your script logic remains exactly the same)
+
 import { ref, computed, onMounted } from 'vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
@@ -200,6 +208,25 @@ const {
   clearBag,
   generateBagCode
 } = useBag()
+
+const useBreakpoints = () => {
+  if (typeof window === 'undefined') {
+    return computed(() => ({ mdAndUp: false }));
+  }
+  const isMdAndUp = ref(window.innerWidth >= 1024);
+
+  onMounted(() => {
+    const update = () => {
+      isMdAndUp.value = window.innerWidth >= 1024;
+    };
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  });
+
+  return computed(() => ({ mdAndUp: isMdAndUp.value }));
+};
+
+const $breakpoint = useBreakpoints();
 
 // Reactive state
 const selectedItems = ref([])
@@ -235,12 +262,7 @@ const handleSelectAll = () => {
 
 const handleUpdateQuantity = (productId, newQuantity) => {
   if (newQuantity <= 0) {
-    removeFromBag(productId)
-    // Remove from selected items if it was selected
-    const index = selectedItems.value.indexOf(productId)
-    if (index > -1) {
-      selectedItems.value.splice(index, 1)
-    }
+    handleRemoveFromBag(productId)
   } else {
     updateQuantity(productId, newQuantity)
   }
@@ -248,7 +270,6 @@ const handleUpdateQuantity = (productId, newQuantity) => {
 
 const handleRemoveFromBag = (productId) => {
   removeFromBag(productId)
-  // Remove from selected items if it was selected
   const index = selectedItems.value.indexOf(productId)
   if (index > -1) {
     selectedItems.value.splice(index, 1)
@@ -261,7 +282,7 @@ const handleClearBag = async () => {
     text: 'Are you sure you want to remove all items from your bag?',
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#E74C3C',
+    confirmButtonColor: '#DC2626',
     cancelButtonColor: '#6B7280',
     confirmButtonText: 'Yes, clear bag',
     cancelButtonText: 'Cancel'
@@ -287,12 +308,11 @@ const handleCheckout = async () => {
       title: 'No Items Selected',
       text: 'Please select at least one item to checkout.',
       icon: 'warning',
-      confirmButtonColor: '#E74C3C'
+      confirmButtonColor: '#DC2626'
     })
     return
   }
 
-  // Show checkout confirmation
   const confirmResult = await Swal.fire({
     title: 'Confirm Checkout',
     html: `
@@ -302,7 +322,7 @@ const handleCheckout = async () => {
           <h4 class="font-semibold mb-2">Order Summary:</h4>
           ${selectedBagItems.value.map(item => `
             <div class="flex justify-between text-sm mb-1">
-              <span>${item.product.name} × ${item.quantity}</span>
+              <span>${item.product.name} &times; ${item.quantity}</span>
               <span>₱${(item.product.price * item.quantity).toFixed(2)}</span>
             </div>
           `).join('')}
@@ -316,17 +336,15 @@ const handleCheckout = async () => {
     `,
     icon: 'question',
     showCancelButton: true,
-    confirmButtonColor: '#E74C3C',
+    confirmButtonColor: '#DC2626',
     cancelButtonColor: '#6B7280',
     confirmButtonText: 'Yes, proceed',
     cancelButtonText: 'No, go back'
   })
 
   if (confirmResult.isConfirmed) {
-    // Generate bag code
     const bagCode = generateBagCode()
 
-    // Show success dialog with bag code
     await Swal.fire({
       title: 'Checkout Successful!',
       html: `
@@ -352,13 +370,12 @@ const handleCheckout = async () => {
       `,
       icon: false,
       confirmButtonText: 'Done',
-      confirmButtonColor: '#E74C3C',
+      confirmButtonColor: '#DC2626',
       showCancelButton: true,
       cancelButtonText: 'Copy Code',
       cancelButtonColor: '#6B7280'
     }).then((result) => {
       if (result.dismiss === Swal.DismissReason.cancel) {
-        // Copy bag code to clipboard
         navigator.clipboard.writeText(bagCode).then(() => {
           Swal.fire({
             title: 'Code Copied!',
@@ -371,7 +388,7 @@ const handleCheckout = async () => {
       }
     })
 
-    // Remove checked out items from bag
+    // Remove selected items after successful checkout
     selectedItems.value.forEach(productId => {
       removeFromBag(productId)
     })
@@ -379,55 +396,9 @@ const handleCheckout = async () => {
   }
 }
 
-// Initialize
 onMounted(() => {
-  // Scroll to top on mount
   window.scrollTo(0, 0)
-
-  // Select all items by default
+  $breakpoint.value
   selectedItems.value = bagItems.value.map(item => item.product.id)
 })
 </script>
-
-<style scoped>
-/* Custom styles for better transitions */
-.hover\:shadow-md:hover {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.transition-shadow {
-  transition: box-shadow 0.2s ease-in-out;
-}
-
-/* Sticky checkout section */
-.sticky {
-  position: sticky;
-  top: 2rem;
-}
-
-/* Button active state */
-.active\:scale-95:active {
-  transform: scale(0.95);
-}
-
-/* Checkbox styling */
-input[type="checkbox"]:checked {
-  background-color: #E74C3C;
-  border-color: #E74C3C;
-}
-
-/* Focus styles for accessibility */
-.focus\:ring-red-500:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
-}
-
-/* SweetAlert2 custom styling override */
-:deep(.swal2-popup) {
-  border-radius: 8px;
-}
-
-:deep(.swal2-confirm) {
-  border-radius: 6px;
-}
-</style>

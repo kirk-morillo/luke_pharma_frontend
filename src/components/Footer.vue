@@ -9,15 +9,17 @@
                 </router-link>
                 <p class="tagline">Your trusted health partner.</p>
 
-                <router-link to="/login" class="admin-login-link-btn">
-                    <i class="pi pi-lock"></i> Admin Login
-                </router-link>
+                <div class="footer-actions">
+                    <router-link to="/login" class="admin-login-link-btn">
+                        <i class="pi pi-lock"></i> Admin Login
+                    </router-link>
 
-                <div class="social-links">
-                    <a href="https://www.facebook.com/profile.php?id=100083107822016" target="_blank"
-                        rel="noopener noreferrer" class="social-icon-wrapper">
-                        <i class="pi pi-facebook social-icon"></i>
-                    </a>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/profile.php?id=100083107822016" target="_blank"
+                            rel="noopener noreferrer" class="social-icon-wrapper">
+                            <i class="pi pi-facebook social-icon"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -79,6 +81,9 @@
 </script>
 
 <style scoped>
+/* Importing Poppins for nav links (as discussed previously) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
 :root {
     --primary-red: #E74C3C;
     --footer-bg-dark: #1f2a38;
@@ -156,6 +161,8 @@
     padding: 3px 0;
     transition: background-color 0.2s;
     border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+    /* Applied Poppins to details */
 }
 
 .detail-item:hover {
@@ -204,6 +211,8 @@
     font-weight: 800;
     font-size: 1.8em;
     color: rgb(248, 84, 84);
+    font-family: 'Poppins', sans-serif;
+    /* Added Poppins */
 }
 
 .tagline {
@@ -215,28 +224,35 @@
     padding-left: 115px;
 }
 
-/* --- NEW: Admin Login Button Styling --- */
+.footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+    margin-left: 115px;
+}
+
 .admin-login-link-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--primary-red);
     color: var(--footer-text-light);
     text-decoration: none;
-    font-weight: 600;
-    padding: 10px 20px;
+    font-weight: 300;
+    width: 150px;
+    padding: 5px 5px;
     border-radius: 5px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    margin-left: 115px;
-    /* Offset to align below logo text */
+
+    margin: 0;
+
     transition: background-color 0.3s, transform 0.1s;
     border: 1px solid var(--primary-red);
+    font-family: 'Poppins', sans-serif;
+    /* Added Poppins */
 }
 
 .admin-login-link-btn:hover {
     background-color: #c0392b;
-    /* Darker red on hover */
     transform: translateY(-1px);
 }
 
@@ -247,8 +263,7 @@
 
 /* --- Social Links Styling --- */
 .social-links {
-    margin-top: 15px;
-    margin-left: 115px;
+    margin: 0;
     padding-left: 0;
 }
 
@@ -259,8 +274,6 @@
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    background-color: #34495e;
-    /* Subtle dark background */
     color: var(--footer-text-light);
     font-size: 1.2em;
     transition: background-color 0.3s, color 0.3s;
@@ -275,67 +288,19 @@
 /* ---------------------------------------------------------------------- */
 /* --- 2, 3, 4. CENTER, HOURS, CONTACTS (Keep Existing Styles) --- */
 /* ---------------------------------------------------------------------- */
-
-.footer-center {
-    padding-right: 20px;
-}
-
 .location-text-emphasis {
-    color: var(--primary-red);
-    font-weight: 600;
-    margin: 0;
-    line-height: 1.5;
+    font-family: 'Poppins', sans-serif;
 }
 
 .nearby-text {
-    display: block;
-    font-size: 0.8em;
-    font-style: italic;
-    color: var(--footer-text-subtle);
-    margin-top: 2px;
+    font-family: 'Poppins', sans-serif;
 }
 
-.footer-hours {
-    padding-right: 20px;
-}
-
-.hours-list {
-    font-size: 0.9em;
-}
-
-.hour-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 2px 0;
-    color: var(--footer-text-light);
-}
-
-.hour-item .day {
-    font-weight: 400;
-}
-
+.hour-item .day,
 .hour-item .time {
-    font-weight: 600;
-    color: var(--footer-text-subtle);
+    font-family: 'Poppins', sans-serif;
 }
 
-.hour-item.closed .time {
-    color: var(--primary-red);
-    font-weight: 700;
-}
-
-/* ---------------------------------------------------------------------- */
-/* --- COPYRIGHT BAR --- */
-/* ---------------------------------------------------------------------- */
-.copyright-bar {
-    text-align: center;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 15px 0 15px;
-    font-size: 0.8em;
-    color: var(--footer-text-subtle);
-    border-top: 1px solid #34495e;
-}
 
 /* ---------------------------------------------------------------------- */
 /* --- RESPONSIVE ADJUSTMENTS (Mobile Layout) --- */
@@ -363,25 +328,39 @@
         align-items: center;
     }
 
-    .tagline,
-    .social-links,
-    .admin-login-link-btn {
+    .tagline {
         margin-left: 0;
         text-align: center;
         padding-left: 0;
-        /* Remove offsets on mobile */
     }
 
-    .footer-logo-link {
-        margin-bottom: 15px;
-        justify-content: center;
+    /* NEW: Reset footer-actions on mobile to stack elements */
+    .footer-actions {
+        display: flex;
+        flex-direction: column;
+        /* Stack vertically on small screens */
+        gap: 15px;
+        margin: 15px auto 0;
+        /* Center the group and add top margin */
     }
 
     .admin-login-link-btn {
         width: 100%;
         /* Make button full width on small screens */
         max-width: 250px;
-        /* Optional: limit max width for better aesthetic */
+        margin: 0 auto;
+        /* Ensure it's centered within footer-actions */
+    }
+
+    .social-links {
+        margin: 0;
+        /* Re-clear margin */
+        padding: 0;
+    }
+
+    .footer-logo-link {
+        margin-bottom: 15px;
+        justify-content: center;
     }
 
     /* Title Centering for all Sections */
