@@ -1543,3 +1543,319 @@ input[type="checkbox"]:checked {
         font-size: 0.875rem;
     }
 }
+
+/* Comprehensive Mobile Responsiveness */
+/* Mobile-first utilities */
+.mobile-hidden {
+    display: none;
+}
+
+.mobile-only {
+    display: none;
+}
+
+.tablet-only {
+    display: none;
+}
+
+.desktop-only {
+    display: block;
+}
+
+/* Touch-friendly improvements */
+.touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.5rem;
+}
+
+.touch-large {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 0.75rem;
+}
+
+/* Responsive typography */
+.text-responsive-xs {
+    font-size: clamp(0.75rem, 2vw, 0.875rem);
+}
+
+.text-responsive-sm {
+    font-size: clamp(0.875rem, 2.5vw, 1rem);
+}
+
+.text-responsive-base {
+    font-size: clamp(1rem, 3vw, 1.125rem);
+}
+
+.text-responsive-lg {
+    font-size: clamp(1.125rem, 3.5vw, 1.25rem);
+}
+
+.text-responsive-xl {
+    font-size: clamp(1.25rem, 4vw, 1.5rem);
+}
+
+.text-responsive-2xl {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+}
+
+.text-responsive-3xl {
+    font-size: clamp(1.875rem, 6vw, 2.5rem);
+}
+
+.text-responsive-4xl {
+    font-size: clamp(2.25rem, 7vw, 3.5rem);
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+    .mobile-hidden {
+        display: none;
+    }
+
+    .mobile-only {
+        display: block;
+    }
+
+    .desktop-only {
+        display: none;
+    }
+
+    /* Better touch targets */
+    .btn-touch-target {
+        min-height: 48px;
+        padding: 0.75rem 1.25rem;
+        font-size: 1rem;
+    }
+
+    /* Mobile-friendly spacing */
+    .mobile-spacing-tight {
+        padding: 0.5rem;
+    }
+
+    .mobile-spacing-normal {
+        padding: 1rem;
+    }
+
+    .mobile-spacing-loose {
+        padding: 1.5rem;
+    }
+
+    /* Mobile grid adjustments */
+    .mobile-grid-1 {
+        grid-template-columns: 1fr;
+    }
+
+    .mobile-grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .mobile-flex-column {
+        flex-direction: column;
+    }
+
+    .mobile-text-center {
+        text-align: center;
+    }
+
+    /* Mobile navigation improvements */
+    .mobile-nav-stacked {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    /* Mobile form improvements */
+    .mobile-input-large {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 0.75rem;
+        min-height: 44px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .tablet-only {
+        display: block;
+    }
+
+    .mobile-only {
+        display: none;
+    }
+
+    .tablet-grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tablet-grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1025px) {
+    .mobile-only {
+        display: none;
+    }
+}
+
+/* Touch device specific styles */
+@media (hover: none) and (pointer: coarse) {
+    /* Remove hover effects on touch devices */
+    .no-touch-hover:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Add active states for touch feedback */
+    .touch-feedback:active {
+        transform: scale(0.95);
+        opacity: 0.8;
+        transition: all 0.1s ease;
+    }
+
+    /* Larger touch targets */
+    .touch-friendly {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 0.75rem;
+    }
+
+    /* Prevent accidental zoom */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="search"],
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* Small mobile devices (320px - 480px) */
+@media (max-width: 480px) {
+    .mobile-hidden-sm {
+        display: none;
+    }
+
+    .mobile-only-sm {
+        display: block;
+    }
+
+    /* Extra compact spacing */
+    .mobile-compact {
+        padding: 0.25rem;
+        margin: 0.125rem;
+    }
+
+    /* Smaller text on very small screens */
+    .mobile-text-sm {
+        font-size: 0.875rem;
+    }
+
+    /* Single column layouts */
+    .mobile-single-col {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+    }
+
+    /* Horizontal scrolling prevention */
+    .mobile-no-overflow {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    /* Larger touch targets for small screens */
+    .mobile-touch-large {
+        min-height: 48px;
+        min-width: 48px;
+        padding: 0.875rem;
+    }
+}
+
+/* Large mobile devices (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+    .mobile-only-md {
+        display: block;
+    }
+
+    /* Two column layouts where appropriate */
+    .mobile-two-col {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+}
+
+/* Landscape mobile devices */
+@media (max-width: 768px) and (orientation: landscape) {
+    .mobile-landscape-compact {
+        padding: 0.5rem 1rem;
+    }
+
+    .mobile-landscape-row {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* Crisper text on high DPI displays */
+    .high-dpi-text {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Dark mode support for mobile */
+@media (prefers-color-scheme: dark) and (max-width: 768px) {
+    .mobile-dark-bg {
+        background-color: #1f2937;
+        color: #f9fafb;
+    }
+
+    .mobile-dark-text {
+        color: #f9fafb;
+    }
+
+    .mobile-dark-border {
+        border-color: #374151;
+    }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) and (max-width: 768px) {
+    .mobile-reduced-motion {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Print styles for mobile */
+@media print and (max-width: 768px) {
+    .mobile-no-print {
+        display: none !important;
+    }
+
+    .mobile-print-full {
+        width: 100% !important;
+        max-width: none !important;
+        page-break-inside: avoid;
+    }
+}
+
+/* Loading states for mobile slow connections */
+@media (max-width: 768px) {
+    .mobile-loading-skeleton {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+        0% {
+            background-position: 200% 0;
+        }
+        100% {
+            background-position: -200% 0;
+        }
+    }
+}
