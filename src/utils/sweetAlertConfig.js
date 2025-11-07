@@ -302,15 +302,5 @@ Swal.defaults({
   },
   hideClass: {
     popup: 'animate__animated animate__fadeOutUp'
-  },
-  backdrop: `
-    rgba(0, 0, 0, 0.4)
-    left top
-    no-repeat
-  `,
-  backdropAnimationDuration: 200,
-  showConfirmButton: true,
-  allowOutsideClick: false,
-  allowEscapeKey: true,
-  focusConfirm: false
+  }
 })
