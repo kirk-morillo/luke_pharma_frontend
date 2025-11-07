@@ -1,5 +1,5 @@
 <template>
-    <div class="catalog-container">
+    <div class="catalog-container page-container">
         <header-component />
 
         <div class="search-and-filter">
@@ -24,31 +24,13 @@
                 <h1>Browse Our Medicines</h1>
                 <p v-if="loading" class="loading-message">Loading products...</p>
                 <div v-if="!loading" class="product-grid">
-                    <div v-for="product in filteredProducts" :key="product.id" class="product-card">
-                        <div class="product-image-placeholder">
-                            <i :class="[
-                                'pi',
-                                product.category === 'vitamins' ? 'pi-sun' :
-                                    product.category === 'pain_relief' ? 'pi-briefcase' :
-                                        'pi-tablet'
-                            ]" class="product-icon"></i>
-                        </div>
-                        <div class="product-details">
-                            <h3 class="product-name">{{ product.name }}</h3>
-                            <p class="product-category">{{ product.category.replace('_', ' ') }}</p>
-                            <div class="price-and-stock">
-                                <span class="product-price">₱{{ product.price.toFixed(2) }}</span>
-                                <span
-                                    :class="['product-stock', { low: product.stock < 10 && product.stock > 0, zero: product.stock === 0 }]">
-                                    Stock: {{ product.stock > 0 ? product.stock : 'Out of Stock' }}
-                                </span>
-                            </div>
-                        </div>
-                        <button @click="addToCart(product)" :disabled="product.stock <= 0"
-                            :class="['add-to-cart-btn', { 'staff-mode': isStaff }]">
-                            {{ isStaff ? 'ADD TO SALE' : 'ADD TO CART' }}
-                        </button>
-                    </div>
+                    <ProductCard
+                        v-for="product in mappedProducts"
+                        :key="product.id"
+                        :product="product"
+                        :compact="true"
+                        @add-to-bag="handleAddToCart"
+                    />
                 </div>
             </div>
 
@@ -75,7 +57,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-
+import ProductCard from './ProductCard.vue';
+import { showProductAddedAlert, showErrorAlert } from '@/utils/sweetAlertConfig.js';
 
 const products = ref([]);
 const loading = ref(true);
@@ -110,6 +93,19 @@ const fetchProducts = async () => {
     loading.value = false;
 };
 
+// Map MedicineSection products to ProductCard format
+const mappedProducts = computed(() => {
+    return filteredProducts.value.map(product => ({
+        id: product.id,
+        name: product.name,
+        category: mapCategory(product.category),
+        price: product.price,
+        inStock: product.stock > 0,
+        stockLocations: getStockLocations(product.stock),
+        description: `${product.category.replace('_', ' ')} - Stock: ${product.stock}`
+    }));
+});
+
 const filteredProducts = computed(() => {
     let filtered = products.value.filter(product => {
         // Search filter
@@ -122,6 +118,33 @@ const filteredProducts = computed(() => {
     });
     return filtered;
 });
+
+// Map internal categories to standard ProductCard categories
+const mapCategory = (category) => {
+    const categoryMap = {
+        'pain_relief': 'Medicine',
+        'vitamins': 'Medicine',
+        'prescription': 'Medicine'
+    };
+    return categoryMap[category] || 'Medicine';
+};
+
+// Generate stock locations based on stock level
+const getStockLocations = (stock) => {
+    if (stock === 0) return [];
+    if (stock >= 20) return ['Location 1', 'Location 2', 'Location 3'];
+    if (stock >= 10) return ['Location 1', 'Location 2'];
+    return ['Location 1'];
+};
+
+const handleAddToCart = (product) => {
+    if (product.inStock) {
+        addToCart(product);
+        // Feedback will be handled by individual component logic
+    } else {
+        showErrorAlert('Out of Stock', 'This product is currently out of stock.');
+    }
+};
 
 const addToCart = (product) => {
     console.log(`${product.name} added to cart/sale.`);
@@ -147,7 +170,7 @@ onMounted(fetchProducts);
 /* --- 1. MAIN LAYOUT & CONTAINERS --- */
 /* ---------------------------------------------------------------------- */
 .catalog-container {
-    background-color: var(--background-light);
+    background-color: var(--background-light, #f4f6f9);
     min-height: 100vh;
 }
 
@@ -167,15 +190,9 @@ onMounted(fetchProducts);
     color: #2c3e50;
     margin-bottom: 20px;
     font-size: 2.2em;
-    border-bottom: 3px solid var(--primary-red);
+    border-bottom: 3px solid var(--primary-red, #E74C3C);
     display: inline-block;
     padding-bottom: 5px;
-}
-
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 25px;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -244,112 +261,20 @@ onMounted(fetchProducts);
 }
 
 /* ---------------------------------------------------------------------- */
-/* --- 3. PRODUCT CARD --- */
+/* --- 3. PRODUCT GRID & LOADING --- */
 /* ---------------------------------------------------------------------- */
-.product-card {
-    background: white;
-    border-radius: 10px;
-    box-shadow: var(--card-shadow);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s, box-shadow 0.2s;
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
 }
 
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-.product-image-placeholder {
-    height: 120px;
-    background-color: #f0f3f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 4em;
-    color: #bdc3c7;
-}
-
-.product-icon {
-    color: var(--secondary-blue);
-}
-
-.product-details {
-    padding: 15px;
-    flex-grow: 1;
-}
-
-.product-name {
-    font-size: 1.3em;
-    color: #2c3e50;
-    margin: 0 0 5px 0;
-    font-weight: 700;
-}
-
-.product-category {
-    font-size: 0.9em;
-    color: #95a5a6;
-    text-transform: capitalize;
-    margin-bottom: 10px;
-}
-
-.price-and-stock {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.product-price {
-    font-size: 1.4em;
-    font-weight: 800;
-    color: var(--primary-red);
-}
-
-.product-stock {
-    font-size: 0.9em;
-    font-weight: 600;
-    color: #27ae60;
-    /* Green for in stock */
-}
-
-.product-stock.low {
-    color: #f39c12;
-    /* Yellow/Orange for low stock */
-}
-
-.product-stock.zero {
-    color: var(--primary-red);
-    /* Red for out of stock */
-    font-weight: 700;
-}
-
-.add-to-cart-btn {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    background-color: #2ecc71;
-    /* Green for general cart */
-    color: white;
-    font-size: 1.1em;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.add-to-cart-btn:disabled {
-    background-color: #bdc3c7;
-    cursor: not-allowed;
-}
-
-.add-to-cart-btn.staff-mode {
-    background-color: var(--primary-red);
-    /* Red for staff/sale mode */
-}
-
-.add-to-cart-btn.staff-mode:hover:not(:disabled) {
-    background-color: #C0392B;
+.loading-message {
+    text-align: center;
+    font-size: 1.2em;
+    color: var(--text-secondary, #666666);
+    padding: 40px;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* ---------------------------------------------------------------------- */

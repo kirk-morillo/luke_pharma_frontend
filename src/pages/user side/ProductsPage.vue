@@ -1,31 +1,31 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="products-page-container page-container" :style="containerStyle">
     <!-- Header Component -->
     <Header />
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
+    <main class="main-content" :style="mainContentStyle">
       <!-- Page Title -->
-      <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-800 mb-2">Our Products</h1>
-        <p class="text-lg text-gray-600">Find quality medicines and medical equipment</p>
-        <div class="w-24 h-1 bg-red-500 mx-auto mt-4"></div>
+      <div class="page-title-section" :style="titleSectionStyle">
+        <h1 :style="titleStyle">Our Products</h1>
+        <p :style="subtitleStyle">Find quality medicines and medical equipment</p>
+        <div :style="titleUnderlineStyle"></div>
       </div>
 
       <!-- Search Bar Section -->
-      <div class="max-w-2xl mx-auto mb-8">
-        <div class="relative">
-          <i class="pi pi-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl"></i>
+      <div class="search-section" :style="searchSectionStyle">
+        <div class="search-container" :style="searchContainerStyle">
+          <i class="pi pi-search" :style="searchIconStyle"></i>
           <input
             v-model="searchQuery"
             type="text"
             placeholder="Search for medicines or medical equipment..."
-            class="w-full pl-12 pr-12 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-lg"
+            :style="searchInputStyle"
           />
           <button
             v-if="searchQuery"
             @click="searchQuery = ''"
-            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 text-2xl leading-none"
+            :style="clearButtonStyle"
           >
             ×
           </button>
@@ -33,16 +33,11 @@
       </div>
 
       <!-- Category Filter Section -->
-      <div class="max-w-4xl mx-auto mb-8">
-        <div class="flex flex-wrap justify-center gap-4">
+      <div class="filter-section" :style="filterSectionStyle">
+        <div class="filter-container" :style="filterContainerStyle">
           <button
             @click="selectedCategory = null"
-            :class="[
-              'px-6 py-3 rounded-lg font-semibold transition-all duration-200',
-              selectedCategory === null
-                ? 'bg-red-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            ]"
+            :style="getCategoryButtonStyle(null)"
           >
             All Categories ({{ productCategories.reduce((sum, cat) => sum + cat.count, 0) }})
           </button>
@@ -50,12 +45,7 @@
             v-for="category in productCategories"
             :key="category.id"
             @click="selectedCategory = category.id"
-            :class="[
-              'px-6 py-3 rounded-lg font-semibold transition-all duration-200',
-              selectedCategory === category.id
-                ? 'bg-red-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            ]"
+            :style="getCategoryButtonStyle(category.id)"
           >
             {{ category.name }} ({{ category.count }})
           </button>
@@ -63,71 +53,20 @@
       </div>
 
       <!-- Products Grid Section -->
-      <div class="max-w-7xl mx-auto">
-        <div v-if="filteredProducts.length === 0" class="text-center py-16">
-          <i class="pi pi-search text-6xl text-gray-300 mb-4"></i>
-          <h3 class="text-xl font-semibold text-gray-600 mb-2">No products found</h3>
-          <p class="text-gray-500">Try adjusting your search or filters</p>
+      <div class="products-section" :style="productsSectionStyle">
+        <div v-if="filteredProducts.length === 0" class="empty-state" :style="emptyStateStyle">
+          <i class="pi pi-search" :style="emptyIconStyle"></i>
+          <h3 :style="emptyTitleStyle">No products found</h3>
+          <p :style="emptyTextStyle">Try adjusting your search or filters</p>
         </div>
 
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div
+        <div v-else class="products-grid">
+          <ProductCard
             v-for="product in filteredProducts"
             :key="product.id"
-            class="bg-white p-6 rounded-lg border border-gray-200 hover:border-red-500 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1"
-          >
-            <!-- Product Name -->
-            <h3 class="text-xl font-bold mb-2" style="color: #E74C3C;">
-              {{ product.name }}
-            </h3>
-
-            <!-- Product Description -->
-            <p class="text-gray-600 text-sm mb-4">
-              {{ product.description }}
-            </p>
-
-            <!-- Price -->
-            <div class="text-2xl font-bold text-gray-800 mb-3">
-              ₱{{ product.price.toFixed(2) }}
-            </div>
-
-            <!-- Stock Locations -->
-            <div class="text-sm text-gray-600 mb-4">
-              <span v-if="product.stockLocations.length === 3" class="text-green-600 font-medium">
-                Available at all branches
-              </span>
-              <span v-else-if="product.stockLocations.length > 0" class="text-blue-600">
-                Available at: {{ product.stockLocations.join(', ') }}
-              </span>
-              <span v-else class="text-red-600 font-medium">
-                Currently out of stock
-              </span>
-            </div>
-
-            <!-- Add to Bag Button -->
-            <button
-              @click="handleAddToBag(product)"
-              :disabled="!product.inStock || isInBag(product.id)"
-              :class="[
-                'w-full py-3 px-4 rounded-lg font-semibold transition-all duration-200',
-                !product.inStock || isInBag(product.id)
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-red-500 text-white hover:bg-red-600 active:scale-95'
-              ]"
-            >
-              <span v-if="isInBag(product.id)" class="flex items-center justify-center">
-                <i class="pi pi-check mr-2"></i>
-                In Bag ({{ getItemQuantity(product.id) }})
-              </span>
-              <span v-else-if="!product.inStock">
-                Out of Stock
-              </span>
-              <span v-else>
-                <i class="pi pi-shopping-cart mr-2"></i>
-                Add to Bag
-              </span>
-            </button>
-          </div>
+            :product="product"
+            @add-to-bag="handleAddToBag"
+          />
         </div>
       </div>
     </main>
@@ -141,8 +80,10 @@
 import { ref, computed, onMounted } from 'vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import ProductCard from '@/components/ProductCard.vue'
 import { useBag } from '@/composables/useBag.js'
 import { mockProducts, productCategories } from '@/data/mockData.js'
+import { showProductAddedAlert, showErrorAlert } from '@/utils/sweetAlertConfig.js'
 
 // Bag composable
 const { addToBag, isInBag, getItemQuantity } = useBag()
@@ -150,6 +91,152 @@ const { addToBag, isInBag, getItemQuantity } = useBag()
 // Reactive state
 const searchQuery = ref('')
 const selectedCategory = ref(null)
+
+// Inline styles
+const containerStyle = {
+  minHeight: '100vh',
+  backgroundColor: '#f9fafb',
+  fontFamily: 'Poppins, sans-serif'
+}
+
+const mainContentStyle = {
+  maxWidth: '1280px',
+  margin: '0 auto',
+  padding: '2rem 1rem'
+}
+
+const titleSectionStyle = {
+  textAlign: 'center',
+  marginBottom: '2rem'
+}
+
+const titleStyle = {
+  fontSize: '2.5rem',
+  fontWeight: '700',
+  color: '#1f2937',
+  marginBottom: '0.5rem',
+  fontFamily: 'Poppins, sans-serif'
+}
+
+const subtitleStyle = {
+  fontSize: '1.125rem',
+  color: '#6b7280',
+  marginBottom: '1rem',
+  fontFamily: 'Poppins, sans-serif'
+}
+
+const titleUnderlineStyle = {
+  width: '6rem',
+  height: '4px',
+  backgroundColor: '#E74C3C',
+  margin: '1rem auto',
+  borderRadius: '2px'
+}
+
+const searchSectionStyle = {
+  maxWidth: '42rem',
+  margin: '0 auto 2rem auto'
+}
+
+const searchContainerStyle = {
+  position: 'relative'
+}
+
+const searchIconStyle = {
+  position: 'absolute',
+  left: '1rem',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  color: '#9ca3af',
+  fontSize: '1.25rem',
+  zIndex: 1
+}
+
+const searchInputStyle = {
+  width: '100%',
+  paddingLeft: '3rem',
+  paddingRight: '3rem',
+  padding: '1rem',
+  border: '1px solid #d1d5db',
+  borderRadius: '0.5rem',
+  fontSize: '1.125rem',
+  fontFamily: 'Poppins, sans-serif',
+  outline: 'none',
+  transition: 'all 0.2s ease',
+  backgroundColor: '#ffffff'
+}
+
+const clearButtonStyle = {
+  position: 'absolute',
+  right: '1rem',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  color: '#9ca3af',
+  fontSize: '1.5rem',
+  cursor: 'pointer',
+  background: 'none',
+  border: 'none',
+  padding: '0.25rem',
+  borderRadius: '50%',
+  transition: 'color 0.2s ease'
+}
+
+const filterSectionStyle = {
+  maxWidth: '56rem',
+  margin: '0 auto 2rem auto'
+}
+
+const filterContainerStyle = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  gap: '1rem'
+}
+
+const getCategoryButtonStyle = (categoryId) => {
+  const isSelected = selectedCategory.value === categoryId
+  return {
+    padding: '0.75rem 1.5rem',
+    borderRadius: '0.5rem',
+    fontWeight: '600',
+    fontSize: '1rem',
+    fontFamily: 'Poppins, sans-serif',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    border: 'none',
+    backgroundColor: isSelected ? '#E74C3C' : '#e5e7eb',
+    color: isSelected ? '#ffffff' : '#374151'
+  }
+}
+
+const productsSectionStyle = {
+  maxWidth: '80rem',
+  margin: '0 auto'
+}
+
+const emptyStateStyle = {
+  textAlign: 'center',
+  padding: '4rem 0'
+}
+
+const emptyIconStyle = {
+  fontSize: '4rem',
+  color: '#d1d5db',
+  marginBottom: '1rem'
+}
+
+const emptyTitleStyle = {
+  fontSize: '1.25rem',
+  fontWeight: '600',
+  color: '#4b5563',
+  marginBottom: '0.5rem',
+  fontFamily: 'Poppins, sans-serif'
+}
+
+const emptyTextStyle = {
+  color: '#6b7280',
+  fontFamily: 'Poppins, sans-serif'
+}
 
 // Computed property for filtered products
 const filteredProducts = computed(() => {
@@ -175,7 +262,9 @@ const filteredProducts = computed(() => {
 // Methods
 const handleAddToBag = (product) => {
   if (product.inStock && !isInBag(product.id)) {
-    addToBag(product)
+    addToBag(product, 1, false) // Feedback handled by composable
+  } else if (!product.inStock) {
+    showErrorAlert('Out of Stock', 'This product is currently out of stock.')
   }
 }
 
@@ -187,43 +276,29 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Custom styles for better transitions */
-.hover\:shadow-lg {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+  .products-page-container {
+    padding-top: 80px;
+  }
 }
 
-.hover\:shadow-lg:hover {
-  box-shadow: 0 20px 25px -5px rgba(231, 76, 60, 0.3), 0 10px 10px -5px rgba(231, 76, 60, 0.04);
+/* Focus states for accessibility */
+input:focus {
+  border-color: #E74C3C !important;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1) !important;
 }
 
-/* Animation for card hover */
-.transform {
-  transition: transform 0.2s ease-in-out;
+button:hover {
+  transform: translateY(-1px);
 }
 
-.transform:hover {
-  transform: translateY(-4px);
+button:active {
+  transform: translateY(0);
 }
 
-/* Button active state */
-.active\:scale-95:active {
-  transform: scale(0.95);
-}
-
-/* Focus styles for accessibility */
-.focus\:ring-2:focus {
-  outline: none;
-  ring: 2px;
-  ring-color: #E74C3C;
-}
-
-/* Search input styling */
-input[type="text"]::placeholder {
-  color: #9CA3AF;
-}
-
-/* Category filter button animations */
-.transition-all {
-  transition: all 0.2s ease-in-out;
+/* Smooth transitions */
+input, button {
+  transition: all 0.2s ease;
 }
 </style>
