@@ -57,7 +57,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-
+import ProductCard from './ProductCard.vue';
+import { showProductAddedAlert, showErrorAlert } from '@/utils/sweetAlertConfig.js';
 
 const products = ref([]);
 const loading = ref(true);
