@@ -1,4 +1,5 @@
 import { ref, computed, watch } from 'vue'
+import { showSuccessAlert, showConfirmationAlert, showErrorAlert, showOrderSuccessAlert } from '@/utils/sweetAlertConfig.js'
 
 const bagState = ref({
   items: [],
