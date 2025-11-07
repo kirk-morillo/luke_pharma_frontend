@@ -774,3 +774,322 @@ input[type="checkbox"]:checked {
     transform: translateY(0) !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
 }
+
+/* Enhanced Carousel Styles */
+.carousel-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 16px;
+    touch-action: pan-y pinch-zoom;
+}
+
+.carousel-wrapper {
+    overflow: hidden;
+    border-radius: 16px;
+    position: relative;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+}
+
+.carousel-track.smooth-transition {
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.carousel-track.no-transition {
+    transition: none;
+}
+
+.branch-card {
+    text-align: center;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+}
+
+.branch-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #E74C3C, #c0392b);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.branch-card:hover::before {
+    opacity: 1;
+}
+
+.branch-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, #E74C3C 0%, #c0392b 100%);
+    color: white;
+    border: none;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 20;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 20px rgba(231, 76, 60, 0.3);
+    opacity: 0.9;
+}
+
+.carousel-arrow:hover {
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 8px 30px rgba(231, 76, 60, 0.4);
+    opacity: 1;
+}
+
+.carousel-arrow:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-arrow.prev-arrow {
+    left: -28px;
+}
+
+.carousel-arrow.next-arrow {
+    right: -28px;
+}
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 32px;
+    padding: 0 1rem;
+}
+
+.indicator {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 3px solid #E74C3C;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+}
+
+.indicator::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 6px;
+    height: 6px;
+    background-color: #E74C3C;
+    border-radius: 50%;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.indicator.active::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.indicator:hover {
+    transform: scale(1.3);
+    border-color: #c0392b;
+}
+
+.indicator.active:hover::before {
+    background-color: #c0392b;
+}
+
+/* Carousel Touch Support */
+@media (hover: none) and (pointer: coarse) {
+    .carousel-container {
+        touch-action: pan-x;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .carousel-wrapper {
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .carousel-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+
+    .carousel-track {
+        transition: transform 0.25s ease-out;
+    }
+
+    .carousel-arrow {
+        width: 48px;
+        height: 48px;
+        opacity: 0.8;
+    }
+
+    .carousel-arrow:hover {
+        transform: translateY(-50%) scale(1.05);
+    }
+}
+
+/* Carousel Responsive Design */
+@media (max-width: 1024px) {
+    .carousel-arrow {
+        width: 50px;
+        height: 50px;
+    }
+
+    .carousel-arrow.prev-arrow {
+        left: -25px;
+    }
+
+    .carousel-arrow.next-arrow {
+        right: -25px;
+    }
+
+    .branch-card {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-container {
+        margin: 0 2rem;
+    }
+
+    .carousel-arrow {
+        width: 44px;
+        height: 44px;
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    .carousel-arrow.prev-arrow {
+        left: 0;
+    }
+
+    .carousel-arrow.next-arrow {
+        right: 0;
+    }
+
+    .branch-card {
+        padding: 1.25rem;
+    }
+
+    .carousel-indicators {
+        gap: 8px;
+        margin-top: 24px;
+    }
+
+    .indicator {
+        width: 12px;
+        height: 12px;
+        border-width: 2px;
+    }
+
+    .indicator::before {
+        width: 4px;
+        height: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-container {
+        margin: 0 1rem;
+    }
+
+    .carousel-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 0.8rem;
+    }
+
+    .branch-card {
+        padding: 1rem;
+    }
+
+    .carousel-indicators {
+        gap: 6px;
+        margin-top: 20px;
+    }
+
+    .indicator {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+/* Carousel Animations */
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.branch-card {
+    animation: slideInFromRight 0.5s ease-out;
+}
+
+.branch-card:nth-child(even) {
+    animation: slideInFromLeft 0.5s ease-out;
+}
+
+/* Carousel Loading State */
+.carousel-loading .carousel-track {
+    opacity: 0.6;
+}
+
+.carousel-loading .branch-card {
+    animation: none;
+}
+
+/* Focus styles for accessibility */
+.carousel-arrow:focus-visible {
+    outline: 3px solid rgba(231, 76, 60, 0.3);
+    outline-offset: 2px;
+}
+
+.indicator:focus-visible {
+    outline: 2px solid rgba(231, 76, 60, 0.3);
+    outline-offset: 2px;
+}
