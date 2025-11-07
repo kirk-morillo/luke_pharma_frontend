@@ -140,7 +140,7 @@ const getStockLocations = (stock) => {
 const handleAddToCart = (product) => {
     if (product.inStock) {
         addToCart(product);
-        showProductAddedAlert(product.name, false);
+        // Feedback will be handled by individual component logic
     } else {
         showErrorAlert('Out of Stock', 'This product is currently out of stock.');
     }
