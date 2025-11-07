@@ -285,32 +285,25 @@ export const showToast = (title, message, type = 'info') => {
 }
 
 // Configure global SweetAlert2 defaults
-Swal.defaults({
-  customClass: {
-    popup: 'custom-popup',
-    header: 'custom-header',
-    title: 'custom-title',
-    content: 'custom-content',
-    actions: 'custom-actions',
-    confirmButton: 'custom-confirm-button',
-    cancelButton: 'custom-cancel-button',
-    footer: 'custom-footer'
-  },
-  buttonsStyling: true,
-  showClass: {
-    popup: 'animate__animated animate__fadeInDown'
-  },
-  hideClass: {
-    popup: 'animate__animated animate__fadeOutUp'
-  },
-  backdrop: `
-    rgba(0, 0, 0, 0.4)
-    left top
-    no-repeat
-  `,
-  backdropAnimationDuration: 200,
-  showConfirmButton: true,
-  allowOutsideClick: false,
-  allowEscapeKey: true,
-  focusConfirm: false
-})
+if (Swal && Swal.defaults) {
+    Object.assign(Swal.defaults, {
+        customClass: {
+            popup: 'custom-popup',
+            header: 'custom-header',
+            title: 'custom-title',
+            content: 'custom-content',
+            actions: 'custom-actions',
+            confirmButton: 'custom-confirm-button',
+            cancelButton: 'custom-cancel-button',
+            footer: 'custom-footer'
+        },
+        buttonsStyling: true,
+        // ... all other defaults
+        showConfirmButton: true,
+        allowOutsideClick: false,
+        allowEscapeKey: true,
+        focusConfirm: false
+    });
+} else {
+    console.error("SweetAlert2 is not fully initialized. Cannot set global defaults.");
+}

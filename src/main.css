@@ -495,7 +495,6 @@ input[type="checkbox"]:checked {
 /* Ensure PrimeVue icons are loaded */
 .pi {
     font-family: 'primeicons' !important;
-    speak: none;
     font-style: normal;
     font-weight: normal;
     font-variant: normal;
@@ -1219,21 +1218,21 @@ input[type="checkbox"]:checked {
     color: var(--text-dark, #000000);
     margin-bottom: 0.625rem;
     font-weight: 600;
-    font-family: 'Poppins', sans-serif';
+    font-family: 'Poppins', sans-serif;
 }
 
 .branch-hours {
     color: var(--text-secondary, #666666);
     margin-bottom: 0.9375rem;
     font-size: 0.95rem;
-    font-family: 'Poppins', sans-serif';
+    font-family: 'Poppins', sans-serif;
 }
 
 .branch-contact {
     color: var(--text-secondary, #666666);
     margin: 5px 0;
     font-size: 0.9rem;
-    font-family: 'Poppins', sans-serif';
+    font-family: 'Poppins', sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1256,7 +1255,7 @@ input[type="checkbox"]:checked {
     margin-top: 0.9375rem;
     display: inline-flex;
     align-items: center;
-    font-family: 'Poppins', sans-serif';
+    font-family: 'Poppins', sans-serif;
     font-size: 1rem;
 }
 
@@ -1293,14 +1292,14 @@ input[type="checkbox"]:checked {
     font-weight: 700;
     color: #1f2937;
     margin-bottom: 0.5rem;
-    font-family: 'Poppins', sans-serif';
+    font-family: 'Poppins', sans-serif;
 }
 
 .page-subtitle {
     font-size: 1.125rem;
     color: #6b7280;
     margin-bottom: 1rem;
-    font-family: 'Poppins', sans-serif';
+    font-family: 'Poppins', sans-serif;
 }
 
 .page-title-underline {
@@ -1338,7 +1337,7 @@ input[type="checkbox"]:checked {
     border: 1px solid #d1d5db;
     border-radius: 0.5rem;
     font-size: 1.125rem;
-    font-family: 'Poppins', sans-serif';
+    font-family: 'Poppins', sans-serif;
     outline: none;
     transition: all 0.2s ease;
     background-color: #ffffff;
@@ -1427,12 +1426,12 @@ input[type="checkbox"]:checked {
     font-weight: 600;
     color: #4b5563;
     margin-bottom: 0.5rem;
-    font-family: 'Poppins', sans-serif';
+    font-family: 'Poppins', sans-serif;
 }
 
 .empty-state-text {
     color: #6b7280;
-    font-family: 'Poppins', sans-serif';
+    font-family: 'Poppins', sans-serif;
 }
 
 /* Responsive Classes for Landing Page */

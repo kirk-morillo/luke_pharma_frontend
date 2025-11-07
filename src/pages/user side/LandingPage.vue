@@ -336,7 +336,7 @@ section {
     color: var(--text-secondary, #666666);
     margin-bottom: 35px;
     font-weight: 400;
-    font-family: 'Poppins', sans-serif';
+    font-family: 'Poppins', sans-serif;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;

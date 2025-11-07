@@ -65,7 +65,7 @@ const togglePasswordVisibility = () => {
 
 // --- Style Objects for Design ---
 
-const primaryRed = '#E74C3C';
+const primaryCoral = '#E74C3C';
 const whiteColor = '#FFFFFF';
 const boxShadowColor = 'rgba(0, 0, 0, 0.1)';
 
