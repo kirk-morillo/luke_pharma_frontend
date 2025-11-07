@@ -185,18 +185,30 @@ const handleLogin = async () => {
 
     const { username, password } = credentials;
     let redirectPath = null;
+    let role = null;
 
     if (username === 'admin' && password === '123') {
         setAuthState('admin');
         redirectPath = '/admin';
+        role = 'Administrator';
     } else if (username === 'user' && password === '123') {
         setAuthState('user');
         redirectPath = '/products';
+        role = 'User';
     } else {
-        error.value = 'Invalid username or password.';
+        isLoading.value = false;
+        showErrorAlert('Login Failed', 'Invalid username or password. Please try again.');
+        return;
     }
 
     isLoading.value = false;
+
+    // Show success message before redirect
+    await showSuccessAlert(
+        'Login Successful!',
+        `Welcome back, ${role}! You are being redirected...`,
+        false
+    );
 
     if (redirectPath) {
         router.replace(redirectPath);
