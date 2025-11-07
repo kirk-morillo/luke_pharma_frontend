@@ -267,112 +267,12 @@ onMounted(fetchProducts);
 }
 
 /* ---------------------------------------------------------------------- */
-/* --- 3. PRODUCT CARD --- */
+/* --- 3. PRODUCT GRID --- */
 /* ---------------------------------------------------------------------- */
-.product-card {
-    background: white;
-    border-radius: 10px;
-    box-shadow: var(--card-shadow);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-.product-image-placeholder {
-    height: 120px;
-    background-color: #f0f3f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 4em;
-    color: #bdc3c7;
-}
-
-.product-icon {
-    color: var(--secondary-blue);
-}
-
-.product-details {
-    padding: 15px;
-    flex-grow: 1;
-}
-
-.product-name {
-    font-size: 1.3em;
-    color: #2c3e50;
-    margin: 0 0 5px 0;
-    font-weight: 700;
-}
-
-.product-category {
-    font-size: 0.9em;
-    color: #95a5a6;
-    text-transform: capitalize;
-    margin-bottom: 10px;
-}
-
-.price-and-stock {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.product-price {
-    font-size: 1.4em;
-    font-weight: 800;
-    color: var(--primary-red);
-}
-
-.product-stock {
-    font-size: 0.9em;
-    font-weight: 600;
-    color: #27ae60;
-    /* Green for in stock */
-}
-
-.product-stock.low {
-    color: #f39c12;
-    /* Yellow/Orange for low stock */
-}
-
-.product-stock.zero {
-    color: var(--primary-red);
-    /* Red for out of stock */
-    font-weight: 700;
-}
-
-.add-to-cart-btn {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    background-color: #2ecc71;
-    /* Green for general cart */
-    color: white;
-    font-size: 1.1em;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.add-to-cart-btn:disabled {
-    background-color: #bdc3c7;
-    cursor: not-allowed;
-}
-
-.add-to-cart-btn.staff-mode {
-    background-color: var(--primary-red);
-    /* Red for staff/sale mode */
-}
-
-.add-to-cart-btn.staff-mode:hover:not(:disabled) {
-    background-color: #C0392B;
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
 }
 
 /* ---------------------------------------------------------------------- */
