@@ -201,14 +201,13 @@ const handleAddToBag = (product) => {
 
 const nextBranches = () => {
     // Determine the furthest possible starting index (the index of the first branch in the last 'slide')
-    const lastBranchIndex = totalBranches.value - BRANCHES_PER_SLIDE;
+    const lastBranchIndex = totalBranches.value - branchesPerSlide.value;
 
-    // Calculate the new index. Max of 0 is needed in case totalBranches < BRANCHES_PER_SLIDE
+    // Calculate the new index. Max of 0 is needed in case totalBranches < branchesPerSlide
     const maxIndex = Math.max(0, lastBranchIndex);
 
-    // Cycle through all branches individually, or move by the slide size.
-    // Sticking to moving by one slide for cleaner navigation (BRANCHES_PER_SLIDE)
-    let newIndex = currentIndex.value + BRANCHES_PER_SLIDE;
+    // Move by the slide size (branchesPerSlide)
+    let newIndex = currentIndex.value + branchesPerSlide.value;
 
     // Wrap around to the start (index 0) if we exceed the max index.
     if (newIndex > maxIndex) {
@@ -219,15 +218,15 @@ const nextBranches = () => {
 };
 
 const previousBranches = () => {
-    const lastBranchIndex = totalBranches.value - BRANCHES_PER_SLIDE;
+    const lastBranchIndex = totalBranches.value - branchesPerSlide.value;
     const maxIndex = Math.max(0, lastBranchIndex);
 
-    let newIndex = currentIndex.value - BRANCHES_PER_SLIDE;
+    let newIndex = currentIndex.value - branchesPerSlide.value;
 
     // Wrap around to the last slide if we go below 0
     if (newIndex < 0) {
         // Calculate the starting index of the *last* complete/partial slide
-        const lastSlideStart = Math.floor(maxIndex / BRANCHES_PER_SLIDE) * BRANCHES_PER_SLIDE;
+        const lastSlideStart = Math.floor(maxIndex / branchesPerSlide.value) * branchesPerSlide.value;
         newIndex = lastSlideStart;
     }
 
@@ -236,10 +235,10 @@ const previousBranches = () => {
 
 const goToSlide = (slideIndex) => {
     // Move to the starting branch index of the requested slide
-    currentIndex.value = slideIndex * BRANCHES_PER_SLIDE;
+    currentIndex.value = slideIndex * branchesPerSlide.value;
 
     // Ensure we don't exceed the boundary
-    const lastBranchIndex = totalBranches.value - BRANCHES_PER_SLIDE;
+    const lastBranchIndex = totalBranches.value - branchesPerSlide.value;
     const maxIndex = Math.max(0, lastBranchIndex);
 
     if (currentIndex.value > maxIndex) {
