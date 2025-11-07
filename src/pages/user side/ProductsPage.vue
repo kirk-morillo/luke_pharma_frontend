@@ -277,43 +277,29 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Custom styles for better transitions */
-.hover\:shadow-lg {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+  .products-page-container {
+    padding-top: 80px;
+  }
 }
 
-.hover\:shadow-lg:hover {
-  box-shadow: 0 20px 25px -5px rgba(231, 76, 60, 0.3), 0 10px 10px -5px rgba(231, 76, 60, 0.04);
+/* Focus states for accessibility */
+input:focus {
+  border-color: #E74C3C !important;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1) !important;
 }
 
-/* Animation for card hover */
-.transform {
-  transition: transform 0.2s ease-in-out;
+button:hover {
+  transform: translateY(-1px);
 }
 
-.transform:hover {
-  transform: translateY(-4px);
+button:active {
+  transform: translateY(0);
 }
 
-/* Button active state */
-.active\:scale-95:active {
-  transform: scale(0.95);
-}
-
-/* Focus styles for accessibility */
-.focus\:ring-2:focus {
-  outline: none;
-  ring: 2px;
-  ring-color: #E74C3C;
-}
-
-/* Search input styling */
-input[type="text"]::placeholder {
-  color: #9CA3AF;
-}
-
-/* Category filter button animations */
-.transition-all {
-  transition: all 0.2s ease-in-out;
+/* Smooth transitions */
+input, button {
+  transition: all 0.2s ease;
 }
 </style>
