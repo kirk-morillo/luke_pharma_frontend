@@ -194,8 +194,7 @@ const handleResize = () => {
 // Methods
 const handleAddToBag = (product) => {
     if (product.inStock) {
-        bagAddToBag(product, 1);
-        showProductAddedAlert(product.name, true);
+        bagAddToBag(product, 1, false); // Feedback handled by composable
     }
 };
 
