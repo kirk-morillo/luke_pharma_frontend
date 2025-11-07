@@ -8,10 +8,31 @@
                     <span class="site-name">Luked Pharma Co.</span>
                 </router-link>
             </div>
+
+            <div class="header-center">
+                <input type="text" placeholder="Search items, stores..." class="search-input" />
+            </div>
+
             <nav class="main-nav">
-                <router-link to="/items" class="nav-link">Items</router-link>
-                <router-link to="/stores" class="nav-link">Stores</router-link>
-                <router-link to="/about" class="nav-link">About</router-link>
+                <router-link to="/items" class="nav-link">
+                    <i class="pi pi-box nav-icon"></i>
+                    <span class="nav-text">Items</span>
+                </router-link>
+
+                <router-link to="/stores" class="nav-link">
+                    <i class="pi pi-building nav-icon"></i>
+                    <span class="nav-text">Stores</span>
+                </router-link>
+
+                <router-link to="/about" class="nav-link">
+                    <i class="pi pi-info-circle nav-icon"></i>
+                    <span class="nav-text">About</span>
+                </router-link>
+
+                <router-link to="/account" class="nav-link account-icon-link">
+                    <i class="pi pi-user-circle nav-icon"></i>
+                    <span class="nav-text">Account</span>
+                </router-link>
             </nav>
 
         </div>
@@ -19,130 +40,217 @@
 </template>
 
 <script setup>
+// No script changes needed for this component structure
 </script>
 
 <style scoped>
+/* NOTE: Icons will only appear if primeicons/primeicons.css is imported globally. */
+
 :root {
     --primary-red: #E74C3C;
     --bg-light-red: #FADBD8;
     --text-dark: #000000;
     --border-light: #ecf0f1;
+    --search-bg: #ffffff;
 }
 
 .main-header {
+    position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
     background-color: var(--bg-light-red);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Adjusted padding slightly since the stacked button is gone */
-    padding: 20px 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    padding: 15px 40px;
     margin-bottom: 20px;
 }
 
 .header-content {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     max-width: 1400px;
     margin: 0 auto;
+    gap: 30px;
 }
 
-/* --- Layout Containers --- */
+/* --- Left Section (Logo) --- */
 .header-left {
-    /* No need for complex column layout anymore, just a wrapper */
     display: flex;
     align-items: center;
 }
 
-/* --- Logo Styling --- */
 .logo-link {
     display: flex;
     align-items: center;
     text-decoration: none;
     color: var(--primary-red);
-    font-size: 1.5em;
     font-weight: 700;
-    margin-left: -20px;
-    /* Removed margin-bottom since nothing is stacked below it */
-    margin-bottom: 0;
 }
 
 .logo {
-    width: 60px;
-    height: 60px;
-    margin-right: 15px;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
     object-fit: contain;
 }
 
 .site-name {
-    font-weight: 500;
+    font-weight: 600;
     color: var(--primary-red);
-    font-size: 1.8em;
+    font-size: 1.6em;
 }
 
-/* --- Stacked Account Button Styling (REMOVED) --- */
-/* .user-area-stacked and .account-link-stacked styles are gone */
+/* --- Center Section (Search) --- */
+.header-center {
+    flex-grow: 1;
+    max-width: 450px;
+}
 
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid var(--border-light);
+    border-radius: 25px;
+    font-size: 1em;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: var(--search-bg);
+}
 
-/* --- Navigation Styling --- */
+.search-input:focus {
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+}
+
+/* --- Right Section (Navigation) --- */
 .main-nav {
     display: flex;
     gap: 15px;
-    margin-left: auto;
 }
 
 .nav-link {
+    display: flex;
+    align-items: center;
     text-decoration: none;
     color: var(--primary-red);
-    font-size: 1.1em;
-    padding: 10px 15px;
+    font-size: 1em;
+    padding: 8px 12px;
     border-radius: 4px;
     transition: color 0.3s, background-color 0.3s;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.nav-icon {
+    margin-right: 6px;
+    font-size: 1.1em;
 }
 
 .nav-link:hover,
 .nav-link.router-link-active {
-    color: var(--text-dark);
-    background-color: #fce4e4;
-    border-bottom: none;
+    color: var(--bg-light-red);
+    background-color: var(--primary-red);
+}
+
+/* Account Icon Styling (Icon-only on Desktop) */
+.account-icon-link {
+    padding: 8px 10px;
+    margin-left: 5px;
+}
+
+.account-icon-link .nav-text {
+    display: none;
+}
+
+.account-icon-link .nav-icon {
+    margin-right: 0;
+    font-size: 1.4em;
 }
 
 
 /* --- Responsive Adjustments --- */
-@media (max-width: 800px) {
+/* Medium Screens (950px and below) */
+@media (max-width: 950px) {
+    .header-content {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .header-left {
+        order: 1;
+    }
+
+    .main-nav {
+        order: 3;
+        flex-basis: 100%;
+        justify-content: center;
+        margin-left: 0;
+    }
+
+    .header-center {
+        order: 2;
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+
+    /* Re-show 'Account' text on wider mobile views */
+    .account-icon-link .nav-text {
+        display: initial;
+    }
+
+    .account-icon-link .nav-icon {
+        margin-right: 6px;
+        font-size: 1.1em;
+    }
+}
+
+/* Small Screens (600px and below) - Icon-only navigation */
+@media (max-width: 600px) {
+    .main-header {
+        padding: 15px 10px;
+    }
+
     .header-content {
         flex-direction: column;
         gap: 15px;
         align-items: center;
     }
 
-    .header-left {
-        align-items: center;
-    }
-
-    .logo-link {
-        margin-left: 0;
-    }
-
-    .main-header {
-        padding: 20px 20px;
+    .header-left,
+    .main-nav,
+    .header-center {
+        order: unset;
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
     }
 
     .main-nav {
-        gap: 10px;
-        margin-left: 0;
+        flex-wrap: nowrap;
+        justify-content: space-around;
+        gap: 0;
     }
 
     .nav-link {
-        padding: 8px 10px;
+        padding: 6px 10px;
     }
 
-    .logo {
-        width: 50px;
-        height: 50px;
-        margin-right: 10px;
+    /* Hide text on all small-screen links */
+    .nav-text {
+        display: none;
     }
 
-    .site-name {
-        font-size: 1.5em;
+    .nav-icon {
+        margin-right: 0;
+        font-size: 1.2em;
+    }
+
+    .account-icon-link {
+        margin-left: 0;
+        padding: 6px 10px;
     }
 }
 </style>

@@ -8,9 +8,14 @@
                     <span class="footer-site-name">Luked Pharma Co.</span>
                 </router-link>
                 <p class="tagline">Your trusted health partner.</p>
+
+                <router-link to="/admin/login" class="admin-login-link-btn">
+                    <i class="pi pi-lock"></i> Admin Login
+                </router-link>
+
                 <div class="social-links">
                     <a href="https://www.facebook.com/profile.php?id=100083107822016" target="_blank"
-                        rel="noopener noreferrer">
+                        rel="noopener noreferrer" class="social-icon-wrapper">
                         <i class="pi pi-facebook social-icon"></i>
                     </a>
                 </div>
@@ -70,7 +75,7 @@
 </template>
 
 <script setup>
-// No script logic needed for this footer
+// No script logic needed
 </script>
 
 <style scoped>
@@ -105,7 +110,6 @@
 /* ---------------------------------------------------------------------- */
 
 .footer-section {
-    /* Width for 4 columns */
     width: 23%;
 }
 
@@ -127,7 +131,6 @@
     margin: 0;
 }
 
-/* Class for the requested red headings */
 .red-text {
     color: var(--primary-red) !important;
 }
@@ -174,7 +177,7 @@
 }
 
 /* ---------------------------------------------------------------------- */
-/* --- 1. LEFT SECTION (Logo and Social Links ONLY) --- */
+/* --- 1. LEFT SECTION (Logo, Tagline, Button, Social) --- */
 /* ---------------------------------------------------------------------- */
 .footer-left {
     display: flex;
@@ -210,21 +213,67 @@
     margin-left: 0;
     color: var(--footer-text-subtle);
     padding-left: 115px;
-    /* Offset to align under site name */
 }
 
+/* --- NEW: Admin Login Button Styling --- */
+.admin-login-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-red);
+    color: var(--footer-text-light);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 115px;
+    /* Offset to align below logo text */
+    transition: background-color 0.3s, transform 0.1s;
+    border: 1px solid var(--primary-red);
+}
+
+.admin-login-link-btn:hover {
+    background-color: #c0392b;
+    /* Darker red on hover */
+    transform: translateY(-1px);
+}
+
+.admin-login-link-btn .pi {
+    margin-right: 8px;
+    font-size: 1.1em;
+}
+
+/* --- Social Links Styling --- */
 .social-links {
     margin-top: 15px;
-    margin-left: 0;
-    padding-left: 115px;
-    margin-bottom: 0;
-    /* Adjusted: No button, so no extra bottom margin needed */
+    margin-left: 115px;
+    padding-left: 0;
 }
 
-/* REMOVED .admin-login-link-btn STYLES */
+.social-icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #34495e;
+    /* Subtle dark background */
+    color: var(--footer-text-light);
+    font-size: 1.2em;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.social-icon-wrapper:hover {
+    background-color: var(--primary-red);
+    color: white;
+}
+
 
 /* ---------------------------------------------------------------------- */
-/* --- 2. LOCATION SECTION --- */
+/* --- 2, 3, 4. CENTER, HOURS, CONTACTS (Keep Existing Styles) --- */
 /* ---------------------------------------------------------------------- */
 
 .footer-center {
@@ -246,9 +295,6 @@
     margin-top: 2px;
 }
 
-/* ---------------------------------------------------------------------- */
-/* --- 3. OPERATING HOURS SECTION --- */
-/* ---------------------------------------------------------------------- */
 .footer-hours {
     padding-right: 20px;
 }
@@ -279,7 +325,7 @@
 }
 
 /* ---------------------------------------------------------------------- */
-/* --- COPYRIGHT BAR (Simplified Bottom) --- */
+/* --- COPYRIGHT BAR --- */
 /* ---------------------------------------------------------------------- */
 .copyright-bar {
     text-align: center;
@@ -318,18 +364,24 @@
     }
 
     .tagline,
-    .social-links {
+    .social-links,
+    .admin-login-link-btn {
         margin-left: 0;
         text-align: center;
         padding-left: 0;
         /* Remove offsets on mobile */
     }
 
-    /* REMOVED .admin-login-link-btn mobile styles */
-
     .footer-logo-link {
         margin-bottom: 15px;
         justify-content: center;
+    }
+
+    .admin-login-link-btn {
+        width: 100%;
+        /* Make button full width on small screens */
+        max-width: 250px;
+        /* Optional: limit max width for better aesthetic */
     }
 
     /* Title Centering for all Sections */

@@ -10,9 +10,9 @@
             <div class="stat-card primary">
                 <div class="stat-icon-group">
                     <i class="pi pi-chart-line stat-icon"></i>
-                    <h3>Today's Sales</h3>
+                    <h3>Today's Sales (₱)</h3>
                 </div>
-                <p class="stat-value">{{ formatCurrency(stats.todaySales) }}</p>
+                <p class="stat-value">{{(stats.todaySales) }}</p>
                 <span class="stat-label">Total Revenue</span>
             </div>
 
@@ -109,9 +109,6 @@ const lists = ref({
     ]
 });
 
-const formatCurrency = (value) => {
-    return `₱ ${value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-};
 </script>
 
 <style scoped>
