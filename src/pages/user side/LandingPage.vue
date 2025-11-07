@@ -274,27 +274,11 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* --- CSS Variables --- */
-/* Placed inside the component root selector for scoped use */
 .landing-page-container {
-    --primary-red: #E74C3C;
-    --bg-light-red: #FADBD8;
-    --text-dark: #000000;
-    --border-light: #ecf0f1;
-    --text-secondary: #666666;
-    --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
-    --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.15);
-
     display: flex;
     flex-direction: column;
     font-family: 'Poppins', sans-serif;
     background-color: #f7f7f7;
-}
-
-/* Padding to prevent content from being hidden by a fixed header */
-.main-content {
-    flex-grow: 1;
-    padding-top: 75px;
 }
 
 section {
@@ -312,28 +296,25 @@ section {
 .section-header h2 {
     font-size: 2.5em;
     font-weight: 700;
-    color: var(--primary-red);
+    color: var(--primary-red, #E74C3C);
     margin-bottom: 15px;
     font-family: 'Poppins', sans-serif;
 }
 
 .section-header p {
-    color: var(--text-secondary);
+    color: var(--text-secondary, #666666);
     font-size: 1.1em;
     font-weight: 400;
     font-family: 'Poppins', sans-serif;
 }
 
-/* ========================================
-2. HERO STYLES
-========================================
-*/
+/* Hero Section */
 .hero-section {
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    background: linear-gradient(135deg, #fefefe, var(--bg-light-red));
+    background: linear-gradient(135deg, #fefefe, #FADBD8);
     padding: 120px 40px;
     min-height: 500px;
     border-bottom-left-radius: 20px;
@@ -344,7 +325,7 @@ section {
 
 .hero-text-content h1 {
     font-size: 3.5em;
-    color: var(--text-dark);
+    color: var(--text-dark, #000000);
     margin-bottom: 20px;
     font-weight: 700;
     font-family: 'Poppins', sans-serif;
@@ -353,10 +334,10 @@ section {
 
 .subtitle-text {
     font-size: 1.3em;
-    color: var(--text-secondary);
+    color: var(--text-secondary, #666666);
     margin-bottom: 35px;
     font-weight: 400;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif';
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
@@ -367,7 +348,7 @@ section {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background-color: var(--primary-red);
+    background-color: var(--primary-red, #E74C3C);
     color: white;
     padding: 15px 35px;
     border-radius: 30px;
@@ -388,143 +369,15 @@ section {
     color: white;
 }
 
-/* ========================================
-3. FREQUENTLY SOLD PRODUCTS STYLES
-========================================
-*/
+/* Products Section */
 .frequently-sold-section {
     background-color: white;
     border-radius: 20px;
-    box-shadow: var(--shadow-light);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     margin: 30px auto;
 }
 
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    margin-top: 50px;
-}
-
-.product-card {
-    background-color: white;
-    border: 2px solid #f0f0f0;
-    border-radius: 15px;
-    box-shadow: var(--shadow-light);
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative;
-}
-
-.product-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-medium);
-    border-color: var(--primary-red);
-    border-width: 2px;
-}
-
-.product-card:hover .product-name {
-    color: var(--primary-red);
-}
-
-.card-content {
-    padding: 25px;
-    text-align: center;
-}
-
-.product-icon {
-    font-size: 3.5em;
-    color: var(--primary-red);
-    margin-bottom: 15px;
-    opacity: 0.8;
-    transition: opacity 0.3s;
-}
-
-.product-card:hover .product-icon {
-    opacity: 1;
-}
-
-.product-name {
-    font-size: 1.4em;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 8px;
-    font-family: 'Poppins', sans-serif;
-    transition: color 0.3s;
-}
-
-.product-description {
-    font-size: 0.95em;
-    color: var(--text-secondary);
-    margin-bottom: 0;
-    font-family: 'Poppins', sans-serif;
-}
-
-.card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 20px 25px;
-    border-top: 1px solid #f8f8f8;
-    background-color: #fafafa;
-    gap: 15px;
-}
-
-.product-price {
-    font-size: 1.3em;
-    font-weight: 700;
-    color: var(--primary-red);
-    font-family: 'Poppins', sans-serif;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.stock-locations {
-    font-size: 0.85em;
-    color: var(--text-secondary);
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.add-to-bag-btn {
-    background-color: var(--primary-red);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9em;
-    white-space: nowrap;
-}
-
-.add-to-bag-btn:hover:not(:disabled) {
-    background-color: #C0392B;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
-}
-
-.add-to-bag-btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-/* ========================================
-4. BRANCHES CAROUSEL STYLES
-========================================
-*/
+/* Branches Carousel */
 .branches-section {
     background-color: #f8f9fa;
     margin: 30px auto 40px;
@@ -547,86 +400,27 @@ section {
 .carousel-track {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    /* Set width to accommodate all branches */
-    width: 100%;
 }
 
 .branch-card {
-    /* Uses the same variable as the script (BRANCHES_PER_SLIDE=3) to set width */
-    min-width: calc(100% / 3);
-    padding: 40px 30px;
     text-align: center;
     background-color: white;
     border-radius: 15px;
-    box-shadow: var(--shadow-light);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     margin: 0 10px;
     transition: all 0.3s ease;
 }
 
 .branch-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-medium);
-}
-
-.branch-icon {
-    font-size: 3.5em;
-    color: var(--primary-red);
-    margin-bottom: 20px;
-    opacity: 0.8;
-}
-
-.branch-name {
-    font-size: 1.4em;
-    color: var(--text-dark);
-    margin-bottom: 10px;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
-}
-
-.branch-hours {
-    color: var(--text-secondary);
-    margin-bottom: 15px;
-    font-size: 0.95em;
-    font-family: 'Poppins', sans-serif;
-}
-
-.branch-contact p {
-    color: var(--text-secondary);
-    margin: 5px 0;
-    font-size: 0.9em;
-    font-family: 'Poppins', sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.branch-details-btn {
-    background-color: var(--primary-red);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-top: 15px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'Poppins', sans-serif;
-}
-
-.branch-details-btn:hover {
-    background-color: #C0392B;
-    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .carousel-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: var(--primary-red);
+    background-color: var(--primary-red, #E74C3C);
     color: white;
     border: none;
     width: 50px;
@@ -639,7 +433,7 @@ section {
     transition: all 0.3s;
     z-index: 10;
     font-size: 1.2em;
-    box-shadow: var(--shadow-light);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .carousel-arrow:hover {
@@ -666,38 +460,22 @@ section {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    border: 2px solid var(--primary-red);
+    border: 2px solid var(--primary-red, #E74C3C);
     background-color: transparent;
     cursor: pointer;
     transition: all 0.3s;
 }
 
 .indicator.active {
-    background-color: var(--primary-red);
+    background-color: var(--primary-red, #E74C3C);
 }
 
 .indicator:hover {
     transform: scale(1.2);
 }
 
-/* ========================================
-RESPONSIVE ADJUSTMENTS
-========================================
-*/
-
-/* Tablets and Small Desktops */
+/* Responsive Design */
 @media (max-width: 1024px) {
-    .products-grid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 25px;
-    }
-
-    .branch-card {
-        /* Adjusted width for showing 2 branches */
-        min-width: calc(100% / 2);
-        padding: 30px 20px;
-    }
-
     .carousel-arrow {
         width: 45px;
         height: 45px;
@@ -712,7 +490,6 @@ RESPONSIVE ADJUSTMENTS
     }
 }
 
-/* Mobile Devices */
 @media (max-width: 768px) {
     section {
         padding: 40px 20px;
@@ -743,35 +520,9 @@ RESPONSIVE ADJUSTMENTS
         margin-bottom: 12px;
     }
 
-    .products-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-    }
-
-    .product-card {
-        border-radius: 12px;
-    }
-
-    .card-content {
-        padding: 20px;
-    }
-
-    .product-name {
-        font-size: 1.2em;
-    }
-
-    .branch-card {
-        /* Adjusted width for showing 1 branch */
-        min-width: 100%;
-        padding: 30px 20px;
-        margin: 0 5px;
-    }
-
     .carousel-arrow {
-        /* Re-enabling arrows but pushing them to the edges */
         display: flex;
         top: 30%;
-        /* Move up a bit to not interfere with indicators */
     }
 
     .prev-arrow {
@@ -784,20 +535,9 @@ RESPONSIVE ADJUSTMENTS
 
     .carousel-container {
         margin: 0 40px;
-        /* Added margin to make space for the arrows */
-    }
-
-    .stock-locations {
-        font-size: 0.8em;
-    }
-
-    .add-to-bag-btn {
-        padding: 8px 16px;
-        font-size: 0.85em;
     }
 }
 
-/* Small Mobile Devices */
 @media (max-width: 480px) {
     .hero-text-content h1 {
         font-size: 1.8em;
@@ -807,30 +547,8 @@ RESPONSIVE ADJUSTMENTS
         font-size: 1em;
     }
 
-    .products-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-
-    .card-footer {
-        flex-direction: column;
-        gap: 15px;
-        align-items: stretch;
-    }
-
-    .add-to-bag-btn {
-        width: 100%;
-        justify-content: center;
-        padding: 12px 20px;
-        font-size: 0.9em;
-    }
-
-    .branch-name {
-        font-size: 1.2em;
-    }
-
-    .branch-contact p {
-        font-size: 0.85em;
+    .carousel-container {
+        margin: 0 20px;
     }
 }
 </style>
