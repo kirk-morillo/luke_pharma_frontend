@@ -58,16 +58,6 @@ export default {
     getProductIcon(category) {
       return category === 'Medicine' ? 'pi pi-pill' : 'pi pi-cog'
     },
-    getProductIconBg(category) {
-      return category === 'Medicine'
-        ? 'rgba(46, 204, 113, 0.1)'
-        : 'rgba(52, 152, 219, 0.1)'
-    },
-    getProductIconColor(category) {
-      return category === 'Medicine'
-        ? '#2ecc71'
-        : '#3498db'
-    },
     formatStockLocations(locations) {
       if (!locations || locations.length === 0) return 'No locations'
 
@@ -80,11 +70,6 @@ export default {
       }
 
       return availableLocations.join(', ')
-    },
-    handleButtonHover(hovering) {
-      if (this.product.inStock) {
-        this.isButtonHovered = hovering
-      }
     }
   }
 }
