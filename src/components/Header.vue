@@ -215,6 +215,10 @@ const scrollToFooter = () => {
     gap: 15px;
 }
 
+.nav-dropdown {
+    position: relative;
+}
+
 .nav-link {
     display: flex;
     align-items: center;
@@ -226,6 +230,9 @@ const scrollToFooter = () => {
     transition: color 0.3s, background-color 0.3s;
     font-weight: 500;
     white-space: nowrap;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 .nav-icon {
@@ -237,6 +244,194 @@ const scrollToFooter = () => {
 .nav-link.router-link-active {
     color: var(--bg-light-red);
     background-color: var(--primary-red);
+}
+
+.dropdown-toggle {
+    position: relative;
+}
+
+.dropdown-icon {
+    margin-left: 4px;
+    font-size: 0.8em;
+    transition: transform 0.3s;
+}
+
+.nav-dropdown:hover .dropdown-icon {
+    transform: rotate(180deg);
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    min-width: 200px;
+    box-shadow: var(--dropdown-shadow);
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+    z-index: 1001;
+    margin-top: 5px;
+}
+
+.dropdown-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: var(--text-dark);
+    text-decoration: none;
+    transition: background-color 0.2s;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 0.95em;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+    border-radius: 0 0 8px 8px;
+}
+
+.dropdown-item:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.dropdown-item:hover {
+    background-color: var(--bg-light-red);
+    color: var(--primary-red);
+}
+
+.dropdown-item-icon {
+    margin-right: 8px;
+    font-size: 1em;
+}
+
+/* Bag Dropdown Styles */
+.bag-dropdown {
+    min-width: 280px;
+    right: 0;
+    left: auto;
+}
+
+.bag-preview {
+    padding: 12px;
+}
+
+.bag-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.bag-preview-title {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.view-bag-btn {
+    color: var(--primary-red);
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.view-bag-btn:hover {
+    text-decoration: underline;
+}
+
+.bag-preview-items {
+    margin-bottom: 12px;
+}
+
+.bag-preview-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 0.9em;
+}
+
+.item-name {
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.item-quantity {
+    color: var(--primary-red);
+    font-weight: 600;
+}
+
+.bag-preview-footer {
+    padding-top: 8px;
+    border-top: 1px solid var(--border-light);
+    text-align: right;
+}
+
+.bag-total {
+    font-weight: 600;
+    color: var(--primary-red);
+    font-size: 1.1em;
+}
+
+.empty-bag {
+    padding: 20px;
+    text-align: center;
+}
+
+.empty-bag-icon {
+    font-size: 2.5em;
+    color: var(--border-light);
+    margin-bottom: 12px;
+}
+
+.empty-bag-text {
+    color: var(--text-dark);
+    margin-bottom: 16px;
+    font-size: 0.95em;
+}
+
+.explore-products-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary-red);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+}
+
+.explore-products-btn:hover {
+    background-color: #C0392B;
+    text-decoration: none;
+    color: white;
+}
+
+/* Bag Badge */
+.bag-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--primary-red);
+    color: white;
+    font-size: 0.75em;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
 }
 
 /* Account Icon Styling (Icon-only on Desktop) */
