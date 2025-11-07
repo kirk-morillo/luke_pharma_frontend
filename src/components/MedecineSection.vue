@@ -93,6 +93,19 @@ const fetchProducts = async () => {
     loading.value = false;
 };
 
+// Map MedicineSection products to ProductCard format
+const mappedProducts = computed(() => {
+    return filteredProducts.value.map(product => ({
+        id: product.id,
+        name: product.name,
+        category: mapCategory(product.category),
+        price: product.price,
+        inStock: product.stock > 0,
+        stockLocations: getStockLocations(product.stock),
+        description: `${product.category.replace('_', ' ')} - Stock: ${product.stock}`
+    }));
+});
+
 const filteredProducts = computed(() => {
     let filtered = products.value.filter(product => {
         // Search filter
@@ -105,6 +118,33 @@ const filteredProducts = computed(() => {
     });
     return filtered;
 });
+
+// Map internal categories to standard ProductCard categories
+const mapCategory = (category) => {
+    const categoryMap = {
+        'pain_relief': 'Medicine',
+        'vitamins': 'Medicine',
+        'prescription': 'Medicine'
+    };
+    return categoryMap[category] || 'Medicine';
+};
+
+// Generate stock locations based on stock level
+const getStockLocations = (stock) => {
+    if (stock === 0) return [];
+    if (stock >= 20) return ['Location 1', 'Location 2', 'Location 3'];
+    if (stock >= 10) return ['Location 1', 'Location 2'];
+    return ['Location 1'];
+};
+
+const handleAddToCart = (product) => {
+    if (product.inStock) {
+        addToCart(product);
+        showProductAddedAlert(product.name, false);
+    } else {
+        showErrorAlert('Out of Stock', 'This product is currently out of stock.');
+    }
+};
 
 const addToCart = (product) => {
     console.log(`${product.name} added to cart/sale.`);
