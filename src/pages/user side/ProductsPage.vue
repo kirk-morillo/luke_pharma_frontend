@@ -80,8 +80,10 @@
 import { ref, computed, onMounted } from 'vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import ProductCard from '@/components/ProductCard.vue'
 import { useBag } from '@/composables/useBag.js'
 import { mockProducts, productCategories } from '@/data/mockData.js'
+import { showProductAddedAlert, showErrorAlert } from '@/utils/sweetAlertConfig.js'
 
 // Bag composable
 const { addToBag, isInBag, getItemQuantity } = useBag()
@@ -89,6 +91,152 @@ const { addToBag, isInBag, getItemQuantity } = useBag()
 // Reactive state
 const searchQuery = ref('')
 const selectedCategory = ref(null)
+
+// Inline styles
+const containerStyle = {
+  minHeight: '100vh',
+  backgroundColor: '#f9fafb',
+  fontFamily: 'Poppins, sans-serif'
+}
+
+const mainContentStyle = {
+  maxWidth: '1280px',
+  margin: '0 auto',
+  padding: '2rem 1rem'
+}
+
+const titleSectionStyle = {
+  textAlign: 'center',
+  marginBottom: '2rem'
+}
+
+const titleStyle = {
+  fontSize: '2.5rem',
+  fontWeight: '700',
+  color: '#1f2937',
+  marginBottom: '0.5rem',
+  fontFamily: 'Poppins, sans-serif'
+}
+
+const subtitleStyle = {
+  fontSize: '1.125rem',
+  color: '#6b7280',
+  marginBottom: '1rem',
+  fontFamily: 'Poppins, sans-serif'
+}
+
+const titleUnderlineStyle = {
+  width: '6rem',
+  height: '4px',
+  backgroundColor: '#E74C3C',
+  margin: '1rem auto',
+  borderRadius: '2px'
+}
+
+const searchSectionStyle = {
+  maxWidth: '42rem',
+  margin: '0 auto 2rem auto'
+}
+
+const searchContainerStyle = {
+  position: 'relative'
+}
+
+const searchIconStyle = {
+  position: 'absolute',
+  left: '1rem',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  color: '#9ca3af',
+  fontSize: '1.25rem',
+  zIndex: 1
+}
+
+const searchInputStyle = {
+  width: '100%',
+  paddingLeft: '3rem',
+  paddingRight: '3rem',
+  padding: '1rem',
+  border: '1px solid #d1d5db',
+  borderRadius: '0.5rem',
+  fontSize: '1.125rem',
+  fontFamily: 'Poppins, sans-serif',
+  outline: 'none',
+  transition: 'all 0.2s ease',
+  backgroundColor: '#ffffff'
+}
+
+const clearButtonStyle = {
+  position: 'absolute',
+  right: '1rem',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  color: '#9ca3af',
+  fontSize: '1.5rem',
+  cursor: 'pointer',
+  background: 'none',
+  border: 'none',
+  padding: '0.25rem',
+  borderRadius: '50%',
+  transition: 'color 0.2s ease'
+}
+
+const filterSectionStyle = {
+  maxWidth: '56rem',
+  margin: '0 auto 2rem auto'
+}
+
+const filterContainerStyle = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  gap: '1rem'
+}
+
+const getCategoryButtonStyle = (categoryId) => {
+  const isSelected = selectedCategory.value === categoryId
+  return {
+    padding: '0.75rem 1.5rem',
+    borderRadius: '0.5rem',
+    fontWeight: '600',
+    fontSize: '1rem',
+    fontFamily: 'Poppins, sans-serif',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    border: 'none',
+    backgroundColor: isSelected ? '#E74C3C' : '#e5e7eb',
+    color: isSelected ? '#ffffff' : '#374151'
+  }
+}
+
+const productsSectionStyle = {
+  maxWidth: '80rem',
+  margin: '0 auto'
+}
+
+const emptyStateStyle = {
+  textAlign: 'center',
+  padding: '4rem 0'
+}
+
+const emptyIconStyle = {
+  fontSize: '4rem',
+  color: '#d1d5db',
+  marginBottom: '1rem'
+}
+
+const emptyTitleStyle = {
+  fontSize: '1.25rem',
+  fontWeight: '600',
+  color: '#4b5563',
+  marginBottom: '0.5rem',
+  fontFamily: 'Poppins, sans-serif'
+}
+
+const emptyTextStyle = {
+  color: '#6b7280',
+  fontFamily: 'Poppins, sans-serif'
+}
 
 // Computed property for filtered products
 const filteredProducts = computed(() => {
