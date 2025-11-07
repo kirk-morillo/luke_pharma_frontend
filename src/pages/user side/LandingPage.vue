@@ -1,172 +1,197 @@
 <template>
     <div class="landing-page-container">
-
         <Header />
 
         <main class="main-content">
-
+            <!-- Hero Section -->
             <section id="hero" class="hero-section">
                 <div class="hero-text-content">
-                    <h1>Your Health, Our Priority.</h1>
-                    <p class="subtitle-text">Find the right medicine and health supplies from our trusted locations.</p>
-                    <a href="#items-section" @click.prevent="scrollToSection('items-section')" class="hero-cta-button">
-                        Explore Our Items <i class="pi pi-arrow-right"></i>
-                    </a>
+                    <h1>"Your Health, Our Commitment"</h1>
+                    <p class="subtitle-text">Trusted pharmaceutical care with quality medicines and health supplies for your family's wellness journey.</p>
+                    <router-link to="/products" class="hero-cta-button">
+                        Explore Products <i class="pi pi-arrow-right"></i>
+                    </router-link>
                 </div>
             </section>
 
-            <section id="items-section" class="items-section-container">
+            <!-- Frequently Sold Products Section -->
+            <section id="frequently-sold" class="frequently-sold-section">
                 <div class="section-header">
-                    <h2>Our Health Items</h2>
-                    <p>Search, filter by category, and check availability across our locations.</p>
+                    <h2>Frequently Sold Products</h2>
+                    <p>Discover our most popular health essentials trusted by our community.</p>
                 </div>
 
-                <div class="search-filter-controls">
-                    <div class="search-input-wrapper">
-                        <i class="pi pi-search search-icon"></i>
-                        <input type="text" v-model="searchTerm" placeholder="Search for a medicine or product name..."
-                            class="search-input" @input="clearSelection" />
-                        <i v-if="searchTerm" class="pi pi-times clear-search"
-                            @click="searchTerm = ''; clearSelection()"></i>
-                    </div>
-
-                    <div class="category-filters">
-                        <button v-for="cat in categories" :key="cat" @click="selectedCategory = cat; clearSelection()"
-                            :class="{ 'active': selectedCategory === cat }" class="category-button">
-                            {{ cat }}
-                        </button>
-                    </div>
-                </div>
-
-                <div v-if="selectedItem" class="item-availability-card">
-                    <div class="availability-header">
-                        <h3>Availability for: {{ selectedItem.name }} ({{ selectedItem.category }})</h3>
-                        <i class="pi pi-times-circle close-btn" @click="clearSelection"></i>
-                    </div>
-                    <div class="availability-list">
-                        <p v-if="selectedItem.locations.length === 0" class="not-available">
-                            Currently out of stock at all locations.
-                        </p>
-                        <div v-else class="locations-list">
-                            <span v-for="loc in selectedItem.locations" :key="loc" class="location-tag">
-                                <i class="pi pi-check-circle"></i> {{ loc }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-grid">
-                    <div v-if="filteredItems.length === 0" class="no-results">
-                        <i class="pi pi-exclamation-triangle"></i>
-                        <p>No items found matching your search and filter criteria.</p>
-                    </div>
-
-                    <div v-else v-for="item in filteredItems" :key="item.id" class="product-card"
-                        @click="selectItem(item)">
+                <div class="products-grid">
+                    <div v-for="product in frequentlySoldProducts" :key="product.id" class="product-card"
+                         @mouseenter="hoveredProduct = product.id"
+                         @mouseleave="hoveredProduct = null">
                         <div class="card-content">
-                            <i class="pi pi-pills product-icon"></i>
-                            <h4 class="product-name">{{ item.name }}</h4>
-                            <p class="product-category">{{ item.category }}</p>
+                            <i :class="getProductIcon(product.category)" class="product-icon"></i>
+                            <h4 class="product-name">{{ product.name }}</h4>
+                            <p class="product-description">{{ product.description }}</p>
                         </div>
                         <div class="card-footer">
-                            <span class="product-price">₱{{ item.price.toFixed(2) }}</span>
-                            <button class="availability-btn">
-                                Check Stock <i class="pi pi-arrow-right"></i>
+                            <div>
+                                <span class="product-price">₱{{ product.price.toFixed(2) }}</span>
+                                <p class="stock-locations">
+                                    <i class="pi pi-map-marker"></i>
+                                    {{ product.stockLocations.join(', ') }}
+                                </p>
+                            </div>
+                            <button @click.stop="addToBag(product)"
+                                    class="add-to-bag-btn"
+                                    :disabled="!product.inStock">
+                                <i class="pi pi-shopping-bag"></i>
+                                Add to Bag
                             </button>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section id="stores-section" class="stores-section-container">
+            <!-- Branch Carousel Section -->
+            <section id="branches" class="branches-section">
                 <div class="section-header">
-                    <h2>Our Store Locations</h2>
-                    <p>Visit any of our five convenient locations across the city.</p>
+                    <h2>Our Store Branches</h2>
+                    <p>Visit any of our convenient locations serving your community.</p>
                 </div>
-                <div class="stores-grid">
-                    <div v-for="location in storeLocations" :key="location" class="store-card">
-                        <i class="pi pi-building store-icon"></i>
-                        <h3 class="store-name">{{ location }}</h3>
-                        <p class="store-address">1626 Rizal Avenue Sta.Cruz Manila Area (Near Jose Reyes Hospital)</p>
-                        <button class="view-map-btn">
-                            View Details <i class="pi pi-external-link"></i>
-                        </button>
+
+                <div class="carousel-container">
+                    <button @click="previousBranches" class="carousel-arrow prev-arrow">
+                        <i class="pi pi-chevron-left"></i>
+                    </button>
+
+                    <div class="carousel-wrapper">
+                        <div class="carousel-track" :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
+                            <div v-for="(branch, index) in displayedBranches" :key="`${branch.id}-${index}`"
+                                 class="branch-card">
+                                <div class="branch-icon">
+                                    <i class="pi pi-building"></i>
+                                </div>
+                                <h3 class="branch-name">{{ branch.name }}</h3>
+                                <p class="branch-hours">{{ branch.serviceHours }}</p>
+                                <div class="branch-contact">
+                                    <p><i class="pi pi-phone"></i> {{ branch.contact }}</p>
+                                    <p><i class="pi pi-envelope"></i> {{ branch.email }}</p>
+                                </div>
+                                <button class="branch-details-btn">
+                                    View Details <i class="pi pi-external-link"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
+
+                    <button @click="nextBranches" class="carousel-arrow next-arrow">
+                        <i class="pi pi-chevron-right"></i>
+                    </button>
+                </div>
+
+                <!-- Carousel Indicators -->
+                <div class="carousel-indicators">
+                    <button v-for="(_, index) in totalCarouselSlides"
+                            :key="index"
+                            @click="goToSlide(index)"
+                            :class="{ active: index === currentSlideIndex }"
+                            class="indicator">
+                    </button>
                 </div>
             </section>
         </main>
 
         <Footer />
-
     </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import Header from '../../components/Header.vue';
 import Footer from '../../components/Footer.vue';
+import { useBag } from '@/composables/useBag.js';
+import { frequentlySoldProducts, mockBranches } from '@/data/mockData.js';
 
-// --- MOCK DATA ---
-const items = ref([
-    { id: 1, name: 'Paracetamol 500mg', category: 'Pain Relief', locations: ['Location 1', 'Location 3', 'Location 5'], price: 5.00 },
-    { id: 2, name: 'Amoxicillin 250mg', category: 'Antibiotics', locations: ['Location 2', 'Location 4'], price: 12.50 },
-    { id: 3, name: 'Vitamin C 1000mg', category: 'Vitamins', locations: ['Location 1', 'Location 2', 'Location 3', 'Location 4', 'Location 5'], price: 8.99 },
-    { id: 4, name: 'Loperamide 2mg', category: 'Digestive', locations: ['Location 3', 'Location 5'], price: 6.25 },
-    { id: 5, name: 'Cetirizine 10mg', category: 'Allergy', locations: ['Location 1', 'Location 4'], price: 4.75 },
-    { id: 6, name: 'Ibuprofen 200mg', category: 'Pain Relief', locations: ['Location 2', 'Location 5'], price: 7.00 },
-    { id: 7, name: 'Ginseng Complex', category: 'Vitamins', locations: ['Location 1', 'Location 2'], price: 15.00 },
-    { id: 8, name: 'Omeprazole 20mg', category: 'Digestive', locations: ['Location 3', 'Location 4'], price: 10.50 },
-]);
+// Bag functionality
+const { addToBag: bagAddToBag } = useBag();
 
-const categories = ['All', 'Pain Relief', 'Antibiotics', 'Vitamins', 'Digestive', 'Allergy'];
-const storeLocations = ['Location 1', 'Location 2', 'Location 3', 'Location 4', 'Location 5'];
+// State management
+const hoveredProduct = ref(null);
+const currentIndex = ref(0);
+const autoPlayInterval = ref(null);
 
-// --- STATE MANAGEMENT ---
-const selectedCategory = ref('All');
-const searchTerm = ref('');
-const selectedItem = ref(null);
+// Carousel logic
+const BRANCHES_PER_SLIDE = 3;
+const displayedBranches = computed(() => {
+    const branches = [];
+    const totalBranches = mockBranches.length;
 
-// --- LOGIC ---
-const filteredItems = computed(() => {
-    let list = items.value;
-
-    if (selectedCategory.value !== 'All') {
-        list = list.filter(item => item.category === selectedCategory.value);
+    // Create infinite carousel by duplicating branches
+    for (let i = 0; i < totalBranches * 3; i++) {
+        branches.push(mockBranches[i % totalBranches]);
     }
 
-    if (searchTerm.value.trim()) {
-        const query = searchTerm.value.toLowerCase().trim();
-        list = list.filter(item => item.name.toLowerCase().includes(query));
-    }
-
-    return list;
+    return branches;
 });
 
-const selectItem = (item) => {
-    selectedItem.value = item;
+const totalCarouselSlides = computed(() => {
+    return Math.ceil(displayedBranches.value.length / BRANCHES_PER_SLIDE);
+});
+
+const currentSlideIndex = computed(() => {
+    return Math.floor(currentIndex.value / BRANCHES_PER_SLIDE);
+});
+
+// Methods
+const getProductIcon = (category) => {
+    const icons = {
+        'Medicine': 'pi pi-pill',
+        'Medical Equipment': 'pi pi-cog'
+    };
+    return icons[category] || 'pi pi-box';
 };
 
-const clearSelection = () => {
-    selectedItem.value = null;
-};
-
-/**
- * Handles smooth internal scrolling for navigation.
- */
-const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-        const headerElement = document.querySelector('.main-header');
-        const headerHeight = headerElement ? headerElement.offsetHeight : 0;
-
-        const offsetPosition = element.getBoundingClientRect().top + window.scrollY - headerHeight;
-
-        window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-        });
+const addToBag = (product) => {
+    if (product.inStock) {
+        bagAddToBag(product, 1);
+        // Show success feedback (you can integrate SweetAlert2 here later)
+        console.log(`Added ${product.name} to bag`);
     }
 };
+
+const nextBranches = () => {
+    const maxIndex = displayedBranches.value.length - BRANCHES_PER_SLIDE;
+    currentIndex.value = (currentIndex.value + BRANCHES_PER_SLIDE) % (maxIndex + 1);
+};
+
+const previousBranches = () => {
+    const maxIndex = displayedBranches.value.length - BRANCHES_PER_SLIDE;
+    currentIndex.value = currentIndex.value - BRANCHES_PER_SLIDE < 0
+        ? maxIndex
+        : currentIndex.value - BRANCHES_PER_SLIDE;
+};
+
+const goToSlide = (slideIndex) => {
+    currentIndex.value = slideIndex * BRANCHES_PER_SLIDE;
+};
+
+const startAutoPlay = () => {
+    autoPlayInterval.value = setInterval(() => {
+        nextBranches();
+    }, 5000);
+};
+
+const stopAutoPlay = () => {
+    if (autoPlayInterval.value) {
+        clearInterval(autoPlayInterval.value);
+        autoPlayInterval.value = null;
+    }
+};
+
+onMounted(() => {
+    startAutoPlay();
+});
+
+onUnmounted(() => {
+    stopAutoPlay();
+});
 </script>
 
 <style scoped>
@@ -176,15 +201,15 @@ const scrollToSection = (id) => {
     --bg-light-red: #FADBD8;
     --text-dark: #000000;
     --border-light: #ecf0f1;
-    --search-bg: #ffffff;
-    --footer-bg-dark: #1f2a38;
+    --text-secondary: #666666;
+    --shadow-light: 0 2px 8px rgba(0,0,0,0.1);
+    --shadow-medium: 0 4px 16px rgba(0,0,0,0.15);
 }
 
 .landing-page-container {
     display: flex;
-    padding: '20px';
     flex-direction: column;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: #f7f7f7;
 }
 
@@ -203,19 +228,22 @@ section {
 
 .section-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 50px;
 }
 
 .section-header h2 {
     font-size: 2.5em;
-    font-weight: 800;
+    font-weight: 700;
     color: var(--primary-red);
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    font-family: 'Poppins', sans-serif;
 }
 
 .section-header p {
-    color: #555;
+    color: var(--text-secondary);
     font-size: 1.1em;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* ========================================
@@ -228,350 +256,347 @@ section {
     justify-content: center;
     text-align: center;
     background: linear-gradient(135deg, #fefefe, var(--bg-light-red));
-    padding: 100px 40px;
-    min-height: 400px;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
+    padding: 120px 40px;
+    min-height: 500px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    position: relative;
+    overflow: hidden;
 }
 
 .hero-text-content h1 {
     font-size: 3.5em;
     color: var(--text-dark);
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.2;
 }
 
 .subtitle-text {
-    font-size: 1.4em;
-    color: #555;
-    margin-bottom: 30px;
-    font-weight: 300;
+    font-size: 1.3em;
+    color: var(--text-secondary);
+    margin-bottom: 35px;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
 }
 
 .hero-cta-button {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     background-color: var(--primary-red);
     color: white;
-    padding: 12px 25px;
+    padding: 15px 35px;
     border-radius: 30px;
     text-decoration: none;
     font-weight: 600;
     font-size: 1.1em;
-    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
-    transition: background-color 0.3s, transform 0.2s;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
 }
 
 .hero-cta-button:hover {
-    background-color: #c0392b;
-    transform: translateY(-2px);
+    background-color: #C0392B;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+    text-decoration: none;
+    color: white;
 }
 
 /* ========================================
-3. ITEMS SECTION STYLES
+3. FREQUENTLY SOLD PRODUCTS STYLES
 ========================================
 */
-
-.items-section-container {
+.frequently-sold-section {
     background-color: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
-/* --- Search & Filter Controls --- */
-.search-filter-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-bottom: 40px;
-    align-items: center;
-}
-
-.search-input-wrapper {
-    position: relative;
-    width: 100%;
-    max-width: 600px;
-}
-
-.search-input {
-    width: 100%;
-    padding: 12px 45px 12px 45px;
-    border: 2px solid var(--border-light);
-    border-radius: 25px;
-    font-size: 1em;
-    outline: none;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.search-input:focus {
-    border-color: var(--primary-red);
-    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
-}
-
-.search-icon {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #999;
-}
-
-.clear-search {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #999;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-
-.clear-search:hover {
-    color: var(--primary-red);
-}
-
-.category-filters {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-}
-
-.category-button {
-    background-color: var(--border-light);
-    color: #555;
-    padding: 8px 15px;
-    border: none;
     border-radius: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, transform 0.1s;
-    font-weight: 500;
+    box-shadow: var(--shadow-light);
+    margin: 30px auto;
 }
 
-.category-button:hover {
-    background-color: #e0e0e0;
-}
-
-.category-button.active {
-    background-color: var(--primary-red);
-    color: white;
-    box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
-}
-
-/* --- Availability Card --- */
-.item-availability-card {
-    background-color: #ffeaea;
-    border: 1px solid var(--primary-red);
-    border-radius: 8px;
-    padding: 15px 25px;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 10px rgba(231, 76, 60, 0.1);
-    animation: fadeIn 0.3s ease-out;
-}
-
-.availability-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.availability-header h3 {
-    color: var(--primary-red);
-    font-size: 1.2em;
-    margin: 0;
-}
-
-.close-btn {
-    color: var(--primary-red);
-    cursor: pointer;
-    font-size: 1.4em;
-    transition: transform 0.2s;
-}
-
-.close-btn:hover {
-    transform: rotate(90deg);
-}
-
-.locations-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.location-tag {
-    background-color: var(--primary-red);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 0.9em;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.not-available {
-    color: #999;
-    font-style: italic;
-}
-
-
-/* --- Product Grid --- */
-.product-grid {
+.products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
 }
 
 .product-card {
     background-color: white;
-    border: 1px solid #eee;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 2px solid #f0f0f0;
+    border-radius: 15px;
+    box-shadow: var(--shadow-light);
     overflow: hidden;
     cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: relative;
 }
 
 .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.15);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-medium);
     border-color: var(--primary-red);
+    border-width: 2px;
+}
+
+.product-card:hover .product-name {
+    color: var(--primary-red);
 }
 
 .card-content {
-    padding: 20px;
+    padding: 25px;
     text-align: center;
 }
 
 .product-icon {
-    font-size: 3em;
+    font-size: 3.5em;
     color: var(--primary-red);
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.product-card:hover .product-icon {
+    opacity: 1;
 }
 
 .product-name {
-    font-size: 1.3em;
-    font-weight: 700;
+    font-size: 1.4em;
+    font-weight: 600;
     color: var(--text-dark);
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-family: 'Poppins', sans-serif;
+    transition: color 0.3s;
 }
 
-.product-category {
-    font-size: 0.9em;
-    color: #888;
+.product-description {
+    font-size: 0.95em;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 .card-footer {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    border-top: 1px solid #f0f0f0;
-    background-color: #fcfcfc;
+    align-items: flex-start;
+    padding: 20px 25px;
+    border-top: 1px solid #f8f8f8;
+    background-color: #fafafa;
+    gap: 15px;
 }
 
 .product-price {
-    font-size: 1.2em;
-    font-weight: 800;
+    font-size: 1.3em;
+    font-weight: 700;
     color: var(--primary-red);
-}
-
-.availability-btn {
-    background: none;
-    border: none;
-    color: var(--primary-red);
-    font-weight: 600;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-
-.no-results {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 50px;
-    color: #999;
-    font-size: 1.2em;
-    background-color: #fcfcfc;
-    border-radius: 12px;
-}
-
-.no-results .pi {
-    font-size: 2em;
+    font-family: 'Poppins', sans-serif;
     display: block;
-    margin-bottom: 10px;
-}
-
-/* ========================================
-4. STORES SECTION STYLES
-========================================
-*/
-.stores-section-container {
-    background-color: #f7f7f7;
-    margin-bottom: 40px;
-    /* Reduced margin-bottom back to original */
-}
-
-.stores-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-}
-
-.store-card {
-    background-color: white;
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    text-align: center;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.store-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-}
-
-.store-icon {
-    font-size: 3em;
-    color: #5a7d9a;
-    margin-bottom: 15px;
-}
-
-.store-name {
-    font-size: 1.5em;
-    color: #333;
     margin-bottom: 5px;
 }
 
-.store-address {
-    color: #777;
-    margin-bottom: 20px;
-    font-size: 0.95em;
+.stock-locations {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.view-map-btn {
-    background-color: #5a7d9a;
+.add-to-bag-btn {
+    background-color: var(--primary-red);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+.add-to-bag-btn:hover:not(:disabled) {
+    background-color: #C0392B;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.add-to-bag-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* ========================================
+4. BRANCHES CAROUSEL STYLES
+========================================
+*/
+.branches-section {
+    background-color: #f8f9fa;
+    margin: 30px auto 40px;
+    border-radius: 20px;
+}
+
+.carousel-container {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.carousel-wrapper {
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.branch-card {
+    min-width: calc(100% / 3);
+    padding: 40px 30px;
+    text-align: center;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: var(--shadow-light);
+    margin: 0 10px;
+    transition: all 0.3s ease;
+}
+
+.branch-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+}
+
+.branch-icon {
+    font-size: 3.5em;
+    color: var(--primary-red);
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+.branch-name {
+    font-size: 1.4em;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+}
+
+.branch-hours {
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+    font-size: 0.95em;
+    font-family: 'Poppins', sans-serif;
+}
+
+.branch-contact p {
+    color: var(--text-secondary);
+    margin: 5px 0;
+    font-size: 0.9em;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.branch-details-btn {
+    background-color: var(--primary-red);
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 20px;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s;
+    margin-top: 15px;
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    font-family: 'Poppins', sans-serif;
 }
 
-.view-map-btn:hover {
-    background-color: #436a87;
+.branch-details-btn:hover {
+    background-color: #C0392B;
+    transform: translateY(-2px);
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--primary-red);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 10;
+    font-size: 1.2em;
+    box-shadow: var(--shadow-light);
+}
+
+.carousel-arrow:hover {
+    background-color: #C0392B;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.prev-arrow {
+    left: -25px;
+}
+
+.next-arrow {
+    right: -25px;
+}
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-red);
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.indicator.active {
+    background-color: var(--primary-red);
+}
+
+.indicator:hover {
+    transform: scale(1.2);
 }
 
 /* ========================================
@@ -579,27 +604,138 @@ RESPONSIVE ADJUSTMENTS
 ========================================
 */
 
-/* Mobile Adjustments */
-@media (max-width: 700px) {
+/* Tablets and Small Desktops */
+@media (max-width: 1024px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+    }
+
+    .branch-card {
+        min-width: calc(100% / 2);
+        padding: 30px 20px;
+    }
+
+    .carousel-arrow {
+        width: 45px;
+        height: 45px;
+    }
+
+    .prev-arrow {
+        left: -20px;
+    }
+
+    .next-arrow {
+        right: -20px;
+    }
+}
+
+/* Mobile Devices */
+@media (max-width: 768px) {
     section {
         padding: 40px 20px;
     }
 
+    .hero-section {
+        padding: 80px 20px;
+        min-height: 400px;
+    }
+
+    .hero-text-content h1 {
+        font-size: 2.2em;
+        line-height: 1.3;
+    }
+
+    .subtitle-text {
+        font-size: 1.1em;
+        margin-bottom: 25px;
+    }
+
+    .hero-cta-button {
+        padding: 12px 25px;
+        font-size: 1em;
+    }
+
     .section-header h2 {
         font-size: 2em;
+        margin-bottom: 12px;
     }
 
-    .category-filters {
-        justify-content: flex-start;
-        padding-left: 0;
-        width: 100%;
-        overflow-x: scroll;
-        flex-wrap: nowrap;
-        padding-bottom: 10px;
+    .products-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
     }
 
-    .product-grid {
+    .product-card {
+        border-radius: 12px;
+    }
+
+    .card-content {
+        padding: 20px;
+    }
+
+    .product-name {
+        font-size: 1.2em;
+    }
+
+    .branch-card {
+        min-width: 100%;
+        padding: 30px 20px;
+        margin: 0 5px;
+    }
+
+    .carousel-arrow {
+        display: none;
+    }
+
+    .carousel-container {
+        margin: 0 20px;
+    }
+
+    .stock-locations {
+        font-size: 0.8em;
+    }
+
+    .add-to-bag-btn {
+        padding: 8px 16px;
+        font-size: 0.85em;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+    .hero-text-content h1 {
+        font-size: 1.8em;
+    }
+
+    .subtitle-text {
+        font-size: 1em;
+    }
+
+    .products-grid {
         grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .card-footer {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+
+    .add-to-bag-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 0.9em;
+    }
+
+    .branch-name {
+        font-size: 1.2em;
+    }
+
+    .branch-contact p {
+        font-size: 0.85em;
     }
 }
 </style>

@@ -9,30 +9,88 @@
                 </router-link>
             </div>
 
-            <div class="header-center">
-                <input type="text" placeholder="Search items, stores..." class="search-input" />
-            </div>
-
             <nav class="main-nav">
-                <router-link to="/items" class="nav-link">
-                    <i class="pi pi-box nav-icon"></i>
-                    <span class="nav-text">Items</span>
-                </router-link>
+                <!-- Products Dropdown -->
+                <div class="nav-dropdown" @mouseenter="showProductsDropdown = true" @mouseleave="showProductsDropdown = false">
+                    <router-link to="/products" class="nav-link dropdown-toggle">
+                        <i class="pi pi-box nav-icon"></i>
+                        <span class="nav-text">Products</span>
+                        <i class="pi pi-chevron-down dropdown-icon"></i>
+                    </router-link>
+                    <div class="dropdown-menu" :class="{ active: showProductsDropdown }">
+                        <router-link to="/products" class="dropdown-item">
+                            <i class="pi pi-pill dropdown-item-icon"></i>
+                            Medicine
+                        </router-link>
+                        <router-link to="/products" class="dropdown-item">
+                            <i class="pi pi-cog dropdown-item-icon"></i>
+                            Medical Equipment
+                        </router-link>
+                    </div>
+                </div>
 
-                <router-link to="/stores" class="nav-link">
-                    <i class="pi pi-building nav-icon"></i>
-                    <span class="nav-text">Stores</span>
-                </router-link>
+                <!-- Branch Dropdown -->
+                <div class="nav-dropdown" @mouseenter="showBranchDropdown = true" @mouseleave="showBranchDropdown = false">
+                    <button class="nav-link dropdown-toggle" @click="scrollToFooter">
+                        <i class="pi pi-building nav-icon"></i>
+                        <span class="nav-text">Branch</span>
+                        <i class="pi pi-chevron-down dropdown-icon"></i>
+                    </button>
+                    <div class="dropdown-menu" :class="{ active: showBranchDropdown }">
+                        <a href="#" class="dropdown-item" @click.prevent="scrollToFooter">
+                            <i class="pi pi-map-marker dropdown-item-icon"></i>
+                            Location 1
+                        </a>
+                        <a href="#" class="dropdown-item" @click.prevent="scrollToFooter">
+                            <i class="pi pi-map-marker dropdown-item-icon"></i>
+                            Location 2
+                        </a>
+                        <a href="#" class="dropdown-item" @click.prevent="scrollToFooter">
+                            <i class="pi pi-map-marker dropdown-item-icon"></i>
+                            Location 3
+                        </a>
+                    </div>
+                </div>
 
-                <router-link to="/about" class="nav-link">
-                    <i class="pi pi-info-circle nav-icon"></i>
-                    <span class="nav-text">About</span>
-                </router-link>
+                <!-- Contacts Button -->
+                <button class="nav-link" @click="scrollToFooter">
+                    <i class="pi pi-phone nav-icon"></i>
+                    <span class="nav-text">Contacts</span>
+                </button>
 
-                <router-link to="/account" class="nav-link account-icon-link">
-                    <i class="pi pi-user-circle nav-icon"></i>
-                    <span class="nav-text">Account</span>
-                </router-link>
+                <!-- Bag Dropdown -->
+                <div class="nav-dropdown" @mouseenter="showBagDropdown = true" @mouseleave="showBagDropdown = false">
+                    <router-link to="/bag" class="nav-link dropdown-toggle">
+                        <i class="pi pi-shopping-bag nav-icon"></i>
+                        <span class="nav-text">Bag</span>
+                        <span v-if="itemCount > 0" class="bag-badge">{{ itemCount }}</span>
+                        <i class="pi pi-chevron-down dropdown-icon"></i>
+                    </router-link>
+                    <div class="dropdown-menu bag-dropdown" :class="{ active: showBagDropdown }">
+                        <div v-if="itemCount > 0" class="bag-preview">
+                            <div class="bag-preview-header">
+                                <span class="bag-preview-title">Recently Added</span>
+                                <router-link to="/bag" class="view-bag-btn">View All</router-link>
+                            </div>
+                            <div class="bag-preview-items">
+                                <div v-for="item in recentBagItems" :key="item.product.id" class="bag-preview-item">
+                                    <span class="item-name">{{ item.product.name }}</span>
+                                    <span class="item-quantity">×{{ item.quantity }}</span>
+                                </div>
+                            </div>
+                            <div class="bag-preview-footer">
+                                <span class="bag-total">Total: ₱{{ totalPrice.toFixed(2) }}</span>
+                            </div>
+                        </div>
+                        <div v-else class="empty-bag">
+                            <i class="pi pi-shopping-bag empty-bag-icon"></i>
+                            <p class="empty-bag-text">Your bag is empty</p>
+                            <router-link to="/products" class="explore-products-btn">
+                                Explore Products
+                            </router-link>
+                        </div>
+                    </div>
+                </div>
             </nav>
 
         </div>
@@ -40,7 +98,33 @@
 </template>
 
 <script setup>
-// No script changes needed for this component structure
+import { ref, computed } from 'vue'
+import { useBag } from '@/composables/useBag.js'
+
+const { bagState, getBagItems, getTotalPrice, getItemCount } = useBag()
+
+// Dropdown visibility states
+const showProductsDropdown = ref(false)
+const showBranchDropdown = ref(false)
+const showBagDropdown = ref(false)
+
+// Computed properties
+const itemCount = computed(() => getItemCount())
+const totalPrice = computed(() => getTotalPrice())
+
+// Get recent bag items (max 3 for preview)
+const recentBagItems = computed(() => {
+    const items = getBagItems()
+    return items.slice(0, 3)
+})
+
+// Method to scroll to footer
+const scrollToFooter = () => {
+    const footer = document.querySelector('footer')
+    if (footer) {
+        footer.scrollIntoView({ behavior: 'smooth' })
+    }
+}
 </script>
 
 <style scoped>
@@ -52,17 +136,19 @@
     --text-dark: #000000;
     --border-light: #ecf0f1;
     --search-bg: #ffffff;
+    --dropdown-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
 .main-header {
     position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     background-color: var(--bg-light-red);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     padding: 15px 40px;
     margin-bottom: 20px;
+    z-index: 1000;
 }
 
 .header-content {
@@ -129,6 +215,10 @@
     gap: 15px;
 }
 
+.nav-dropdown {
+    position: relative;
+}
+
 .nav-link {
     display: flex;
     align-items: center;
@@ -140,6 +230,9 @@
     transition: color 0.3s, background-color 0.3s;
     font-weight: 500;
     white-space: nowrap;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 .nav-icon {
@@ -153,21 +246,193 @@
     background-color: var(--primary-red);
 }
 
-/* Account Icon Styling (Icon-only on Desktop) */
-.account-icon-link {
-    padding: 8px 10px;
-    margin-left: 5px;
+.dropdown-toggle {
+    position: relative;
 }
 
-.account-icon-link .nav-text {
-    display: none;
+.dropdown-icon {
+    margin-left: 4px;
+    font-size: 0.8em;
+    transition: transform 0.3s;
 }
 
-.account-icon-link .nav-icon {
-    margin-right: 0;
-    font-size: 1.4em;
+.nav-dropdown:hover .dropdown-icon {
+    transform: rotate(180deg);
 }
 
+/* Dropdown Menu Styles */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    min-width: 200px;
+    box-shadow: var(--dropdown-shadow);
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+    z-index: 1001;
+    margin-top: 5px;
+}
+
+.dropdown-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: var(--text-dark);
+    text-decoration: none;
+    transition: background-color 0.2s;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 0.95em;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+    border-radius: 0 0 8px 8px;
+}
+
+.dropdown-item:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.dropdown-item:hover {
+    background-color: var(--bg-light-red);
+    color: var(--primary-red);
+}
+
+.dropdown-item-icon {
+    margin-right: 8px;
+    font-size: 1em;
+}
+
+/* Bag Dropdown Styles */
+.bag-dropdown {
+    min-width: 280px;
+    right: 0;
+    left: auto;
+}
+
+.bag-preview {
+    padding: 12px;
+}
+
+.bag-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.bag-preview-title {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.view-bag-btn {
+    color: var(--primary-red);
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.view-bag-btn:hover {
+    text-decoration: underline;
+}
+
+.bag-preview-items {
+    margin-bottom: 12px;
+}
+
+.bag-preview-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 0.9em;
+}
+
+.item-name {
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.item-quantity {
+    color: var(--primary-red);
+    font-weight: 600;
+}
+
+.bag-preview-footer {
+    padding-top: 8px;
+    border-top: 1px solid var(--border-light);
+    text-align: right;
+}
+
+.bag-total {
+    font-weight: 600;
+    color: var(--primary-red);
+    font-size: 1.1em;
+}
+
+.empty-bag {
+    padding: 20px;
+    text-align: center;
+}
+
+.empty-bag-icon {
+    font-size: 2.5em;
+    color: var(--border-light);
+    margin-bottom: 12px;
+}
+
+.empty-bag-text {
+    color: var(--text-dark);
+    margin-bottom: 16px;
+    font-size: 0.95em;
+}
+
+.explore-products-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary-red);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+}
+
+.explore-products-btn:hover {
+    background-color: #C0392B;
+    text-decoration: none;
+    color: white;
+}
+
+/* Bag Badge */
+.bag-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--primary-red);
+    color: white;
+    font-size: 0.75em;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+}
 
 /* --- Responsive Adjustments --- */
 /* Medium Screens (950px and below) */
@@ -187,22 +452,21 @@
         flex-basis: 100%;
         justify-content: center;
         margin-left: 0;
+        gap: 10px;
     }
 
-    .header-center {
-        order: 2;
-        flex-basis: 100%;
-        max-width: 100%;
+    /* Hide dropdown icons on medium screens */
+    .dropdown-icon {
+        display: none;
     }
 
-    /* Re-show 'Account' text on wider mobile views */
-    .account-icon-link .nav-text {
-        display: initial;
+    /* Adjust dropdown menu position */
+    .dropdown-menu {
+        min-width: 180px;
     }
 
-    .account-icon-link .nav-icon {
-        margin-right: 6px;
-        font-size: 1.1em;
+    .bag-dropdown {
+        right: -50px;
     }
 }
 
@@ -219,8 +483,7 @@
     }
 
     .header-left,
-    .main-nav,
-    .header-center {
+    .main-nav {
         order: unset;
         margin: 0;
         width: 100%;
@@ -238,8 +501,10 @@
         padding: 6px 10px;
     }
 
-    /* Hide text on all small-screen links */
-    .nav-text {
+    /* Hide text and dropdown icons on small screens */
+    .nav-text,
+    .dropdown-icon,
+    .bag-badge {
         display: none;
     }
 
@@ -248,9 +513,9 @@
         font-size: 1.2em;
     }
 
-    .account-icon-link {
-        margin-left: 0;
-        padding: 6px 10px;
+    /* Disable dropdowns on small screens - use direct navigation */
+    .dropdown-menu {
+        display: none;
     }
 }
 </style>

@@ -6,7 +6,12 @@ import Login from '@/pages/Login.vue';
 // 1. IMPORT THE LANDING PAGE COMPONENT
 import LandingPage from '@/pages/user side/LandingPage.vue'; // Assuming location: src/pages/user side/LandingPage.vue
 // NOTE: ProductCatalog (MedecineSection) is now likely a component within LandingPage.vue
-import ProductCatalogComponent from '@/components/MedecineSection.vue'; 
+import ProductCatalogComponent from '@/components/MedecineSection.vue';
+
+// NEW USER-FACING PAGES
+import ProductsPage from '@/pages/user side/ProductsPage.vue';
+import BranchPage from '@/pages/user side/BranchPage.vue';
+import BagPage from '@/pages/user side/BagPage.vue';
 
 // --- END CHANGES ---
 
@@ -19,15 +24,32 @@ const routes = [
     path: '/',
     name: 'LandingPage',
     // 2. SET LANDINGPAGE AS THE ROOT COMPONENT
-    component: LandingPage 
+    component: LandingPage
   },
-  
-  // NOTE: You can optionally keep the ProductCatalog as a dedicated route, 
+
+  // NOTE: You can optionally keep the ProductCatalog as a dedicated route,
   // but typically, the LandingPage handles the product view at the root path.
   {
     path: '/catalog-only',
     name: 'ProductCatalogOnly',
     component: ProductCatalogComponent // Keep this if you need a pure catalog view
+  },
+
+  // --- NEW USER-FACING PAGES ---
+  {
+    path: '/products',
+    name: 'Products',
+    component: ProductsPage
+  },
+  {
+    path: '/branch',
+    name: 'Branch',
+    component: BranchPage
+  },
+  {
+    path: '/bag',
+    name: 'Bag',
+    component: BagPage
   },
   
   // --- LOGIN PAGE ---
