@@ -263,6 +263,9 @@ const filteredProducts = computed(() => {
 const handleAddToBag = (product) => {
   if (product.inStock && !isInBag(product.id)) {
     addToBag(product)
+    showProductAddedAlert(product.name, true)
+  } else if (!product.inStock) {
+    showErrorAlert('Out of Stock', 'This product is currently out of stock.')
   }
 }
 
