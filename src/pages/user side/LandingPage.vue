@@ -256,43 +256,347 @@ section {
     justify-content: center;
     text-align: center;
     background: linear-gradient(135deg, #fefefe, var(--bg-light-red));
-    padding: 100px 40px;
-    min-height: 400px;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
+    padding: 120px 40px;
+    min-height: 500px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    position: relative;
+    overflow: hidden;
 }
 
 .hero-text-content h1 {
     font-size: 3.5em;
     color: var(--text-dark);
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.2;
 }
 
 .subtitle-text {
-    font-size: 1.4em;
-    color: #555;
-    margin-bottom: 30px;
-    font-weight: 300;
+    font-size: 1.3em;
+    color: var(--text-secondary);
+    margin-bottom: 35px;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
 }
 
 .hero-cta-button {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     background-color: var(--primary-red);
     color: white;
-    padding: 12px 25px;
+    padding: 15px 35px;
     border-radius: 30px;
     text-decoration: none;
     font-weight: 600;
     font-size: 1.1em;
-    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
-    transition: background-color 0.3s, transform 0.2s;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
 }
 
 .hero-cta-button:hover {
-    background-color: #c0392b;
+    background-color: #C0392B;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+    text-decoration: none;
+    color: white;
+}
+
+/* ========================================
+3. FREQUENTLY SOLD PRODUCTS STYLES
+========================================
+*/
+.frequently-sold-section {
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: var(--shadow-light);
+    margin: 30px auto;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.product-card {
+    background-color: white;
+    border: 2px solid #f0f0f0;
+    border-radius: 15px;
+    box-shadow: var(--shadow-light);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-medium);
+    border-color: var(--primary-red);
+    border-width: 2px;
+}
+
+.product-card:hover .product-name {
+    color: var(--primary-red);
+}
+
+.card-content {
+    padding: 25px;
+    text-align: center;
+}
+
+.product-icon {
+    font-size: 3.5em;
+    color: var(--primary-red);
+    margin-bottom: 15px;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.product-card:hover .product-icon {
+    opacity: 1;
+}
+
+.product-name {
+    font-size: 1.4em;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+    font-family: 'Poppins', sans-serif;
+    transition: color 0.3s;
+}
+
+.product-description {
+    font-size: 0.95em;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 25px;
+    border-top: 1px solid #f8f8f8;
+    background-color: #fafafa;
+    gap: 15px;
+}
+
+.product-price {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: var(--primary-red);
+    font-family: 'Poppins', sans-serif;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.stock-locations {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.add-to-bag-btn {
+    background-color: var(--primary-red);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+.add-to-bag-btn:hover:not(:disabled) {
+    background-color: #C0392B;
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.add-to-bag-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* ========================================
+4. BRANCHES CAROUSEL STYLES
+========================================
+*/
+.branches-section {
+    background-color: #f8f9fa;
+    margin: 30px auto 40px;
+    border-radius: 20px;
+}
+
+.carousel-container {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.carousel-wrapper {
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.branch-card {
+    min-width: calc(100% / 3);
+    padding: 40px 30px;
+    text-align: center;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: var(--shadow-light);
+    margin: 0 10px;
+    transition: all 0.3s ease;
+}
+
+.branch-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+}
+
+.branch-icon {
+    font-size: 3.5em;
+    color: var(--primary-red);
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+.branch-name {
+    font-size: 1.4em;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+}
+
+.branch-hours {
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+    font-size: 0.95em;
+    font-family: 'Poppins', sans-serif;
+}
+
+.branch-contact p {
+    color: var(--text-secondary);
+    margin: 5px 0;
+    font-size: 0.9em;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.branch-details-btn {
+    background-color: var(--primary-red);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 15px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.branch-details-btn:hover {
+    background-color: #C0392B;
+    transform: translateY(-2px);
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--primary-red);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 10;
+    font-size: 1.2em;
+    box-shadow: var(--shadow-light);
+}
+
+.carousel-arrow:hover {
+    background-color: #C0392B;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.prev-arrow {
+    left: -25px;
+}
+
+.next-arrow {
+    right: -25px;
+}
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-red);
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.indicator.active {
+    background-color: var(--primary-red);
+}
+
+.indicator:hover {
+    transform: scale(1.2);
 }
 
 /* ========================================
