@@ -190,15 +190,9 @@ onMounted(fetchProducts);
     color: #2c3e50;
     margin-bottom: 20px;
     font-size: 2.2em;
-    border-bottom: 3px solid var(--primary-red);
+    border-bottom: 3px solid var(--primary-red, #E74C3C);
     display: inline-block;
     padding-bottom: 5px;
-}
-
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 25px;
 }
 
 /* ---------------------------------------------------------------------- */
