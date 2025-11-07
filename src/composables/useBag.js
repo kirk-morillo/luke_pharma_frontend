@@ -39,7 +39,7 @@ calculateTotals()
 watch(bagState, saveBagToStorage, { deep: true })
 
 export const useBag = () => {
-  const addToBag = (product, quantity = 1) => {
+  const addToBag = (product, quantity = 1, showFeedback = true) => {
     const existingItemIndex = bagState.value.items.findIndex(item => item.product.id === product.id)
 
     if (existingItemIndex >= 0) {
@@ -55,11 +55,31 @@ export const useBag = () => {
     }
 
     calculateTotals()
+
+    if (showFeedback) {
+      showSuccessAlert(
+        'Added to Bag',
+        `${product.name} has been added to your bag.`,
+        true // Show "View Bag" button
+      )
+    }
   }
 
   const removeFromBag = (productId) => {
-    bagState.value.items = bagState.value.items.filter(item => item.product.id !== productId)
-    calculateTotals()
+    const item = bagState.value.items.find(item => item.product.id === productId)
+    if (!item) return
+
+    showConfirmationAlert(
+      'Remove Item',
+      `Remove ${item.product.name} from your bag?`,
+      'Remove'
+    ).then((result) => {
+      if (result.isConfirmed) {
+        bagState.value.items = bagState.value.items.filter(item => item.product.id !== productId)
+        calculateTotals()
+        showSuccessAlert('Item Removed', `${item.product.name} has been removed from your bag.`)
+      }
+    })
   }
 
   const updateQuantity = (productId, quantity) => {
@@ -76,8 +96,37 @@ export const useBag = () => {
   }
 
   const clearBag = () => {
-    bagState.value.items = []
-    calculateTotals()
+    if (bagState.value.items.length === 0) {
+      showErrorAlert('Bag is Empty', 'Your bag is already empty.')
+      return
+    }
+
+    showConfirmationAlert(
+      'Clear Bag',
+      'Are you sure you want to remove all items from your bag?',
+      'Clear Bag'
+    ).then((result) => {
+      if (result.isConfirmed) {
+        bagState.value.items = []
+        calculateTotals()
+        showSuccessAlert('Bag Cleared', 'All items have been removed from your bag.')
+      }
+    })
+  }
+
+  const completeOrder = () => {
+    if (bagState.value.items.length === 0) {
+      showErrorAlert('No Items', 'Your bag is empty. Add some items before completing your order.')
+      return Promise.resolve(false)
+    }
+
+    const bagCode = generateBagCode()
+    const totalAmount = bagState.value.total
+
+    return showOrderSuccessAlert(bagCode, totalAmount).then(() => {
+      clearBag()
+      return true
+    })
   }
 
   const getBagItems = () => bagState.value.items
