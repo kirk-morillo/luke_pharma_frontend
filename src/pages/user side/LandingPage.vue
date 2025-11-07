@@ -264,10 +264,12 @@ const stopAutoPlay = () => {
 
 onMounted(() => {
     startAutoPlay();
+    window.addEventListener('resize', handleResize);
 });
 
 onUnmounted(() => {
     stopAutoPlay();
+    window.removeEventListener('resize', handleResize);
 });
 </script>
 
