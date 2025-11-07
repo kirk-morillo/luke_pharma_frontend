@@ -170,7 +170,7 @@ onMounted(fetchProducts);
 /* --- 1. MAIN LAYOUT & CONTAINERS --- */
 /* ---------------------------------------------------------------------- */
 .catalog-container {
-    background-color: var(--background-light);
+    background-color: var(--background-light, #f4f6f9);
     min-height: 100vh;
 }
 
