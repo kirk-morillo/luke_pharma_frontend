@@ -36,26 +36,39 @@
                     <p>Visit any of our convenient locations serving your community.</p>
                 </div>
 
-                <div class="carousel-container" @mouseenter="stopAutoPlay" @mouseleave="startAutoPlay">
+                <div class="carousel-container carousel-responsive" @mouseenter="stopAutoPlay" @mouseleave="startAutoPlay">
                     <button @click="previousBranches" class="carousel-arrow prev-arrow">
                         <i class="pi pi-chevron-left"></i>
                     </button>
 
                     <div class="carousel-wrapper">
                         <div class="carousel-track"
-                            :style="{ transform: `translateX(-${currentIndex * (100 / BRANCHES_PER_SLIDE)}%)` }">
-                            <div v-for="branch in mockBranches" :key="branch.id" class="branch-card">
-                                <div class="branch-icon">
+                            :style="{
+                                transform: `translateX(-${currentIndex * (100 / getBranchesPerSlide())}%)`,
+                                width: `${(mockBranches.length / getBranchesPerSlide()) * 100}%`
+                            }">
+                            <div v-for="branch in mockBranches" :key="branch.id" class="branch-card"
+                                :style="{
+                                    minWidth: `${100 / getBranchesPerSlide()}%`,
+                                    padding: getResponsivePadding()
+                                }">
+                                <div class="branch-icon" :style="branchIconStyle">
                                     <i class="pi pi-building"></i>
                                 </div>
-                                <h3 class="branch-name">{{ branch.name }}</h3>
-                                <p class="branch-hours">{{ branch.serviceHours }}</p>
+                                <h3 class="branch-name" :style="branchNameStyle">{{ branch.name }}</h3>
+                                <p class="branch-hours" :style="branchHoursStyle">{{ branch.serviceHours }}</p>
                                 <div class="branch-contact">
-                                    <p><i class="pi pi-phone"></i> {{ branch.contact }}</p>
-                                    <p><i class="pi pi-envelope"></i> {{ branch.email }}</p>
+                                    <p :style="branchContactStyle">
+                                        <i class="pi pi-phone" style="margin-right: 8px; color: var(--primary-red, #E74C3C);"></i>
+                                        {{ branch.contact }}
+                                    </p>
+                                    <p :style="branchContactStyle">
+                                        <i class="pi pi-envelope" style="margin-right: 8px; color: var(--primary-red, #E74C3C);"></i>
+                                        {{ branch.email }}
+                                    </p>
                                 </div>
-                                <button class="branch-details-btn">
-                                    View Details <i class="pi pi-external-link"></i>
+                                <button class="branch-details-btn" :style="branchButtonStyle">
+                                    View Details <i class="pi pi-external-link" style="margin-left: 8px;"></i>
                                 </button>
                             </div>
                         </div>
