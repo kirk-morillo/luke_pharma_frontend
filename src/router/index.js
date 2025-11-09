@@ -23,12 +23,9 @@ const routes = [
   {
     path: '/',
     name: 'LandingPage',
-    // 2. SET LANDINGPAGE AS THE ROOT COMPONENT
     component: LandingPage
   },
 
-  // NOTE: You can optionally keep the ProductCatalog as a dedicated route,
-  // but typically, the LandingPage handles the product view at the root path.
   {
     path: '/catalog-only',
     name: 'ProductCatalogOnly',
@@ -48,7 +45,7 @@ const routes = [
   },
   {
     path: '/bag',
-    name: 'Bag',
+    name: 'BagPage',
     component: BagPage
   },
   
