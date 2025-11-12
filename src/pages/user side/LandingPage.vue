@@ -117,7 +117,6 @@ const loadingProducts = ref(true);
 
 onMounted(async () => {
     try {
-        // ✅ FIX: Use the full server URL to resolve the 404 error
         const response = await fetch('http://localhost:3000/api/products/random');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -137,8 +136,6 @@ onMounted(async () => {
 const { addToBag: bagAddToBag } = useBag();
 
 const handleAddToBag = (product) => {
-    // Rely on product.stock_quantity which is now fetched from the database
-    // The ProductCard handles the final visual check, but we check here too for safety
     if (product.stock_quantity > 0) {
         bagAddToBag(product, 1, false);
     }

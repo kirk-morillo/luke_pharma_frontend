@@ -7,9 +7,12 @@
       <div :class="[
         'icon-badge flex justify-center items-center mb-4 rounded-full transition-all duration-500 shadow-xl border-4 border-white transform-gpu group-hover:scale-110 group-hover:rotate-3',
         compact ? 'w-14 h-14 p-2' : 'w-20 h-20 p-4',
+        // Color logic remains consistent
         product.category === 'Medicine'
           ? 'bg-emerald-500 text-white shadow-emerald-400/50'
-          : 'bg-indigo-500 text-white shadow-indigo-400/50',
+          : product.category === 'Medical Equipment'
+            ? 'bg-indigo-500 text-white shadow-indigo-400/50'
+            : 'bg-indigo-500 text-white shadow-indigo-400/50',
       ]">
         <i :class="[
           getProductIcon(product.category),
@@ -81,14 +84,18 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useBag } from '@/composables/useBag.js';
-import { showErrorAlert, showSuccessAlert } from '@/utils/sweetAlertConfig.js';
+// UPDATED: Import showProductAddedAlert instead of showSuccessAlert
+import { showErrorAlert, showProductAddedAlert } from '@/utils/sweetAlertConfig.js';
+import { useRouter } from 'vue-router';
+
 
 defineEmits(['product-click']);
+
+const router = useRouter(); // Initialize router for navigation
 
 /** Utility: format price with commas and two decimals */
 const formatPrice = (price) => {
   if (price == null) return '0.00';
-  // Use parseFloat for potentially floating point numbers, then fix to 2 decimals
   const numericPrice = parseFloat(price);
   if (isNaN(numericPrice) || !isFinite(numericPrice)) return '0.00';
   return numericPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -103,7 +110,7 @@ const props = defineProps({
     type: Object,
     required: true,
     validator: (product) => {
-      // Validator to check for the six core columns
+      // Validator logic omitted for brevity...
       const requiredFields = [
         'product_id',
         'item_name',
@@ -131,14 +138,11 @@ const props = defineProps({
   compact: { type: Boolean, default: false },
 });
 
-// Safely parse stock quantity using parseFloat and default to 0.
 const productStock = computed(() => {
   const stock = parseFloat(props.product.stock_quantity);
-  // ✅ FIX: Ensure stock is non-negative and integer
   return isNaN(stock) ? 0 : Math.floor(Math.max(0, stock));
 });
 
-// Computed property to check stock, relying on the safe productStock value.
 const hasStock = computed(() => {
   return productStock.value > 0;
 });
@@ -146,21 +150,25 @@ const hasStock = computed(() => {
 const { addToBag } = useBag();
 const isAdding = ref(false);
 
-/** Add to bag logic */
 const handleAddToBag = async (product) => {
-  // Exit if already adding or out of stock
   if (isAdding.value || !hasStock.value) return;
 
   isAdding.value = true;
   try {
     await addToBag(product, 1);
 
-    // Notify user of success
-    // ✅ FIX: Ensure item_name is used here for consistency
-    showSuccessAlert(`${product.item_name} added to bag.`, '', true);
+    // CRITICAL CHANGE: Use the custom alert that handles "View Bag" vs "Continue Shopping"
+    const result = await showProductAddedAlert(
+      product.item_name.trim(),
+      true // showViewBagButton = true
+    );
+
+    // Handle navigation based on the alert result
+    if (result.isConfirmed) {
+      router.push({ name: 'BagPage' });
+    }
   } catch (error) {
     console.error('Failed to add to bag:', error);
-    // Display server-side error message (e.g., 'Insufficient stock')
     showErrorAlert(
       'Failed to Add',
       error.message || 'Could not add the item to the bag.'
@@ -172,7 +180,6 @@ const handleAddToBag = async (product) => {
 </script>
 
 <style scoped>
-/* Custom utility classes, kept here as they are not standard Tailwind */
 .hover\:shadow-3xl:hover {
   box-shadow: 0 20px 40px -8px rgba(239, 68, 68, 0.6);
 }
@@ -185,6 +192,5 @@ const handleAddToBag = async (product) => {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  -webkit-line-clamp: 2;
 }
 </style>

@@ -33,8 +33,6 @@ export const showErrorAlert = (title, text) => {
   return Swal.fire({
     title: title,
     text: text,
-    // The centering fix is primarily in the CSS, but adding a zeroed padding style here
-    // can help override potential inline padding issues, ensuring perfect center.
     iconHtml: '<i class="pi pi-times-circle" style="padding-left: 0 !important;"></i>', 
     customClass: {
       icon: 'custom-error-icon',

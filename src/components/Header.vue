@@ -2,11 +2,10 @@
     <header class="main-header sticky top-0 bg-white shadow-lg z-50 transition duration-300 ease-in-out py-3 sm:py-4">
         <div class="header-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
 
-            <!-- Header Left (Logo and Site Name) -->
             <div class="header-left flex items-center">
-                <router-link to="/"
+                <router-link to="/" @click.prevent="scrollToHero"
                     class="logo-link flex items-center text-red-600 font-bold hover:text-red-700 transition">
-                    <!-- Using your actual logo.png --><img src="/logo.png" alt="Luked Pharma Logo"
+                    <img src="/logo.png" alt="Luked Pharma Logo"
                         class="w-8 h-8 sm:w-10 sm:h-10 mr-2 object-contain rounded-full border-2 border-red-500" />
                     <span class="site-name text-lg sm:text-xl font-extrabold tracking-tight hidden sm:inline">
                         Luked Pharma Co.
@@ -17,20 +16,17 @@
                 </router-link>
             </div>
 
-            <!-- Main Navigation (Desktop) -->
             <nav class="main-nav hidden md:flex items-center space-x-2 lg:space-x-4">
-
-                <!-- Products Dropdown -->
                 <div class="relative group" @mouseenter="showProductsDropdown = true"
                     @mouseleave="showProductsDropdown = false">
                     <router-link to="/products" :class="['nav-link flex items-center p-3 text-red-600 font-medium rounded-lg hover:bg-red-50 hover:text-red-700 transition relative',
-                        isProductsActive ? 'bg-red-50 text-red-700' : '' // Apply active state
+                        isProductsActive ? 'bg-red-50 text-red-700' : ''
                     ]">
                         <i class="pi pi-box mr-2 text-lg"></i>
                         <span class="nav-text">Products</span>
                         <i
                             :class="['pi pi-chevron-down ml-1 text-xs transition-transform duration-200', { 'rotate-180': showProductsDropdown }]"></i>
-                        <!-- Vertical red line for active state --><span v-if="isProductsActive"
+                        <span v-if="isProductsActive"
                             class="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-0.5 bg-red-600 rounded-full"></span>
                     </router-link>
 
@@ -49,10 +45,9 @@
                     </div>
                 </div>
 
-                <!-- Branch Dropdown -->
                 <div class="relative group" @mouseenter="showBranchDropdown = true"
                     @mouseleave="showBranchDropdown = false">
-                    <button @click="scrollToFooter" :class="['nav-link flex items-center p-3 text-red-600 font-medium rounded-lg hover:bg-red-50 hover:text-red-700 transition relative',
+                    <button @click="scrollToBranches" :class="['nav-link flex items-center p-3 text-red-600 font-medium rounded-lg hover:bg-red-50 hover:text-red-700 transition relative',
                         isLocationActive ? 'bg-red-50 text-red-700' : ''
                     ]">
                         <i class="pi pi-building mr-2 text-lg"></i>
@@ -64,22 +59,22 @@
                     </button>
                     <div :class="['absolute top-full mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 transition-all duration-300 origin-top',
                         showBranchDropdown ? 'opacity-100 scale-y-100 visible' : 'opacity-0 scale-y-0 invisible']">
-                        <a href="#" @click.prevent="scrollToFooter"
+                        <a href="#" @click.prevent="scrollToBranches"
                             class="dropdown-item flex items-center p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition border-b border-gray-100">
                             <i class="pi pi-map-marker mr-3 text-red-500"></i> Location 1
                         </a>
-                        <a href="#" @click.prevent="scrollToFooter"
+                        <a href="#" @click.prevent="scrollToBranches"
                             class="dropdown-item flex items-center p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition border-b border-gray-100">
                             <i class="pi pi-map-marker mr-3 text-red-500"></i> Location 2
                         </a>
-                        <a href="#" @click.prevent="scrollToFooter"
+                        <a href="#" @click.prevent="scrollToBranches"
                             class="dropdown-item flex items-center p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition">
                             <i class="pi pi-map-marker mr-3 text-red-500"></i> Location 3
                         </a>
                     </div>
                 </div>
 
-                <!-- Contacts Button (Direct Link) --><button @click="scrollToFooter" :class="['nav-link flex items-center p-3 text-red-600 font-medium rounded-lg hover:bg-red-50 hover:text-red-700 transition relative',
+                <button @click="scrollToFooter" :class="['nav-link flex items-center p-3 text-red-600 font-medium rounded-lg hover:bg-red-50 hover:text-red-700 transition relative',
                     isContactsActive ? 'bg-red-50 text-red-700' : ''
                 ]">
                     <i class="pi pi-phone mr-2 text-lg"></i>
@@ -90,7 +85,6 @@
 
             </nav>
 
-            <!-- Bag Dropdown / Mobile Menu (Right) -->
             <div class="flex items-center space-x-4">
                 <div class="relative group" @mouseenter="showBagDropdown = true" @mouseleave="showBagDropdown = false">
                     <router-link to="/bag" :class="['nav-link flex items-center p-3 text-red-600 font-medium rounded-lg hover:bg-red-50 hover:text-red-700 transition relative',
@@ -145,7 +139,6 @@
 
         </div>
 
-        <!-- Mobile Navigation (Footer-style bar on small screens) -->
         <nav
             class="main-nav-mobile md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-xl p-2 flex justify-around">
             <router-link to="/bag"
@@ -163,7 +156,7 @@
                 <i class="pi pi-box text-xl"></i>
                 <span class="text-xs">Products</span>
             </router-link>
-            <button @click="scrollToFooter"
+            <button @click="scrollToBranches"
                 class="flex flex-col items-center p-1 text-gray-500 hover:text-red-600 transition">
                 <i class="pi pi-building text-xl"></i>
                 <span class="text-xs">Location</span>
@@ -181,9 +174,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useBag } from '@/composables/useBag.js'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 
 const { getBagItems, getTotalPrice, getItemCount } = useBag()
 
@@ -195,19 +189,42 @@ const itemCount = computed(() => getItemCount())
 const totalPrice = computed(() => getTotalPrice())
 
 const isBagPage = computed(() => route.path === '/bag')
-const isProductsActive = computed(() => route.path.startsWith('/products')) // For Products & sub-categories
-const isLocationActive = computed(() => route.hash === '#footer') // Assuming location scrolls to footer
-const isContactsActive = computed(() => route.hash === '#footer') // Assuming contacts scrolls to footer
+const isProductsActive = computed(() => route.path.startsWith('/products'))
+const isLocationActive = computed(() => route.path === '/' && route.hash === '#branches')
+const isContactsActive = computed(() => route.path === '/' && route.hash === '#footer')
 
 const recentBagItems = computed(() => {
     const items = getBagItems()
     return items.slice(0, 3)
 })
 
+const scrollToHero = () => {
+    const hero = document.querySelector('#hero')
+    if (route.path !== '/') {
+        router.push({ path: '/', hash: '#hero' })
+    } else if (hero) {
+        hero.scrollIntoView({ behavior: 'smooth' })
+        history.pushState(null, null, '#hero');
+    }
+}
+
 const scrollToFooter = () => {
     const footer = document.querySelector('footer')
-    if (footer) {
+    if (route.path !== '/') {
+        router.push({ path: '/', hash: '#footer' })
+    } else if (footer) {
         footer.scrollIntoView({ behavior: 'smooth' })
+        history.pushState(null, null, '#footer');
+    }
+}
+
+const scrollToBranches = () => {
+    const branches = document.querySelector('#branches')
+    if (route.path !== '/') {
+        router.push({ path: '/', hash: '#branches' })
+    } else if (branches) {
+        branches.scrollIntoView({ behavior: 'smooth' })
+        history.pushState(null, null, '#branches');
     }
 }
 </script>
